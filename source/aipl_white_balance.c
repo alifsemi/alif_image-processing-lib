@@ -555,7 +555,7 @@ aipl_error_t aipl_white_balance_rgb565(const void* input, void* output,
             aipl_mve_rgb_x16_t pix;
             aipl_mve_load_rgb565_16px(&pix, (uint8_t*)src, tail_p);
 
-            // aipl_mve_white_balance_rgb_x16(&pix, ar, ag, ab);
+            aipl_mve_white_balance_rgb_x16(&pix, ar, ag, ab);
 
             aipl_mve_store_rgb565_16px((uint8_t*)dst, &pix, tail_p);
 
