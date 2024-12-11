@@ -8,6 +8,7 @@
  *********************/
 #include "aipl_color_correction.h"
 #include <RTE_Device.h>
+#include <stddef.h>
 #include "aipl_config.h"
 #if AIPL_USE_MVE
 #include "aipl_mve_utils.h"
@@ -72,7 +73,7 @@ aipl_error_t aipl_color_correction_rgb(const void* input, void* output,
                                                 width, height, ccm);
 
         default:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
     }
 }
 
@@ -80,15 +81,14 @@ aipl_error_t aipl_color_correction_rgb_img(const aipl_image_t* input,
                                            aipl_image_t* output,
                                            const float* ccm)
 {
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
     if (input->width != output->width || input->height != output->height)
-    {
-        return AIPL_SIZE_MISMATCH;
-    }
+        return AIPL_ERR_SIZE_MISMATCH;
 
     if (input->format != output->format)
-    {
-        return AIPL_FORMAT_MISMATCH;
-    }
+        return AIPL_ERR_FORMAT_MISMATCH;
 
     return aipl_color_correction_rgb(input->data, output->data, input->pitch,
                                      input->width, input->height, input->format,
@@ -100,6 +100,9 @@ aipl_error_t aipl_color_correction_argb8888(const void* input, void* output,
                                             uint32_t width, uint32_t height,
                                             const float* ccm)
 {
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
 #if AIPL_USE_MVE
     const uint8_t* src_ptr = input;
     uint8_t* dst_ptr = output;
@@ -152,7 +155,7 @@ aipl_error_t aipl_color_correction_argb8888(const void* input, void* output,
     }
 #endif
 
-    return AIPL_OK;
+    return AIPL_ERR_OK;
 }
 
 aipl_error_t aipl_color_correction_argb4444(const void* input, void* output,
@@ -160,6 +163,9 @@ aipl_error_t aipl_color_correction_argb4444(const void* input, void* output,
                                             uint32_t width, uint32_t height,
                                             const float* ccm)
 {
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
 #if AIPL_USE_MVE
     const uint16_t* src_ptr = input;
     uint16_t* dst_ptr = output;
@@ -216,7 +222,7 @@ aipl_error_t aipl_color_correction_argb4444(const void* input, void* output,
     }
 #endif
 
-    return AIPL_OK;
+    return AIPL_ERR_OK;
 }
 
 aipl_error_t aipl_color_correction_argb1555(const void* input, void* output,
@@ -224,6 +230,9 @@ aipl_error_t aipl_color_correction_argb1555(const void* input, void* output,
                                             uint32_t width, uint32_t height,
                                             const float* ccm)
 {
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
 #if AIPL_USE_MVE
     const uint16_t* src_ptr = input;
     uint16_t* dst_ptr = output;
@@ -280,7 +289,7 @@ aipl_error_t aipl_color_correction_argb1555(const void* input, void* output,
     }
 #endif
 
-    return AIPL_OK;
+    return AIPL_ERR_OK;
 }
 
 aipl_error_t aipl_color_correction_rgba8888(const void* input, void* output,
@@ -288,6 +297,9 @@ aipl_error_t aipl_color_correction_rgba8888(const void* input, void* output,
                                             uint32_t width, uint32_t height,
                                             const float* ccm)
 {
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
 #if AIPL_USE_MVE
     const uint8_t* src_ptr = input;
     uint8_t* dst_ptr = output;
@@ -340,7 +352,7 @@ aipl_error_t aipl_color_correction_rgba8888(const void* input, void* output,
     }
 #endif
 
-    return AIPL_OK;
+    return AIPL_ERR_OK;
 }
 
 aipl_error_t aipl_color_correction_rgba4444(const void* input, void* output,
@@ -348,6 +360,9 @@ aipl_error_t aipl_color_correction_rgba4444(const void* input, void* output,
                                             uint32_t width, uint32_t height,
                                             const float* ccm)
 {
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
 #if AIPL_USE_MVE
     const uint16_t* src_ptr = input;
     uint16_t* dst_ptr = output;
@@ -404,7 +419,7 @@ aipl_error_t aipl_color_correction_rgba4444(const void* input, void* output,
     }
 #endif
 
-    return AIPL_OK;
+    return AIPL_ERR_OK;
 }
 
 aipl_error_t aipl_color_correction_rgba5551(const void* input, void* output,
@@ -412,6 +427,9 @@ aipl_error_t aipl_color_correction_rgba5551(const void* input, void* output,
                                             uint32_t width, uint32_t height,
                                             const float* ccm)
 {
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
 #if AIPL_USE_MVE
     const uint16_t* src_ptr = input;
     uint16_t* dst_ptr = output;
@@ -468,7 +486,7 @@ aipl_error_t aipl_color_correction_rgba5551(const void* input, void* output,
     }
 #endif
 
-    return AIPL_OK;
+    return AIPL_ERR_OK;
 }
 
 aipl_error_t aipl_color_correction_rgb888(const void* input, void* output,
@@ -476,6 +494,9 @@ aipl_error_t aipl_color_correction_rgb888(const void* input, void* output,
                                           uint32_t width, uint32_t height,
                                           const float* ccm)
 {
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
 #if AIPL_USE_MVE
     const uint8_t* src_ptr = input;
     uint8_t* dst_ptr = output;
@@ -527,7 +548,7 @@ aipl_error_t aipl_color_correction_rgb888(const void* input, void* output,
     }
 #endif
 
-    return AIPL_OK;
+    return AIPL_ERR_OK;
 }
 
 aipl_error_t aipl_color_correction_rgb565(const void* input, void* output,
@@ -535,6 +556,9 @@ aipl_error_t aipl_color_correction_rgb565(const void* input, void* output,
                                           uint32_t width, uint32_t height,
                                           const float* ccm)
 {
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
 #if AIPL_USE_MVE
     const uint16_t* src_ptr = input;
     uint16_t* dst_ptr = output;
@@ -591,7 +615,7 @@ aipl_error_t aipl_color_correction_rgb565(const void* input, void* output,
     }
 #endif
 
-    return AIPL_OK;
+    return AIPL_ERR_OK;
 }
 
 /**********************

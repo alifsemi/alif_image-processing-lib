@@ -10,6 +10,9 @@
 extern "C" {
 #endif
 
+#include <RTE_Components.h>
+#include CMSIS_device_header
+
 /**
  * Custom video alloc setting
  *
@@ -44,25 +47,58 @@ extern "C" {
 
 /**
  * Enable color format conversions
+ *
+ * Constants TO_<COLOR_FORMAT> can be used to
+ * define conversions for each individual color format
  */
-// #define AIPL_CONVERT_ALPHA8
-#define AIPL_CONVERT_ARGB8888
-#define AIPL_CONVERT_ARGB4444
-#define AIPL_CONVERT_ARGB1555
-// #define AIPL_CONVERT_RGBA8888
-#define AIPL_CONVERT_RGBA4444
-#define AIPL_CONVERT_RGBA5551
-#define AIPL_CONVERT_RGB888
-#define AIPL_CONVERT_RGB565
-// #define AIPL_CONVERT_YV12
-#define AIPL_CONVERT_I420
-// #define AIPL_CONVERT_I422
-#define AIPL_CONVERT_I444
-// #define AIPL_CONVERT_I400
-// #define AIPL_CONVERT_NV12
-// #define AIPL_CONVERT_NV21
-// #define AIPL_CONVERT_YUY2
-// #define AIPL_CONVERT_UYVY
+#define TO_ALPHA8_I400  BIT(0)
+#define TO_ARGB8888     BIT(1)
+#define TO_ARGB4444     BIT(2)
+#define TO_ARGB1555     BIT(3)
+#define TO_RGBA8888     BIT(4)
+#define TO_RGBA4444     BIT(5)
+#define TO_RGBA5551     BIT(6)
+#define TO_RGB888       BIT(7)
+#define TO_RGB565       BIT(8)
+#define TO_YV12         BIT(9)
+#define TO_I420         BIT(10)
+#define TO_I422         BIT(11)
+#define TO_I444         BIT(12)
+#define TO_NV12         BIT(13)
+#define TO_NV21         BIT(14)
+#define TO_YUY2         BIT(15)
+#define TO_UYVY         BIT(16)
+#define TO_ALL          (TO_ALPHA8_I400 | TO_ARGB8888 | TO_ARGB4444\
+                         | TO_ARGB1555 | TO_RGBA8888 | TO_RGBA4444\
+                         | TO_RGBA5551 | TO_RGB888 | TO_RGB565\
+                         | TO_YV12 | TO_I420 | TO_I422 | TO_I444\
+                         | TO_NV12 | TO_NV21 | TO_YUY2 | TO_UYVY)
+
+/**
+ * Set conversion from each color format using
+ * the convstants above
+ *
+ * To complete disable color conversion the marco should
+ * be defined as 0
+ */
+#define AIPL_CONVERT_ALPHA8_I400    TO_ARGB8888
+#define AIPL_CONVERT_ARGB8888       TO_ALL
+#define AIPL_CONVERT_ARGB4444       TO_ARGB8888
+#define AIPL_CONVERT_ARGB1555       TO_ARGB8888
+#define AIPL_CONVERT_RGBA8888       TO_ARGB8888
+#define AIPL_CONVERT_RGBA4444       TO_ARGB8888
+#define AIPL_CONVERT_RGBA5551       TO_ARGB8888
+#define AIPL_CONVERT_RGB888         TO_ARGB8888
+#define AIPL_CONVERT_RGB565         TO_ARGB8888
+#define AIPL_CONVERT_YV12           TO_ARGB8888
+#define AIPL_CONVERT_I420           TO_ARGB8888
+#define AIPL_CONVERT_I422           TO_ARGB8888
+#define AIPL_CONVERT_I444           TO_ARGB8888
+#define AIPL_CONVERT_I400           TO_ARGB8888
+#define AIPL_CONVERT_NV12           TO_ARGB8888
+#define AIPL_CONVERT_NV21           TO_ARGB8888
+#define AIPL_CONVERT_YUY2           TO_ARGB8888
+#define AIPL_CONVERT_UYVY           TO_ARGB8888
 
 #ifdef __cplusplus
 } /*extern "C"*/

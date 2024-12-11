@@ -14,6 +14,7 @@ extern "C" {
  *      INCLUDES
  *********************/
 #include "aipl_color_formats.h"
+#include "aipl_error.h"
 
 /*********************
  *      DEFINES
@@ -36,14 +37,16 @@ typedef struct {
 /**
  * Create AIPL image structure. Allocate image buffer in videomemory
  *
+ * @param image  image struct pointer
  * @param pitch  image pitch
  * @param width  image width
  * @param height image height
  * @param format image format
- * @return AIPL image structure
+ * @return AIPL error code
  */
-aipl_image_t aipl_image_create(uint32_t pitch, uint32_t width,
-                               uint32_t height, aipl_color_format_t format);
+aipl_error_t aipl_image_create(aipl_image_t* image, uint32_t pitch,
+                               uint32_t width, uint32_t height,
+                               aipl_color_format_t format);
 
 /**
  * Deallocate image buffer

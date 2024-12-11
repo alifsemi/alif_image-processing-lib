@@ -127,13 +127,22 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
                              int32_t rotation,
                              bool flip_u, bool flip_v,
                              bool interpolate);
+
 /**
- * Convert D/AVE2D error code to AIPL error code
+ * Convert D/AVE2D driver error code to AIPL error code
+ * Save the last converted original D/AVE2D driver error code
  *
  * @param error D/AVE2D error code
  * @return AIPL error code
  */
 aipl_error_t aipl_dave2d_error_convert(d2_s32 error);
+
+/**
+ * Get the last converted original D/AVE2D error code
+ *
+ * @return D/AVE2D driver error code
+ */
+d2_u32 aipl_dave2d_get_last_converted_error(void);
 
 /**********************
  *      MACROS

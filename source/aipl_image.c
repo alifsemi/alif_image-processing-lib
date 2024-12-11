@@ -35,17 +35,24 @@ static void* aipl_image_allocate(uint32_t pitch, uint32_t height,
 /**********************
  *   GLOBAL FUNCTIONS
  **********************/
-aipl_image_t aipl_image_create(uint32_t pitch, uint32_t width,
-                               uint32_t height, aipl_color_format_t format)
+aipl_error_t aipl_image_create(aipl_image_t* image, uint32_t pitch,
+                               uint32_t width, uint32_t height,
+                               aipl_color_format_t format)
 {
-    aipl_image_t image = { 0 };
-    image.data = aipl_image_allocate(pitch, height, format);
-    image.pitch = pitch;
-    image.width = width;
-    image.height = height;
-    image.format = format;
+    if (image == NULL)
+        return AIPL_ERR_NULL_POINTER;
 
-    return image;
+    image->data = aipl_image_allocate(pitch, height, format);
+
+    if (image->data == NULL)
+        return AIPL_ERR_NO_MEM;
+
+    image->pitch = pitch;
+    image->width = width;
+    image->height = height;
+    image->format = format;
+
+    return AIPL_ERR_OK;
 }
 
 void aipl_image_destroy(aipl_image_t* image)

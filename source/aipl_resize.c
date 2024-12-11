@@ -8,6 +8,7 @@
  *********************/
 #include "aipl_resize.h"
 #include <RTE_Device.h>
+#include <stddef.h>
 #include "aipl_config.h"
 #if AIPL_USE_DAVE2D
 #include "aipl_dave2d.h"
@@ -53,6 +54,9 @@ aipl_error_t aipl_resize(const void* input, void* output,
                          uint32_t output_width, uint32_t output_height,
                          bool interpolate)
 {
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
 #if AIPL_USE_DAVE2D
     if (aipl_dave2d_format_supported(format))
     {
@@ -73,48 +77,48 @@ aipl_error_t aipl_resize(const void* input, void* output,
     {
         /* Alpha color formats */
         case AIPL_COLOR_ALPHA8:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
         /* RGB color formats */
         case AIPL_COLOR_ARGB8888:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_RGBA8888:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_ARGB4444:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_ARGB1555:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_RGBA4444:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_RGBA5551:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_RGB565:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_RGB888:
             return aipl_resize_rgb888(input, output,
                                       width, height,
                                       output_width, output_height);
         /* YUV color formats */
         case AIPL_COLOR_YV12:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_I420:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_NV12:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_NV21:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_I422:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_YUY2:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_UYVY:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_I444:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_I400:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
 
         default:
-            return AIPL_UNSUPPORTED_FORMAT;
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
     }
 
 }
@@ -123,10 +127,11 @@ aipl_error_t aipl_resize_img(const aipl_image_t* input,
                              aipl_image_t* output,
                              bool interpolate)
 {
-    if (output->format != input->format) 
-    { 
-        return AIPL_FORMAT_MISMATCH;
-    }
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
+    if (output->format != input->format)
+        return AIPL_ERR_FORMAT_MISMATCH;
 
     return aipl_resize(input->data, output->data,
                        input->pitch,
@@ -144,6 +149,9 @@ static aipl_error_t aipl_resize_rgb888(const void* input, void* output,
                                        int srcWidth, int srcHeight,
                                        int dstWidth, int dstHeight)
 {
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
     const bool swapRB = false;
     const uint32_t pixel_size_B = aipl_color_format_depth(AIPL_COLOR_RGB888)/8;
 
@@ -168,7 +176,7 @@ static aipl_error_t aipl_resize_rgb888(const void* input, void* output,
     int x, y, ty;
 
     if (srcHeight < 2) {
-        return AIPL_FRAME_OUT_OF_RANGE;
+        return AIPL_ERR_FRAME_OUT_OF_RANGE;
     }
 
     // start at 1/2 pixel in to account for integer downsampling which might miss pixels
@@ -262,6 +270,6 @@ static aipl_error_t aipl_resize_rgb888(const void* input, void* output,
 #endif
         } // for x
     } // for y
-    return AIPL_OK;
+    return AIPL_ERR_OK;
 } // resizeImage()
 

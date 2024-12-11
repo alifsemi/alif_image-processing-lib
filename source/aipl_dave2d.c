@@ -10,6 +10,7 @@
 #include CMSIS_device_header
 #include "aipl_dave2d.h"
 #include <stdlib.h>
+#include "aipl_cache.h"
 
 /*********************
  *      DEFINES
@@ -33,6 +34,7 @@ typedef struct {
 #if !AIPL_CUSTOM_DAVE2D_INIT
 static d2_device* d2_handle;
 #endif
+static d2_u32 last_converted_error = D2_OK;
 
 /**********************
  *      MACROS
@@ -199,8 +201,8 @@ d2_u32 aipl_dave2d_color_mode_convert(const void* input, void* output,
                                       d2_u32 input_mode,
                                       d2_u32 output_mode)
 {
-    SCB_CleanInvalidateDCache_by_Addr((volatile void*)input, pitch * height
-                                             * aipl_dave2d_mode_px_size(input_mode));
+    aipl_cpu_cache_clean(input, pitch * height
+                                * aipl_dave2d_mode_px_size(input_mode));
 
     d2_device* handle = aipl_dave2d_handle();
 
@@ -236,6 +238,10 @@ d2_u32 aipl_dave2d_color_mode_convert(const void* input, void* output,
     d2_framebuffer(handle, frmbf_ptr, frmbf_pitch,
                    frmbf_width, frmbf_height, frmbf_format);
 
+    /* Invalidate CPU cache of the output */
+    aipl_cpu_cache_invalidate(output, pitch * height
+                                      * aipl_dave2d_mode_px_size(output_mode));
+
     /* Wait until convertion finishes */
     d2_endframe(handle);
 }
@@ -249,6 +255,9 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
                              bool flip_u, bool flip_v,
                              bool interpolate)
 {
+    aipl_cpu_cache_clean(input, pitch * height
+                                * aipl_dave2d_mode_px_size(format));
+
     d2_device* handle = aipl_dave2d_handle();
 
     /* Start rendering current buffer */
@@ -394,23 +403,34 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
     d2_framebuffer(handle, frmbf_ptr, frmbf_pitch,
                    frmbf_width, frmbf_height, frmbf_format);
 
+    /* Invalidate CPU cache of the output */
+    aipl_cpu_cache_invalidate(output, output_width * output_height
+                                      * aipl_dave2d_mode_px_size(format));
+
     /* Wait until convertion finishes */
     d2_endframe(handle);
 }
 
 aipl_error_t aipl_dave2d_error_convert(d2_s32 error)
 {
+    last_converted_error = error;
+
     switch (error)
     {
         case D2_OK:
-            return AIPL_OK;
+            return AIPL_ERR_OK;
 
         case D2_NOMEMORY:
-            return AIPL_NO_MEM;
+            return AIPL_ERR_NO_MEM;
 
         default:
-            return AIPL_D2_ERROR;
+            return AIPL_ERR_D2;
     }
+}
+
+d2_u32 aipl_dave2d_get_last_converted_error(void)
+{
+    return last_converted_error;
 }
 
 /**********************

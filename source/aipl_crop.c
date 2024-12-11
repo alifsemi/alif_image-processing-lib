@@ -15,6 +15,7 @@
 
 #include "aipl_crop.h"
 #include "aipl_config.h"
+#include "aipl_cache.h"
 
 /*********************
  *      DEFINES
@@ -48,11 +49,11 @@ aipl_error_t aipl_crop(const void* input, void* output,
 {
     // Check pointers
     if (input == NULL || output == NULL)
-        return AIPL_ERROR;
+        return AIPL_ERR_NULL_POINTER;
 
 	// Checking the boundary
 	if( (left > right) || (right > width) || (top > bottom) || (bottom > height) )
-		return AIPL_FRAME_OUT_OF_RANGE;
+		return AIPL_ERR_FRAME_OUT_OF_RANGE;
 
     uint32_t bpp = aipl_color_format_depth (format);
 
@@ -63,8 +64,8 @@ aipl_error_t aipl_crop(const void* input, void* output,
 	    if (input != output) {
 	        memcpy(output, input, size);
 	    }
-        SCB_CleanInvalidateDCache_by_Addr(output, size);
-	    return AIPL_OK;
+        aipl_cpu_cache_clean(output, size);
+	    return AIPL_ERR_OK;
 	}
 
 	// Updating the input frame column start
@@ -85,9 +86,9 @@ aipl_error_t aipl_crop(const void* input, void* output,
     }
 
     size_t size = new_width * new_hight * (bpp / 8);
-    SCB_CleanInvalidateDCache_by_Addr(output, size);
+    aipl_cpu_cache_clean(output, size);
 
-	return AIPL_OK;
+	return AIPL_ERR_OK;
 }
 
 aipl_error_t aipl_crop_img(const aipl_image_t* input,
@@ -95,16 +96,19 @@ aipl_error_t aipl_crop_img(const aipl_image_t* input,
                        uint32_t left, uint32_t top,
                        uint32_t right, uint32_t bottom)
 {
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
     uint32_t new_width = right - left;
     uint32_t new_hight = bottom - top;
     if (new_width != output->width || new_hight != output->height)
     {
-        return AIPL_SIZE_MISMATCH;
+        return AIPL_ERR_SIZE_MISMATCH;
     }
 
-    if (output->format != input->format) 
-    { 
-        return AIPL_FORMAT_MISMATCH;
+    if (output->format != input->format)
+    {
+        return AIPL_ERR_FORMAT_MISMATCH;
     }
 
     return aipl_crop(input->data, output->data,

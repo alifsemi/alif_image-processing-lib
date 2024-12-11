@@ -8,6 +8,7 @@
  *********************/
 #include "aipl_flip.h"
 #include <RTE_Device.h>
+#include <stddef.h>
 #include "aipl_config.h"
 #if AIPL_USE_DAVE2D
 #include "aipl_dave2d.h"
@@ -45,6 +46,9 @@
                        aipl_color_format_t format,
                        bool flip_horizontal, bool flip_vertical)
 {
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
 #if AIPL_USE_DAVE2D
     if (aipl_dave2d_format_supported(format))
     {
@@ -61,7 +65,7 @@
     }
 #else
     // Software mode is not implemented
-    return AIPL_ERROR;
+    return AIPL_ERR_UNIMPLEMENTED;
 #endif
 }
 
@@ -69,10 +73,11 @@ aipl_error_t aipl_flip_img(const aipl_image_t* input,
                              aipl_image_t* output,
                              bool flip_horizontal, bool flip_vertical)
 {
-    if (output->format != input->format) 
-    { 
-        return AIPL_FORMAT_MISMATCH;
-    }
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
+    if (output->format != input->format)
+        return AIPL_ERR_FORMAT_MISMATCH;
 
     return aipl_flip(input->data, output->data,
                      input->pitch,
