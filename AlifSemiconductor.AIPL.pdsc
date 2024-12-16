@@ -88,7 +88,7 @@
         <file category="sourceC"  name="source/aipl_image.c"/>
         <file category="sourceC"  name="source/aipl_error.c"/>
         <!-- config header -->
-        <file category="header"   name="include/aipl_config.h" attr="config" version="1.0.0"/>
+        <file category="header"   name="aipl_config.h" attr="config" version="1.0.0"/>
       </files>
     </component>
 

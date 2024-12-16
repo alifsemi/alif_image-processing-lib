@@ -10,8 +10,10 @@
 extern "C" {
 #endif
 
+#if defined(_RTE_)
 #include <RTE_Components.h>
 #include CMSIS_device_header
+#endif
 
 /**
  * Custom video alloc setting

@@ -40,6 +40,10 @@ static d2_u32 last_converted_error = D2_OK;
 /**********************
  *      MACROS
  **********************/
+/* d2_u32 ret should be defined before use */
+#define D2_CHECK_ERR(X) \
+    ret = X;\
+    if (ret != D2_OK) return ret
 
 /**********************
  *   GLOBAL FUNCTIONS
@@ -206,9 +210,10 @@ d2_u32 aipl_dave2d_color_mode_convert(const void* input, void* output,
                                 * aipl_dave2d_mode_px_size(input_mode));
 
     d2_device* handle = aipl_dave2d_handle();
+    d2_u32 ret;
 
     /* Start rendering current buffer */
-    d2_startframe(handle);
+    D2_CHECK_ERR(d2_startframe(handle));
 
     /* Get current framebuffer info */
     void* frmbf_ptr;
@@ -216,35 +221,38 @@ d2_u32 aipl_dave2d_color_mode_convert(const void* input, void* output,
     d2_u32 frmbf_width;
     d2_u32 frmbf_height;
     d2_s32 frmbf_format;
-    d2_getframebuffer(handle, &frmbf_ptr, &frmbf_pitch,
-                      &frmbf_width, &frmbf_height, &frmbf_format);
+    D2_CHECK_ERR(d2_getframebuffer(handle, &frmbf_ptr, &frmbf_pitch,
+                                   &frmbf_width, &frmbf_height,
+                                   &frmbf_format));
 
     /* Set output as framebuffer */
-    d2_framebuffer(handle, output, pitch, width, height,
-                    output_mode);
+    D2_CHECK_ERR(d2_framebuffer(handle, output, pitch, width, height,
+                                output_mode));
 
-    d2_setblitsrc(handle, (void*)input, pitch, width, height,
-                    input_mode);
+    D2_CHECK_ERR(d2_setblitsrc(handle, (void*)input, pitch, width, height,
+                               input_mode));
 
-    d2_blitcopy(handle, width, height, 0, 0,
-                D2_FIX4(width), D2_FIX4(height), 0, 0, 0);
+    D2_CHECK_ERR(d2_blitcopy(handle, width, height, 0, 0,
+                             D2_FIX4(width), D2_FIX4(height), 0, 0, 0));
 
     /* Wait until the prevous render finishes */
-    d2_endframe(handle);
+    D2_CHECK_ERR(d2_endframe(handle));
 
     /* Start the convertion */
-    d2_startframe(handle);
+    D2_CHECK_ERR(d2_startframe(handle));
 
     /* Restore old framebuffer */
-    d2_framebuffer(handle, frmbf_ptr, frmbf_pitch,
-                   frmbf_width, frmbf_height, frmbf_format);
+    D2_CHECK_ERR(d2_framebuffer(handle, frmbf_ptr, frmbf_pitch,
+                                frmbf_width, frmbf_height, frmbf_format));
 
     /* Invalidate CPU cache of the output */
     aipl_cpu_cache_invalidate(output, pitch * height
                                       * aipl_dave2d_mode_px_size(output_mode));
 
     /* Wait until convertion finishes */
-    d2_endframe(handle);
+    D2_CHECK_ERR(d2_endframe(handle));
+
+    return D2_OK;
 }
 
 d2_u32 aipl_dave2d_texturing(const void* input, void* output,
@@ -260,9 +268,10 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
                                 * aipl_dave2d_mode_px_size(format));
 
     d2_device* handle = aipl_dave2d_handle();
+    d2_u32 ret;
 
     /* Start rendering current buffer */
-    d2_startframe(handle);
+    D2_CHECK_ERR(d2_startframe(handle));
 
     /* Get current framebuffer info */
     void* frmbf_ptr;
@@ -270,19 +279,19 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
     d2_u32 frmbf_width;
     d2_u32 frmbf_height;
     d2_s32 frmbf_format;
-    d2_getframebuffer(handle, &frmbf_ptr, &frmbf_pitch,
-                      &frmbf_width, &frmbf_height, &frmbf_format);
+    D2_CHECK_ERR(d2_getframebuffer(handle, &frmbf_ptr, &frmbf_pitch,
+                                   &frmbf_width, &frmbf_height, &frmbf_format));
 
     /* Prepare input image as texture*/
     d2_u8 alpha_mode = aipl_dave2d_mode_has_alpha(format) ? d2_to_copy : d2_to_one;
-    d2_settextureoperation(handle, alpha_mode, d2_to_copy, d2_to_copy, d2_to_copy);
+    D2_CHECK_ERR(d2_settextureoperation(handle, alpha_mode, d2_to_copy, d2_to_copy, d2_to_copy));
 
-    d2_settexture(handle, (void*)input,
-                 pitch, width, height,
-                 format);
+    D2_CHECK_ERR(d2_settexture(handle, (void*)input,
+                               pitch, width, height,
+                               format));
 
-    d2_settexturemode(handle, interpolate ? d2_tm_filter : 0);
-    d2_setfillmode(handle, d2_fm_texture);
+    D2_CHECK_ERR(d2_settexturemode(handle, interpolate ? d2_tm_filter : 0));
+    D2_CHECK_ERR(d2_setfillmode(handle, d2_fm_texture));
 
     /* Texture points in clockwise order and mapping parameters */
     point_t p[4];
@@ -292,9 +301,9 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
 
     if (rotation == 0) {
         /* Set output as framebuffer */
-        d2_framebuffer(handle, output,
-                       output_width, output_width, output_height,
-                       format);
+        D2_CHECK_ERR(d2_framebuffer(handle, output,
+                                    output_width, output_width, output_height,
+                                    format));
 
         p[0].x =  0;                    p[0].y = 0;
         p[1].x = output_width - 1;      p[1].y = 0;
@@ -306,9 +315,9 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
     }
     if (rotation == 90) {
         /* Set output as framebuffer */
-        d2_framebuffer(handle, output,
-                       output_height, output_height, output_width,
-                       format);
+        D2_CHECK_ERR(d2_framebuffer(handle, output,
+                                    output_height, output_height, output_width,
+                                    format));
 
         p[0].x = output_height - 1;     p[0].y = 0;
         p[1].x = output_height - 1;     p[1].y = output_width - 1;
@@ -321,9 +330,9 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
     if (rotation == 180)
     {
         /* Set output as framebuffer */
-        d2_framebuffer(handle, output,
-                       output_width, output_width, output_height,
-                       format);
+        D2_CHECK_ERR(d2_framebuffer(handle, output,
+                                    output_width, output_width, output_height,
+                                    format));
 
         p[0].x = output_width - 1;      p[0].y = output_height - 1;
         p[1].x = 0;                     p[1].y = output_height - 1;
@@ -336,9 +345,9 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
     if (rotation == 270)
     {
         /* Set output as framebuffer */
-        d2_framebuffer(handle, output,
-                       output_height, output_height, output_width,
-                       format);
+        D2_CHECK_ERR(d2_framebuffer(handle, output,
+                                    output_height, output_height, output_width,
+                                    format));
         p[0].x = 0;                     p[0].y = output_width - 1;
         p[1].x = 0;                     p[1].y = 0;
         p[2].x = output_height - 1;     p[2].y = 0;
@@ -373,43 +382,44 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
         v0 = D2_FIX16(output_height);
     }
 
-    d2_setblendmode(handle, d2_bm_alpha, d2_bm_one_minus_alpha);
-    d2_setalphablendmode(handle, d2_bm_one, d2_bm_one_minus_alpha);
+    D2_CHECK_ERR(d2_setblendmode(handle, d2_bm_alpha, d2_bm_one_minus_alpha));
+    D2_CHECK_ERR(d2_setalphablendmode(handle, d2_bm_one, d2_bm_one_minus_alpha));
 
-    d2_settexturemapping(handle,
-                         D2_FIX4(p[0].x), D2_FIX4(p[0].y),
-                         u0, v0,
-                         dxu, dxv,
-                         dyu, dyv
-                        );
+    D2_CHECK_ERR(d2_settexturemapping(handle,
+                                      D2_FIX4(p[0].x), D2_FIX4(p[0].y),
+                                      u0, v0,
+                                      dxu, dxv,
+                                      dyu, dyv));
 
-    d2_renderquad(handle,
-                  (d2_point)D2_FIX4(p[0].x),
-                  (d2_point)D2_FIX4(p[0].y),
-                  (d2_point)D2_FIX4(p[1].x),
-                  (d2_point)D2_FIX4(p[1].y),
-                  (d2_point)D2_FIX4(p[2].x),
-                  (d2_point)D2_FIX4(p[2].y),
-                  (d2_point)D2_FIX4(p[3].x),
-                  (d2_point)D2_FIX4(p[3].y),
-                  0);
+    D2_CHECK_ERR(d2_renderquad(handle,
+                               (d2_point)D2_FIX4(p[0].x),
+                               (d2_point)D2_FIX4(p[0].y),
+                               (d2_point)D2_FIX4(p[1].x),
+                               (d2_point)D2_FIX4(p[1].y),
+                               (d2_point)D2_FIX4(p[2].x),
+                               (d2_point)D2_FIX4(p[2].y),
+                               (d2_point)D2_FIX4(p[3].x),
+                               (d2_point)D2_FIX4(p[3].y),
+                               0));
 
     /* Wait until the prevous render finishes */
-    d2_endframe(handle);
+    D2_CHECK_ERR(d2_endframe(handle));
 
     /* Start the convertion */
-    d2_startframe(handle);
+    D2_CHECK_ERR(d2_startframe(handle));
 
     /* Restore old framebuffer */
-    d2_framebuffer(handle, frmbf_ptr, frmbf_pitch,
-                   frmbf_width, frmbf_height, frmbf_format);
+    D2_CHECK_ERR(d2_framebuffer(handle, frmbf_ptr, frmbf_pitch,
+                   frmbf_width, frmbf_height, frmbf_format));
 
     /* Invalidate CPU cache of the output */
     aipl_cpu_cache_invalidate(output, output_width * output_height
                                       * aipl_dave2d_mode_px_size(format));
 
     /* Wait until convertion finishes */
-    d2_endframe(handle);
+    D2_CHECK_ERR(d2_endframe(handle));
+
+    return D2_OK;
 }
 
 aipl_error_t aipl_dave2d_error_convert(d2_s32 error)
