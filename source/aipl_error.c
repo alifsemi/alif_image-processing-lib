@@ -41,6 +41,8 @@ const char* aipl_error_str(aipl_error_t error)
         return "AIPL_ERR_NO_MEM";
     case AIPL_ERR_NULL_POINTER:
         return "AIPL_ERR_NULL_POINTER";
+    case AIPL_ERR_UNSUPPORTED_FORMAT:
+        return "AIPL_ERR_UNSUPPORTED_FORMAT";
     case AIPL_ERR_FORMAT_MISMATCH:
         return "AIPL_ERR_FORMAT_MISMATCH";
     case AIPL_ERR_SIZE_MISMATCH:
