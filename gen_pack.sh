@@ -35,9 +35,9 @@ DEFAULT_ARGS="-v"
 # Specify file names to be added to pack base directory
 # Default: empty
 #
-# PACK_BASE_FILES="
-#   <list files here>
-# "
+PACK_BASE_FILES="
+  aipl_config.h
+"
 
 # Specify file names to be deleted from pack build directory
 # Default: empty
