@@ -10,10 +10,10 @@
 #include <RTE_Device.h>
 #include <stddef.h>
 #include "aipl_config.h"
-#if AIPL_USE_DAVE2D
+#ifdef AIPL_DAVE2D_ACCELERATION
 #include "aipl_dave2d.h"
 #endif
-#if AIPL_USE_MVE
+#ifdef AIPL_HELIUM_ACCELERATION
 #include <arm_mve.h>
 #endif
 
@@ -49,7 +49,7 @@
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#if AIPL_USE_DAVE2D
+#ifdef AIPL_DAVE2D_ACCELERATION
     if (aipl_dave2d_format_supported(format))
     {
         d2_u32 ret = aipl_dave2d_texturing(input, output,

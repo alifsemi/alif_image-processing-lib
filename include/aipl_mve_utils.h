@@ -13,7 +13,7 @@ extern "C" {
  *      INCLUDES
  *********************/
 #include "aipl_config.h"
-#if AIPL_USE_MVE
+#ifdef AIPL_HELIUM_ACCELERATION
 #include "arm_mve.h"
 
 /*********************

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="1.7.7" xs:noNamespaceSchemaLocation="https://raw.githubusercontent.com/Open-CMSIS-Pack/Open-CMSIS-Pack-Spec/v1.7.7/schema/PACK.xsd">
+  <vendor>AlifSemiconductor</vendor>
+  <name>AIPL</name>
+  <description>Alif Semiconductor image processing library that uses D/AVE2D and Helium acceleration</description>
+  <url>https://github.com/alifsemi/alif_image-processing-lib/raw/main/</url>
+  <supportContact>support@alifsemi.com</supportContact>
+  <!-- optional license file -->
+  <!--
+  <license>
+  </license>
+  -->
+
+  <releases>
+    <release version="0.9.0" tag="v0.9.0" url="https://github.com/alifsemi/alif_image-processing-lib/releases/download/v0.9.0/AlifSemiconductor.AlifImageProcessingLib.0.9.0.pack" date="2024-12-11">
+      Basic operations:
+        * Crop
+        * Flip
+        * Resize
+        * Rotate
+      Color correction:
+        * Color correction using a matrix
+        * White balance
+        * Lookup Table channel transformation
+      Supported formats:
+        * ALPHA8
+        * ARGB8888
+        * ARGB4444
+        * ARGB1555
+        * RGBA8888
+        * RGBA4444
+        * RGBA5551
+        * RGB888
+        * RGB565
+        * YV12
+        * I420
+        * I422
+        * I444
+        * I400
+        * NV21
+        * NV12
+        * YUY2
+        * UYVY
+    </release>
+  </releases>
+
+  <requirements>
+    <packages>
+      <package name="Dave2DDriver"  vendor="AlifSemiconductor" version="1.0.1"/>
+    </packages>
+  </requirements>
+
+  <keywords>
+    <!-- keywords for indexing -->
+    <keyword>Alif Semiconductor</keyword>
+    <keyword>GPU2D</keyword>
+    <keyword>D/AVE2D</keyword>
+    <keyword>Dave2d</keyword>
+    <keyword>Helium</keyword>
+    <keyword>Image Processing</keyword>
+  </keywords>
+
+  <conditions>
+    <condition id="AlifSemi-Dave2D">
+      <description>Condition for AlifSemi-Dave2D driver</description>
+      <require Cclass="Graphics" Cgroup="DAVE2D" Csub="Layer2"/>
+    </condition>
+    <condition id="AIPL-Essential">
+      <description>Condition for AIPL essential code base</description>
+      <require Cclass="Graphics" Cgroup="AIPL" Csub="Essential"/>
+    </condition>
+  </conditions>
+
+  <components>
+    <component Cclass="Graphics" Cgroup="AIPL" Csub="Essential" Cversion="1.0.0">
+      <description>Alif Image Processing Library essential data types and functions</description>
+      <files>
+        <!-- include folder / device header file -->
+        <file category="include"  name="include/"/>
+        <!-- include headers -->
+        <file category="header"   name="include/aipl_cache.h"/>
+        <file category="header"   name="include/aipl_color_formats.h"/>
+        <file category="header"   name="include/aipl_image.h"/>
+        <file category="header"   name="include/aipl_error.h"/>
+        <file category="header"   name="include/aipl_video_alloc.h"/>
+        <!-- source files -->
+        <file category="sourceC"  name="source/aipl_color_formats.c"/>
+        <file category="sourceC"  name="source/aipl_image.c"/>
+        <file category="sourceC"  name="source/aipl_error.c"/>
+        <!-- config header -->
+        <file category="header"   name="include/aipl_config.h" attr="config" version="1.0.0"/>
+      </files>
+    </component>
+
+    <component Cclass="Graphics" Cgroup="Acceleration" Csub="Dave2d" Cversion="1.0.0" condition="AlifSemi-Dave2D">
+      <description>A hardware acceleration from Alif Semiconductor Dave2D</description>
+      <files>
+        <!-- include folder / device header file -->
+        <file category="include"  name="include/"/>
+        <!-- include headers -->
+        <file category="header"   name="include/aipl_dave2d.h"/>
+        <!-- source files -->
+        <file category="sourceC"  name="source/aipl_dave2d.c"/>
+      </files>
+
+      <RTE_Components_h>
+
+/*! \brief enable Dave2D acceleration */
+#define AIPL_DAVE2D_ACCELERATION
+      </RTE_Components_h>
+    </component>
+
+    <component Cclass="Graphics" Cgroup="Acceleration" Csub="Helium" Cversion="1.0.0">
+      <description>A hardware acceleration from ARM Helium</description>
+
+      <RTE_Components_h>
+
+/*! \brief enable Helium */
+#define AIPL_HELIUM_ACCELERATION
+      </RTE_Components_h>
+    </component>
+
+    <component Cclass="Graphics" Cgroup="AIPL" Csub="Basic" Cversion="1.0.0" condition="AIPL-Essential">
+      <description>
+        Alif Image Processing Library basic functions:
+          * Crop
+          * Flip
+          * Resize
+          * Rotate
+      </description>
+      <files>
+        <!-- include folder / device header file -->
+        <file category="include"  name="include/"/>
+        <!-- include headers -->
+        <file category="header"   name="include/aipl_crop.h"/>
+        <file category="header"   name="include/aipl_flip.h"/>
+        <file category="header"   name="include/aipl_resize.h"/>
+        <file category="header"   name="include/aipl_rotate.h"/>
+        <!-- source files -->
+        <file category="sourceC"  name="source/aipl_crop.c"/>
+        <file category="sourceC"  name="source/aipl_flip.c"/>
+        <file category="sourceC"  name="source/aipl_resize.c"/>
+        <file category="sourceC"  name="source/aipl_rotate.c"/>
+      </files>
+    </component>
+
+    <component Cclass="Graphics" Cgroup="AIPL" Csub="Color correction" Cversion="1.0.0" condition="AIPL-Essential">
+      <description>
+        Alif Image Processing Library color correction functions:
+          * Color correction (using a matrix)
+          * White balance (multiply each channel)
+          * Lookup Table transformation (mapping each 8-bit channel value to another)
+      </description>
+      <files>
+        <!-- include folder / device header file -->
+        <file category="include"  name="include/"/>
+        <!-- include headers -->
+        <file category="header"   name="include/aipl_color_correction.h"/>
+        <file category="header"   name="include/aipl_white_balance.h"/>
+        <file category="header"   name="include/aipl_lut_transform.h"/>
+        <!-- source files -->
+        <file category="sourceC"  name="source/aipl_color_correction.c"/>
+        <file category="sourceC"  name="source/aipl_white_balance.c"/>
+        <file category="sourceC"  name="source/aipl_lut_transform.c"/>
+      </files>
+    </component>
+
+    <component Cclass="Graphics" Cgroup="AIPL" Csub="Color conversion" Cversion="1.0.0" condition="AIPL-Essential">
+      <description>
+        Alif Image Processing Library color conversions between the following formats:
+          * ALPHA8
+          * ARGB8888
+          * ARGB4444
+          * ARGB1555
+          * RGBA8888
+          * RGBA4444
+          * RGBA5551
+          * RGB888
+          * RGB565
+          * YV12
+          * I420
+          * I422
+          * I444
+          * I400
+          * NV21
+          * NV12
+          * YUY2
+          * UYVY
+      </description>
+            <files>
+        <!-- include folder / device header file -->
+        <file category="include"  name="include/"/>
+        <!-- include headers -->
+        <file category="header"   name="include/aipl_color_conversion.h"/>
+        <!-- source files -->
+        <file category="sourceC"  name="source/aipl_color_conversion.c"/>
+      </files>
+    </component>
+
+  </components>
+</package>

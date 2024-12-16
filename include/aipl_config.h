@@ -24,18 +24,6 @@ extern "C" {
 #define AIPL_CUSTOM_VIDEO_ALLOC  1
 
 /**
- * Use M-Profile Vector Extension setting
- *
- */
-#define AIPL_USE_MVE (__ARM_FEATURE_MVE & 1)
-//  #define AIPL_USE_MVE 0
-
-/**
- * Use D/AVE2D GPU
- */
-#define AIPL_USE_DAVE2D 1
-
-/**
  * Custom D/AVE2D initialization function
  *
  * Options:

@@ -10,7 +10,7 @@
 #include <RTE_Device.h>
 #include <stddef.h>
 #include "aipl_config.h"
-#if AIPL_USE_MVE
+#ifdef AIPL_HELIUM_ACCELERATION
 #include "aipl_mve_utils.h"
 #else
 #include "aipl_utils.h"
@@ -107,7 +107,7 @@ aipl_error_t aipl_white_balance_argb8888(const void* input, void* output,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#if AIPL_USE_MVE
+#ifdef AIPL_HELIUM_ACCELERATION
     const uint8_t* src_ptr = input;
     uint8_t* dst_ptr = output;
 
@@ -170,7 +170,7 @@ aipl_error_t aipl_white_balance_argb4444(const void* input, void* output,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#if AIPL_USE_MVE
+#ifdef AIPL_HELIUM_ACCELERATION
     const uint16_t* src_ptr = input;
     uint16_t* dst_ptr = output;
 
@@ -237,7 +237,7 @@ aipl_error_t aipl_white_balance_argb1555(const void* input, void* output,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#if AIPL_USE_MVE
+#ifdef AIPL_HELIUM_ACCELERATION
     const uint16_t* src_ptr = input;
     uint16_t* dst_ptr = output;
 
@@ -303,7 +303,7 @@ aipl_error_t aipl_white_balance_rgba8888(const void* input, void* output,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#if AIPL_USE_MVE
+#ifdef AIPL_HELIUM_ACCELERATION
     const uint8_t* src_ptr = input;
     uint8_t* dst_ptr = output;
 
@@ -366,7 +366,7 @@ aipl_error_t aipl_white_balance_rgba4444(const void* input, void* output,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#if AIPL_USE_MVE
+#ifdef AIPL_HELIUM_ACCELERATION
     const uint16_t* src_ptr = input;
     uint16_t* dst_ptr = output;
 
@@ -433,7 +433,7 @@ aipl_error_t aipl_white_balance_rgba5551(const void* input, void* output,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#if AIPL_USE_MVE
+#ifdef AIPL_HELIUM_ACCELERATION
     const uint16_t* src_ptr = input;
     uint16_t* dst_ptr = output;
 
@@ -500,7 +500,7 @@ aipl_error_t aipl_white_balance_rgb888(const void* input, void* output,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#if AIPL_USE_MVE
+#ifdef AIPL_HELIUM_ACCELERATION
     const uint8_t* src_ptr = input;
     uint8_t* dst_ptr = output;
 
@@ -562,7 +562,7 @@ aipl_error_t aipl_white_balance_rgb565(const void* input, void* output,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#if AIPL_USE_MVE
+#ifdef AIPL_HELIUM_ACCELERATION
     const uint16_t* src_ptr = input;
     uint16_t* dst_ptr = output;
 

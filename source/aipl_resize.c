@@ -10,10 +10,10 @@
 #include <RTE_Device.h>
 #include <stddef.h>
 #include "aipl_config.h"
-#if AIPL_USE_DAVE2D
+#ifdef AIPL_DAVE2D_ACCELERATION
 #include "aipl_dave2d.h"
 #endif
-#if AIPL_USE_MVE
+#ifdef AIPL_HELIUM_ACCELERATION
 #include <arm_mve.h>
 #endif
 
@@ -57,7 +57,7 @@ aipl_error_t aipl_resize(const void* input, void* output,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#if AIPL_USE_DAVE2D
+#ifdef AIPL_DAVE2D_ACCELERATION
     if (aipl_dave2d_format_supported(format))
     {
         d2_u32 ret = aipl_dave2d_texturing(input, output,
@@ -158,7 +158,7 @@ static aipl_error_t aipl_resize_rgb888(const void* input, void* output,
     const uint8_t* srcImage = (const uint8_t*)input;
     uint8_t* dstImage = (uint8_t*)output;
 
-#if AIPL_USE_MVE & 1
+#ifdef AIPL_HELIUM_ACCELERATION
     const uint32x4_t rgb_offset = {0,1,2,3};
     const uint32x4_t bgr_offset = {2,1,0,3};
     const uint32x4_t output_offset = swapRB ? bgr_offset : rgb_offset;
@@ -214,7 +214,7 @@ static aipl_error_t aipl_resize_rgb888(const void* input, void* output,
             __builtin_prefetch(&s[tx + 64]);
             __builtin_prefetch(&s[tx + srcWidth + 64]);
 
-#if AIPL_USE_MVE & 1
+#ifdef AIPL_HELIUM_ACCELERATION
             uint32x4_t p00 = vldrbq_u32(&s[tx]);
             uint32x4_t p10 = vldrbq_u32(&s[tx + pixel_size_B]);
             uint32x4_t p01 = vldrbq_u32(&s[tx + srcWidth]);
