@@ -665,13 +665,13 @@ INLINE void aipl_mve_load_rgba5551_offset_16px(aipl_mve_rgb_x16_t* dst,
 
 
 /**
- * Load 16 RGB888 pixels
+ * Load 16 BGR888 pixels
  *
  * @param dst   destination struct pointer
  * @param src   first source pixel pointer
  * @param pred  load predicate
  */
-INLINE void aipl_mve_load_rgb888_16px(aipl_mve_rgb_x16_t* dst,
+INLINE void aipl_mve_load_bgr888_16px(aipl_mve_rgb_x16_t* dst,
                                       const uint8_t* src,
                                       mve_pred16_t pred)
 {
@@ -681,14 +681,14 @@ INLINE void aipl_mve_load_rgb888_16px(aipl_mve_rgb_x16_t* dst,
 }
 
 /**
- * Load 16 RGB888 pixels with custom offsets between pixels
+ * Load 16 BGR888 pixels with custom offsets between pixels
  *
  * @param dst       destination struct pointer
  * @param src       first source pixel pointer
  * @param offset    pixel offset
  * @param pred      load predicate
  */
-INLINE void aipl_mve_load_rgb888_offset_16px(aipl_mve_rgb_x16_t* dst,
+INLINE void aipl_mve_load_bgr888_offset_16px(aipl_mve_rgb_x16_t* dst,
                                              const uint8_t* src,
                                              uint8_t offset,
                                              mve_pred16_t pred)
@@ -977,7 +977,7 @@ INLINE void aipl_mve_store_rgba5551_offset_16px(uint8_t* dst,
 }
 
 /**
- * Store 16 RGB888 pixels without alpha channel
+ * Store 16 BGR888 pixels without alpha channel
  * and custom offset between pixels
  *
  * @param dst       first destination pixel pointer
@@ -985,7 +985,7 @@ INLINE void aipl_mve_store_rgba5551_offset_16px(uint8_t* dst,
  * @param offset    pixel offset
  * @param pred      store predicate
  */
-INLINE void aipl_mve_store_rgb888_offset_16px(uint8_t* dst,
+INLINE void aipl_mve_store_bgr888_offset_16px(uint8_t* dst,
                                               const aipl_mve_rgb_x16_t* src,
                                               uint8_t offset,
                                               mve_pred16_t pred)
@@ -1165,13 +1165,13 @@ INLINE void aipl_mve_storea_rgba5551_16px(uint8_t* dst,
 }
 
 /**
- * Store 16 RGB888 pixels from ARGB struct
+ * Store 16 BGR888 pixels from ARGB struct
  *
  * @param dst   first destination pixel pointer
  * @param src   source struct pointer
  * @param pred  store predicate
  */
-INLINE void aipl_mve_storea_rgb888_16px(uint8_t* dst,
+INLINE void aipl_mve_storea_bgr888_16px(uint8_t* dst,
                                         const aipl_mve_argb_x16_t* src,
                                         mve_pred16_t pred)
 {
@@ -1181,13 +1181,13 @@ INLINE void aipl_mve_storea_rgb888_16px(uint8_t* dst,
 }
 
 /**
- * Store 16 RGB888 pixels from RGB struct
+ * Store 16 BGR888 pixels from RGB struct
  *
  * @param dst   first destination pixel pointer
  * @param src   source struct pointer
  * @param pred  store predicate
  */
-INLINE void aipl_mve_store_rgb888_16px(uint8_t* dst,
+INLINE void aipl_mve_store_bgr888_16px(uint8_t* dst,
                                        const aipl_mve_rgb_x16_t* src,
                                        mve_pred16_t pred)
 {

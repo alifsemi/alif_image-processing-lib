@@ -48,7 +48,7 @@ extern "C" {
 #define TO_RGBA8888     BIT(4)
 #define TO_RGBA4444     BIT(5)
 #define TO_RGBA5551     BIT(6)
-#define TO_RGB888       BIT(7)
+#define TO_BGR888       BIT(7)
 #define TO_RGB565       BIT(8)
 #define TO_YV12         BIT(9)
 #define TO_I420         BIT(10)
@@ -60,7 +60,7 @@ extern "C" {
 #define TO_UYVY         BIT(16)
 #define TO_ALL          (TO_ALPHA8_I400 | TO_ARGB8888 | TO_ARGB4444\
                          | TO_ARGB1555 | TO_RGBA8888 | TO_RGBA4444\
-                         | TO_RGBA5551 | TO_RGB888 | TO_RGB565\
+                         | TO_RGBA5551 | TO_BGR888 | TO_RGB565\
                          | TO_YV12 | TO_I420 | TO_I422 | TO_I444\
                          | TO_NV12 | TO_NV21 | TO_YUY2 | TO_UYVY)
 
@@ -78,7 +78,7 @@ extern "C" {
 #define AIPL_CONVERT_RGBA8888       TO_ARGB8888
 #define AIPL_CONVERT_RGBA4444       TO_ARGB8888
 #define AIPL_CONVERT_RGBA5551       TO_ARGB8888
-#define AIPL_CONVERT_RGB888         TO_ARGB8888
+#define AIPL_CONVERT_BGR888         TO_ARGB8888
 #define AIPL_CONVERT_RGB565         TO_ARGB8888
 #define AIPL_CONVERT_YV12           TO_ARGB8888
 #define AIPL_CONVERT_I420           TO_ARGB8888

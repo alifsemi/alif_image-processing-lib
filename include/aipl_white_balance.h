@@ -195,7 +195,7 @@ aipl_error_t aipl_white_balance_rgba5551(const void* input, void* output,
                                          float ar, float ag, float ab);
 
 /**
- * Apply given color multipliers to white balance an RGB888 image
+ * Apply given color multipliers to white balance an BGR888 image
  * using raw pointer interface
  *
  *
@@ -210,7 +210,7 @@ aipl_error_t aipl_white_balance_rgba5551(const void* input, void* output,
  * @param ab        blue channel multiplier
  * @return error code
  */
-aipl_error_t aipl_white_balance_rgb888(const void* input, void* output,
+aipl_error_t aipl_white_balance_bgr888(const void* input, void* output,
                                        uint32_t pitch,
                                        uint32_t width, uint32_t height,
                                        float ar, float ag, float ab);

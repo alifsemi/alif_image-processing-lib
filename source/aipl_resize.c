@@ -32,7 +32,7 @@
 /**********************
  *  STATIC VARIABLES
  **********************/
-static aipl_error_t aipl_resize_rgb888(const void* input, void* output,
+static aipl_error_t aipl_resize_bgr888(const void* input, void* output,
                                        int input_width, int input_height,
                                        int output_width, int output_height);
 
@@ -93,8 +93,8 @@ aipl_error_t aipl_resize(const void* input, void* output,
             return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_RGB565:
             return AIPL_ERR_UNSUPPORTED_FORMAT;
-        case AIPL_COLOR_RGB888:
-            return aipl_resize_rgb888(input, output,
+        case AIPL_COLOR_BGR888:
+            return aipl_resize_bgr888(input, output,
                                       width, height,
                                       output_width, output_height);
         /* YUV color formats */
@@ -145,7 +145,7 @@ aipl_error_t aipl_resize_img(const aipl_image_t* input,
  *   STATIC FUNCTIONS
  **********************/
 
-static aipl_error_t aipl_resize_rgb888(const void* input, void* output,
+static aipl_error_t aipl_resize_bgr888(const void* input, void* output,
                                        int srcWidth, int srcHeight,
                                        int dstWidth, int dstHeight)
 {
@@ -153,7 +153,7 @@ static aipl_error_t aipl_resize_rgb888(const void* input, void* output,
         return AIPL_ERR_NULL_POINTER;
 
     const bool swapRB = false;
-    const uint32_t pixel_size_B = aipl_color_format_depth(AIPL_COLOR_RGB888)/8;
+    const uint32_t pixel_size_B = aipl_color_format_depth(AIPL_COLOR_BGR888)/8;
 
     const uint8_t* srcImage = (const uint8_t*)input;
     uint8_t* dstImage = (uint8_t*)output;
@@ -165,7 +165,7 @@ static aipl_error_t aipl_resize_rgb888(const void* input, void* output,
 #endif
 
 // Copied from ei_camera.cpp in firmware-eta-compute
-// Modified for RGB888
+// Modified for BGR888
 // This needs to be < 16 or it won't fit. Cortex-M4 only has SIMD for signed multiplies
 #define FRAC_BITS 14
     const int FRAC_VAL = (1 << FRAC_BITS);

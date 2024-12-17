@@ -65,8 +65,8 @@ aipl_error_t aipl_white_balance_rgb(const void* input, void* output,
         case AIPL_COLOR_RGBA5551:
             return aipl_white_balance_rgba5551(input, output, pitch,
                                                width, height, ar, ag, ab);
-        case AIPL_COLOR_RGB888:
-            return aipl_white_balance_rgb888(input, output, pitch,
+        case AIPL_COLOR_BGR888:
+            return aipl_white_balance_bgr888(input, output, pitch,
                                              width, height, ar, ag, ab);
         case AIPL_COLOR_RGB565:
             return aipl_white_balance_rgb565(input, output, pitch,
@@ -492,7 +492,7 @@ aipl_error_t aipl_white_balance_rgba5551(const void* input, void* output,
     return AIPL_ERR_OK;
 }
 
-aipl_error_t aipl_white_balance_rgb888(const void* input, void* output,
+aipl_error_t aipl_white_balance_bgr888(const void* input, void* output,
                                        uint32_t pitch,
                                        uint32_t width, uint32_t height,
                                        float ar, float ag, float ab)
@@ -515,11 +515,11 @@ aipl_error_t aipl_white_balance_rgb888(const void* input, void* output,
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_rgb_x16_t pix;
-            aipl_mve_load_rgb888_16px(&pix, src, tail_p);
+            aipl_mve_load_bgr888_16px(&pix, src, tail_p);
 
             aipl_mve_white_balance_rgb_x16(&pix, ar, ag, ab);
 
-            aipl_mve_store_rgb888_16px(dst, &pix, tail_p);
+            aipl_mve_store_bgr888_16px(dst, &pix, tail_p);
 
             src += 48;
             dst += 48;
@@ -527,13 +527,13 @@ aipl_error_t aipl_white_balance_rgb888(const void* input, void* output,
         }
     }
 #else
-    const aipl_rgb888_px_t* src_ptr = input;
-    aipl_rgb888_px_t* dst_ptr = output;
+    const aipl_bgr888_px_t* src_ptr = input;
+    aipl_bgr888_px_t* dst_ptr = output;
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        const aipl_rgb888_px_t* src = src_ptr + (i * pitch);
-        aipl_rgb888_px_t* dst = dst_ptr + (i * pitch);
+        const aipl_bgr888_px_t* src = src_ptr + (i * pitch);
+        aipl_bgr888_px_t* dst = dst_ptr + (i * pitch);
 
         for (uint32_t j = 0; j < width; ++j)
         {
@@ -599,7 +599,7 @@ aipl_error_t aipl_white_balance_rgb565(const void* input, void* output,
 
         for (uint32_t j = 0; j < width; ++j)
         {
-            aipl_rgb888_px_t px;
+            aipl_bgr888_px_t px;
             aipl_load_rgb565_px(&px, src);
 
             int16_t r = px.r * ar;

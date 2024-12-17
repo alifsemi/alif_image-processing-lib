@@ -104,7 +104,7 @@ bool aipl_dave2d_mode_has_alpha(d2_u32 mode)
         case d2_mode_i2:
         case d2_mode_i1:
         case d2_mode_rgb565:
-        case d2_mode_rgb888:
+        case d2_mode_bgr888:
         case d2_mode_rgb444:
         case d2_mode_rgb555:
         default:

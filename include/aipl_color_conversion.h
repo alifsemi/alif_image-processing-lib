@@ -178,9 +178,9 @@ aipl_error_t aipl_color_convert_argb8888_to_rgba5551(const void* input,
                                                      uint32_t width,
                                                      uint32_t height);
 #endif
-#if (AIPL_CONVERT_ARGB8888 & TO_RGB888)
+#if (AIPL_CONVERT_ARGB8888 & TO_BGR888)
 /**
- * Convert ARGB8888 image to RGB888
+ * Convert ARGB8888 image to BGR888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -189,7 +189,7 @@ aipl_error_t aipl_color_convert_argb8888_to_rgba5551(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_argb8888_to_rgb888(const void* input,
+aipl_error_t aipl_color_convert_argb8888_to_bgr888(const void* input,
                                                    void* output,
                                                    uint32_t pitch,
                                                    uint32_t width,
@@ -486,9 +486,9 @@ aipl_error_t aipl_color_convert_argb4444_to_rgba5551(const void* input,
                                                      uint32_t width,
                                                      uint32_t height);
 #endif
-#if (AIPL_CONVERT_ARGB4444 & TO_RGB888)
+#if (AIPL_CONVERT_ARGB4444 & TO_BGR888)
 /**
- * Convert ARGB4444 image to RGB888
+ * Convert ARGB4444 image to BGR888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -497,7 +497,7 @@ aipl_error_t aipl_color_convert_argb4444_to_rgba5551(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_argb4444_to_rgb888(const void* input,
+aipl_error_t aipl_color_convert_argb4444_to_bgr888(const void* input,
                                                    void* output,
                                                    uint32_t pitch,
                                                    uint32_t width,
@@ -794,9 +794,9 @@ aipl_error_t aipl_color_convert_argb1555_to_rgba5551(const void* input,
                                                      uint32_t width,
                                                      uint32_t height);
 #endif
-#if (AIPL_CONVERT_ARGB1555 & TO_RGB888)
+#if (AIPL_CONVERT_ARGB1555 & TO_BGR888)
 /**
- * Convert ARGB1555 image to RGB888
+ * Convert ARGB1555 image to BGR888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -805,7 +805,7 @@ aipl_error_t aipl_color_convert_argb1555_to_rgba5551(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_argb1555_to_rgb888(const void* input,
+aipl_error_t aipl_color_convert_argb1555_to_bgr888(const void* input,
                                                    void* output,
                                                    uint32_t pitch,
                                                    uint32_t width,
@@ -1103,9 +1103,9 @@ aipl_error_t aipl_color_convert_rgba8888_to_rgba5551(const void* input,
                                                      uint32_t width,
                                                      uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGBA8888 & TO_RGB888)
+#if (AIPL_CONVERT_RGBA8888 & TO_BGR888)
 /**
- * Convert RGBA8888 image to RGB888
+ * Convert RGBA8888 image to BGR888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -1114,7 +1114,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_rgba5551(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgba8888_to_rgb888(const void* input,
+aipl_error_t aipl_color_convert_rgba8888_to_bgr888(const void* input,
                                                    void* output,
                                                    uint32_t pitch,
                                                    uint32_t width,
@@ -1411,9 +1411,9 @@ aipl_error_t aipl_color_convert_rgba4444_to_rgba5551(const void* input,
                                                      uint32_t width,
                                                      uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGBA4444 & TO_RGB888)
+#if (AIPL_CONVERT_RGBA4444 & TO_BGR888)
 /**
- * Convert RGBA4444 image to RGB888
+ * Convert RGBA4444 image to BGR888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -1422,7 +1422,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_rgba5551(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgba4444_to_rgb888(const void* input,
+aipl_error_t aipl_color_convert_rgba4444_to_bgr888(const void* input,
                                                    void* output,
                                                    uint32_t pitch,
                                                    uint32_t width,
@@ -1720,9 +1720,9 @@ aipl_error_t aipl_color_convert_rgba5551_to_rgba4444(const void* input,
                                                      uint32_t width,
                                                      uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGBA5551 & TO_RGB888)
+#if (AIPL_CONVERT_RGBA5551 & TO_BGR888)
 /**
- * Convert RGBA5551 image to RGB888
+ * Convert RGBA5551 image to BGR888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -1731,7 +1731,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_rgba4444(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgba5551_to_rgb888(const void* input,
+aipl_error_t aipl_color_convert_rgba5551_to_bgr888(const void* input,
                                                    void* output,
                                                    uint32_t pitch,
                                                    uint32_t width,
@@ -1909,9 +1909,9 @@ aipl_error_t aipl_color_convert_rgba5551_to_uyvy(const void* input,
 #endif
 #endif
 
-#if AIPL_CONVERT_RGB888
+#if AIPL_CONVERT_BGR888
 /**
- * Convert RGB888 image to specified format
+ * Convert BGR888 image to specified format
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -1921,14 +1921,14 @@ aipl_error_t aipl_color_convert_rgba5551_to_uyvy(const void* input,
  * @param format        desired color format
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888(const void* input, void* output,
+aipl_error_t aipl_color_convert_bgr888(const void* input, void* output,
                                        uint32_t pitch,
                                        uint32_t width, uint32_t height,
                                        aipl_color_format_t format);
 
-#if (AIPL_CONVERT_RGB888 & TO_ALPHA8_I400)
+#if (AIPL_CONVERT_BGR888 & TO_ALPHA8_I400)
 /**
- * Convert RGB888 image to ALPHA8
+ * Convert BGR888 image to ALPHA8
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -1937,15 +1937,15 @@ aipl_error_t aipl_color_convert_rgb888(const void* input, void* output,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888_to_alpha8(const void* input,
+aipl_error_t aipl_color_convert_bgr888_to_alpha8(const void* input,
                                                  void* output,
                                                  uint32_t pitch,
                                                  uint32_t width,
                                                  uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGB888 & TO_ARGB8888)
+#if (AIPL_CONVERT_BGR888 & TO_ARGB8888)
 /**
- * Convert RGB888 image to ARGB8888
+ * Convert BGR888 image to ARGB8888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -1954,15 +1954,15 @@ aipl_error_t aipl_color_convert_rgb888_to_alpha8(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888_to_argb8888(const void* input,
+aipl_error_t aipl_color_convert_bgr888_to_argb8888(const void* input,
                                                    void* output,
                                                    uint32_t pitch,
                                                    uint32_t width,
                                                    uint32_t height);
 
 #endif
-#if (AIPL_CONVERT_RGB888 & TO_ARGB4444)/**
- * Convert RGB888 image to ARGB4444
+#if (AIPL_CONVERT_BGR888 & TO_ARGB4444)/**
+ * Convert BGR888 image to ARGB4444
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -1971,15 +1971,15 @@ aipl_error_t aipl_color_convert_rgb888_to_argb8888(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888_to_argb4444(const void* input,
+aipl_error_t aipl_color_convert_bgr888_to_argb4444(const void* input,
                                                    void* output,
                                                    uint32_t pitch,
                                                    uint32_t width,
                                                    uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGB888 & TO_ARGB1555)
+#if (AIPL_CONVERT_BGR888 & TO_ARGB1555)
 /**
- * Convert RGB888 image to ARGB1555
+ * Convert BGR888 image to ARGB1555
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -1988,15 +1988,15 @@ aipl_error_t aipl_color_convert_rgb888_to_argb4444(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888_to_argb1555(const void* input,
+aipl_error_t aipl_color_convert_bgr888_to_argb1555(const void* input,
                                                    void* output,
                                                    uint32_t pitch,
                                                    uint32_t width,
                                                    uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGB888 & TO_RGBA8888)
+#if (AIPL_CONVERT_BGR888 & TO_RGBA8888)
 /**
- * Convert RGB888 image to RGBA8888
+ * Convert BGR888 image to RGBA8888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -2005,15 +2005,15 @@ aipl_error_t aipl_color_convert_rgb888_to_argb1555(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888_to_rgba8888(const void* input,
+aipl_error_t aipl_color_convert_bgr888_to_rgba8888(const void* input,
                                                    void* output,
                                                    uint32_t pitch,
                                                    uint32_t width,
                                                    uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGB888 & TO_RGBA4444)
+#if (AIPL_CONVERT_BGR888 & TO_RGBA4444)
 /**
- * Convert RGB888 image to RGBA4444
+ * Convert BGR888 image to RGBA4444
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -2022,15 +2022,15 @@ aipl_error_t aipl_color_convert_rgb888_to_rgba8888(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888_to_rgba4444(const void* input,
+aipl_error_t aipl_color_convert_bgr888_to_rgba4444(const void* input,
                                                    void* output,
                                                    uint32_t pitch,
                                                    uint32_t width,
                                                    uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGB888 & TO_RGBA5551)
+#if (AIPL_CONVERT_BGR888 & TO_RGBA5551)
 /**
- * Convert RGB888 image to RGBA5551
+ * Convert BGR888 image to RGBA5551
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -2039,15 +2039,15 @@ aipl_error_t aipl_color_convert_rgb888_to_rgba4444(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888_to_rgba5551(const void* input,
+aipl_error_t aipl_color_convert_bgr888_to_rgba5551(const void* input,
                                                    void* output,
                                                    uint32_t pitch,
                                                    uint32_t width,
                                                    uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGB888 & TO_RGB565)
+#if (AIPL_CONVERT_BGR888 & TO_RGB565)
 /**
- * Convert RGB888 image to RGB565
+ * Convert BGR888 image to RGB565
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -2056,15 +2056,15 @@ aipl_error_t aipl_color_convert_rgb888_to_rgba5551(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888_to_rgb565(const void* input,
+aipl_error_t aipl_color_convert_bgr888_to_rgb565(const void* input,
                                                  void* output,
                                                  uint32_t pitch,
                                                  uint32_t width,
                                                  uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGB888 & TO_YV12)
+#if (AIPL_CONVERT_BGR888 & TO_YV12)
 /**
- * Convert RGB888 image to YV12
+ * Convert BGR888 image to YV12
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -2073,15 +2073,15 @@ aipl_error_t aipl_color_convert_rgb888_to_rgb565(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888_to_yv12(const void* input,
+aipl_error_t aipl_color_convert_bgr888_to_yv12(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
                                                uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGB888 & TO_I420)
+#if (AIPL_CONVERT_BGR888 & TO_I420)
 /**
- * Convert RGB888 image to I420
+ * Convert BGR888 image to I420
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -2090,15 +2090,15 @@ aipl_error_t aipl_color_convert_rgb888_to_yv12(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888_to_i420(const void* input,
+aipl_error_t aipl_color_convert_bgr888_to_i420(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
                                                uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGB888 & TO_I422)
+#if (AIPL_CONVERT_BGR888 & TO_I422)
 /**
- * Convert RGB888 image to I422
+ * Convert BGR888 image to I422
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -2107,15 +2107,15 @@ aipl_error_t aipl_color_convert_rgb888_to_i420(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888_to_i422(const void* input,
+aipl_error_t aipl_color_convert_bgr888_to_i422(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
                                                uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGB888 & TO_I444)
+#if (AIPL_CONVERT_BGR888 & TO_I444)
 /**
- * Convert RGB888 image to I444
+ * Convert BGR888 image to I444
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -2124,15 +2124,15 @@ aipl_error_t aipl_color_convert_rgb888_to_i422(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888_to_i444(const void* input,
+aipl_error_t aipl_color_convert_bgr888_to_i444(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
                                                uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGB888 & TO_ALPHA8_I400)
+#if (AIPL_CONVERT_BGR888 & TO_ALPHA8_I400)
 /**
- * Convert RGB888 image to I400
+ * Convert BGR888 image to I400
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -2141,15 +2141,15 @@ aipl_error_t aipl_color_convert_rgb888_to_i444(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888_to_i400(const void* input,
+aipl_error_t aipl_color_convert_bgr888_to_i400(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
                                                uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGB888 & TO_NV21)
+#if (AIPL_CONVERT_BGR888 & TO_NV21)
 /**
- * Convert RGB888 image to NV21
+ * Convert BGR888 image to NV21
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -2158,15 +2158,15 @@ aipl_error_t aipl_color_convert_rgb888_to_i400(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888_to_nv21(const void* input,
+aipl_error_t aipl_color_convert_bgr888_to_nv21(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
                                                uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGB888 & TO_NV12)
+#if (AIPL_CONVERT_BGR888 & TO_NV12)
 /**
- * Convert RGB888 image to NV12
+ * Convert BGR888 image to NV12
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -2175,15 +2175,15 @@ aipl_error_t aipl_color_convert_rgb888_to_nv21(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888_to_nv12(const void* input,
+aipl_error_t aipl_color_convert_bgr888_to_nv12(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
                                                uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGB888 & TO_YUY2)
+#if (AIPL_CONVERT_BGR888 & TO_YUY2)
 /**
- * Convert RGB888 image to YUY2
+ * Convert BGR888 image to YUY2
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -2192,15 +2192,15 @@ aipl_error_t aipl_color_convert_rgb888_to_nv12(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888_to_yuy2(const void* input,
+aipl_error_t aipl_color_convert_bgr888_to_yuy2(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
                                                uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGB888 & TO_UYVY)
+#if (AIPL_CONVERT_BGR888 & TO_UYVY)
 /**
- * Convert RGB888 image to UYVY
+ * Convert BGR888 image to UYVY
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -2209,7 +2209,7 @@ aipl_error_t aipl_color_convert_rgb888_to_yuy2(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb888_to_uyvy(const void* input,
+aipl_error_t aipl_color_convert_bgr888_to_uyvy(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
@@ -2353,9 +2353,9 @@ aipl_error_t aipl_color_convert_rgb565_to_rgba5551(const void* input,
                                                    uint32_t width,
                                                    uint32_t height);
 #endif
-#if (AIPL_CONVERT_RGB565 & TO_RGB888)
+#if (AIPL_CONVERT_RGB565 & TO_BGR888)
 /**
- * Convert RGB565 image to RGB888
+ * Convert RGB565 image to BGR888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -2364,7 +2364,7 @@ aipl_error_t aipl_color_convert_rgb565_to_rgba5551(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_rgb565_to_rgb888(const void* input,
+aipl_error_t aipl_color_convert_rgb565_to_bgr888(const void* input,
                                                  void* output,
                                                  uint32_t pitch,
                                                  uint32_t width,
@@ -2661,9 +2661,9 @@ aipl_error_t aipl_color_convert_yv12_to_rgba5551(const void* input,
                                                  uint32_t width,
                                                  uint32_t height);
 #endif
-#if (AIPL_CONVERT_YV12 & TO_RGB888)
+#if (AIPL_CONVERT_YV12 & TO_BGR888)
 /**
- * Convert YV12 image to RGB888
+ * Convert YV12 image to BGR888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -2672,7 +2672,7 @@ aipl_error_t aipl_color_convert_yv12_to_rgba5551(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_yv12_to_rgb888(const void* input,
+aipl_error_t aipl_color_convert_yv12_to_bgr888(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
@@ -2970,9 +2970,9 @@ aipl_error_t aipl_color_convert_i420_to_rgba5551(const void* input,
                                                  uint32_t width,
                                                  uint32_t height);
 #endif
-#if (AIPL_CONVERT_I420 & TO_RGB888)
+#if (AIPL_CONVERT_I420 & TO_BGR888)
 /**
- * Convert I420 image to RGB888
+ * Convert I420 image to BGR888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -2981,7 +2981,7 @@ aipl_error_t aipl_color_convert_i420_to_rgba5551(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_i420_to_rgb888(const void* input,
+aipl_error_t aipl_color_convert_i420_to_bgr888(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
@@ -3278,9 +3278,9 @@ aipl_error_t aipl_color_convert_i422_to_rgba5551(const void* input,
                                                  uint32_t width,
                                                  uint32_t height);
 #endif
-#if (AIPL_CONVERT_I422 & TO_RGB888)
+#if (AIPL_CONVERT_I422 & TO_BGR888)
 /**
- * Convert I422 image to RGB888
+ * Convert I422 image to BGR888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -3289,7 +3289,7 @@ aipl_error_t aipl_color_convert_i422_to_rgba5551(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_i422_to_rgb888(const void* input,
+aipl_error_t aipl_color_convert_i422_to_bgr888(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
@@ -3586,9 +3586,9 @@ aipl_error_t aipl_color_convert_i444_to_rgba5551(const void* input,
                                                  uint32_t width,
                                                  uint32_t height);
 #endif
-#if (AIPL_CONVERT_I444 & TO_RGB888)
+#if (AIPL_CONVERT_I444 & TO_BGR888)
 /**
- * Convert I444 image to RGB888
+ * Convert I444 image to BGR888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -3597,7 +3597,7 @@ aipl_error_t aipl_color_convert_i444_to_rgba5551(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_i444_to_rgb888(const void* input,
+aipl_error_t aipl_color_convert_i444_to_bgr888(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
@@ -3895,9 +3895,9 @@ aipl_error_t aipl_color_convert_nv12_to_rgba5551(const void* input,
                                                  uint32_t width,
                                                  uint32_t height);
 #endif
-#if (AIPL_CONVERT_NV12 & TO_RGB888)
+#if (AIPL_CONVERT_NV12 & TO_BGR888)
 /**
- * Convert NV12 image to RGB888
+ * Convert NV12 image to BGR888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -3906,7 +3906,7 @@ aipl_error_t aipl_color_convert_nv12_to_rgba5551(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_nv12_to_rgb888(const void* input,
+aipl_error_t aipl_color_convert_nv12_to_bgr888(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
@@ -4203,9 +4203,9 @@ aipl_error_t aipl_color_convert_nv21_to_rgba5551(const void* input,
                                                  uint32_t width,
                                                  uint32_t height);
 #endif
-#if (AIPL_CONVERT_NV21 & TO_RGB888)
+#if (AIPL_CONVERT_NV21 & TO_BGR888)
 /**
- * Convert NV21 image to RGB888
+ * Convert NV21 image to BGR888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -4214,7 +4214,7 @@ aipl_error_t aipl_color_convert_nv21_to_rgba5551(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_nv21_to_rgb888(const void* input,
+aipl_error_t aipl_color_convert_nv21_to_bgr888(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
@@ -4511,9 +4511,9 @@ aipl_error_t aipl_color_convert_yuy2_to_rgba5551(const void* input,
                                                  uint32_t width,
                                                  uint32_t height);
 #endif
-#if (AIPL_CONVERT_YUY2 & TO_RGB888)
+#if (AIPL_CONVERT_YUY2 & TO_BGR888)
 /**
- * Convert YUY2 image to RGB888
+ * Convert YUY2 image to BGR888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -4522,7 +4522,7 @@ aipl_error_t aipl_color_convert_yuy2_to_rgba5551(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_yuy2_to_rgb888(const void* input,
+aipl_error_t aipl_color_convert_yuy2_to_bgr888(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
@@ -4819,9 +4819,9 @@ aipl_error_t aipl_color_convert_uyvy_to_rgba5551(const void* input,
                                                  uint32_t width,
                                                  uint32_t height);
 #endif
-#if (AIPL_CONVERT_UYVY & TO_RGB888)
+#if (AIPL_CONVERT_UYVY & TO_BGR888)
 /**
- * Convert UYVY image to RGB888
+ * Convert UYVY image to BGR888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -4830,7 +4830,7 @@ aipl_error_t aipl_color_convert_uyvy_to_rgba5551(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_uyvy_to_rgb888(const void* input,
+aipl_error_t aipl_color_convert_uyvy_to_bgr888(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
@@ -5110,9 +5110,9 @@ aipl_error_t aipl_color_convert_i400_to_rgba5551(const void* input,
                                                  uint32_t width,
                                                  uint32_t height);
 #endif
-#if (AIPL_CONVERT_I400 & TO_RGB888)
+#if (AIPL_CONVERT_I400 & TO_BGR888)
 /**
- * Convert I400 image to RGB888
+ * Convert I400 image to BGR888
  *
  * @param input         input image pointer
  * @param output        output image pointer
@@ -5121,7 +5121,7 @@ aipl_error_t aipl_color_convert_i400_to_rgba5551(const void* input,
  * @param height        image height
  * @return error code
  */
-aipl_error_t aipl_color_convert_i400_to_rgb888(const void* input,
+aipl_error_t aipl_color_convert_i400_to_bgr888(const void* input,
                                                void* output,
                                                uint32_t pitch,
                                                uint32_t width,
