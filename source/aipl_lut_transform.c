@@ -493,11 +493,11 @@ aipl_error_t aipl_lut_transform_bgr888(const void* input, void* output,
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_rgb_x16_t pix;
-            aipl_mve_load_bgr888_16px(&pix, src, tail_p);
+            aipl_mve_load_24bit_16px(&pix, src, tail_p, 2, 1, 0);
 
             aipl_mve_lut_transform_rgb_x16(&pix, lut);
 
-            aipl_mve_store_bgr888_16px(dst, &pix, tail_p);
+            aipl_mve_store_24bit_16px(dst, &pix, tail_p, 2, 1, 0);
 
             src += 48;
             dst += 48;
@@ -505,22 +505,22 @@ aipl_error_t aipl_lut_transform_bgr888(const void* input, void* output,
         }
     }
 #else
-    const aipl_bgr888_px_t* src_ptr = input;
-    aipl_bgr888_px_t* dst_ptr = output;
+    const uint8_t* src_ptr = input;
+    uint8_t* dst_ptr = output;
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        const aipl_bgr888_px_t* src = src_ptr + (i * pitch);
-        aipl_bgr888_px_t* dst = dst_ptr + (i * pitch);
+        const uint8_t* src = src_ptr + i * pitch * 3;
+        uint8_t* dst = dst_ptr + i * pitch * 3;
 
         for (uint32_t j = 0; j < width; ++j)
         {
-            dst->r = lut[src->r];
-            dst->g = lut[src->g];
-            dst->b = lut[src->b];
+            dst[2] = lut[src[2]];
+            dst[1] = lut[src[1]];
+            dst[0] = lut[src[0]];
 
-            ++src;
-            ++dst;
+            src += 3;
+            dst += 3;
         }
     }
 #endif
@@ -573,14 +573,14 @@ aipl_error_t aipl_lut_transform_rgb565(const void* input, void* output,
 
         for (uint32_t j = 0; j < width; ++j)
         {
-            aipl_bgr888_px_t px;
-            aipl_load_rgb565_px(&px, src);
+            uint8_t px[3];
+            aipl_load_rgb565_px(px, src, 2, 1, 0);
 
-            px.r = lut[px.r];
-            px.g = lut[px.g];
-            px.b = lut[px.b];
+            px[2] = lut[px[2]];
+            px[1] = lut[px[1]];
+            px[0] = lut[px[0]];
 
-            aipl_pack_rgb565_px(dst, &px);
+            aipl_pack_rgb565_px(dst, px, 2, 1, 0);
 
             ++src;
             ++dst;

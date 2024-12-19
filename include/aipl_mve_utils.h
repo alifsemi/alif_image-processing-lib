@@ -665,37 +665,49 @@ INLINE void aipl_mve_load_rgba5551_offset_16px(aipl_mve_rgb_x16_t* dst,
 
 
 /**
- * Load 16 BGR888 pixels
+ * Load 16 24bit pixels
  *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
+ * @param dst       destination struct pointer
+ * @param src       first source pixel pointer
+ * @param pred      load predicate
+ * @param r_offset  red channel offset
+ * @param g_offset  green channel offset
+ * @param b_offset  blue channel offset
  */
-INLINE void aipl_mve_load_bgr888_16px(aipl_mve_rgb_x16_t* dst,
-                                      const uint8_t* src,
-                                      mve_pred16_t pred)
+INLINE void aipl_mve_load_24bit_16px(aipl_mve_rgb_x16_t* dst,
+                                     const uint8_t* src,
+                                     mve_pred16_t pred,
+                                     uint8_t r_offset,
+                                     uint8_t g_offset,
+                                     uint8_t b_offset)
 {
-    dst->r = vldrbq_gather_offset_z(src + 2, AIPL_3_BYTE_OFFSETS_U8, pred);
-    dst->g = vldrbq_gather_offset_z(src + 1, AIPL_3_BYTE_OFFSETS_U8, pred);
-    dst->b = vldrbq_gather_offset_z(src, AIPL_3_BYTE_OFFSETS_U8, pred);
+    dst->r = vldrbq_gather_offset_z(src + r_offset, AIPL_3_BYTE_OFFSETS_U8, pred);
+    dst->g = vldrbq_gather_offset_z(src + g_offset, AIPL_3_BYTE_OFFSETS_U8, pred);
+    dst->b = vldrbq_gather_offset_z(src + b_offset, AIPL_3_BYTE_OFFSETS_U8, pred);
 }
 
 /**
- * Load 16 BGR888 pixels with custom offsets between pixels
+ * Load 16 24bit pixels with custom offsets between pixels
  *
  * @param dst       destination struct pointer
  * @param src       first source pixel pointer
  * @param offset    pixel offset
  * @param pred      load predicate
+ * @param r_offset  red channel offset
+ * @param g_offset  green channel offset
+ * @param b_offset  blue channel offset
  */
-INLINE void aipl_mve_load_bgr888_offset_16px(aipl_mve_rgb_x16_t* dst,
-                                             const uint8_t* src,
-                                             uint8_t offset,
-                                             mve_pred16_t pred)
+INLINE void aipl_mve_load_24bit_offset_16px(aipl_mve_rgb_x16_t* dst,
+                                            const uint8_t* src,
+                                            uint8_t offset,
+                                            mve_pred16_t pred,
+                                            uint8_t r_offset,
+                                            uint8_t g_offset,
+                                            uint8_t b_offset)
 {
-    dst->r = vldrbq_gather_offset_z(src + 2, AIPL_OFFSETS_U8(offset, 3), pred);
-    dst->g = vldrbq_gather_offset_z(src + 1, AIPL_OFFSETS_U8(offset, 3), pred);
-    dst->b = vldrbq_gather_offset_z(src, AIPL_OFFSETS_U8(offset, 3), pred);
+    dst->r = vldrbq_gather_offset_z(src + r_offset, AIPL_OFFSETS_U8(offset, 3), pred);
+    dst->g = vldrbq_gather_offset_z(src + g_offset, AIPL_OFFSETS_U8(offset, 3), pred);
+    dst->b = vldrbq_gather_offset_z(src + b_offset, AIPL_OFFSETS_U8(offset, 3), pred);
 }
 
 /**
@@ -977,22 +989,28 @@ INLINE void aipl_mve_store_rgba5551_offset_16px(uint8_t* dst,
 }
 
 /**
- * Store 16 BGR888 pixels without alpha channel
+ * Store 16 24bit pixels without alpha channel
  * and custom offset between pixels
  *
  * @param dst       first destination pixel pointer
  * @param src       source struct pointer
  * @param offset    pixel offset
  * @param pred      store predicate
+ * @param r_offset  red channel offset
+ * @param g_offset  green channel offset
+ * @param b_offset  blue channel offset
  */
-INLINE void aipl_mve_store_bgr888_offset_16px(uint8_t* dst,
-                                              const aipl_mve_rgb_x16_t* src,
-                                              uint8_t offset,
-                                              mve_pred16_t pred)
+INLINE void aipl_mve_store_24bit_offset_16px(uint8_t* dst,
+                                             const aipl_mve_rgb_x16_t* src,
+                                             uint8_t offset,
+                                             mve_pred16_t pred,
+                                             uint8_t r_offset,
+                                             uint8_t g_offset,
+                                             uint8_t b_offset)
 {
-    vstrbq_scatter_offset_p(dst + 2, AIPL_OFFSETS_U8(offset, 3), src->r, pred);
-    vstrbq_scatter_offset_p(dst + 1, AIPL_OFFSETS_U8(offset, 3), src->g, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_OFFSETS_U8(offset, 3), src->b, pred);
+    vstrbq_scatter_offset_p(dst + r_offset, AIPL_OFFSETS_U8(offset, 3), src->r, pred);
+    vstrbq_scatter_offset_p(dst + g_offset, AIPL_OFFSETS_U8(offset, 3), src->g, pred);
+    vstrbq_scatter_offset_p(dst + b_offset, AIPL_OFFSETS_U8(offset, 3), src->b, pred);
 }
 
 /**
@@ -1165,35 +1183,48 @@ INLINE void aipl_mve_storea_rgba5551_16px(uint8_t* dst,
 }
 
 /**
- * Store 16 BGR888 pixels from ARGB struct
+ * Store 16 24bit pixels from ARGB struct
  *
  * @param dst   first destination pixel pointer
  * @param src   source struct pointer
  * @param pred  store predicate
+ * @param r_offset  red channel offset
+ * @param g_offset  green channel offset
+ * @param b_offset  blue channel offset
  */
-INLINE void aipl_mve_storea_bgr888_16px(uint8_t* dst,
-                                        const aipl_mve_argb_x16_t* src,
-                                        mve_pred16_t pred)
+INLINE void aipl_mve_storea_24bit_16px(uint8_t* dst,
+                                       const aipl_mve_argb_x16_t* src,
+                                       mve_pred16_t pred,
+                                       uint8_t r_offset,
+                                       uint8_t g_offset,
+                                       uint8_t b_offset)
 {
-    vstrbq_scatter_offset_p(dst + 2, AIPL_3_BYTE_OFFSETS_U8, src->r, pred);
-    vstrbq_scatter_offset_p(dst + 1, AIPL_3_BYTE_OFFSETS_U8, src->g, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_3_BYTE_OFFSETS_U8, src->b, pred);
+    vstrbq_scatter_offset_p(dst + r_offset, AIPL_3_BYTE_OFFSETS_U8, src->r, pred);
+    vstrbq_scatter_offset_p(dst + g_offset, AIPL_3_BYTE_OFFSETS_U8, src->g, pred);
+    vstrbq_scatter_offset_p(dst + b_offset, AIPL_3_BYTE_OFFSETS_U8, src->b, pred);
 }
 
 /**
- * Store 16 BGR888 pixels from RGB struct
+ * Store 16 24bit pixels from RGB struct
  *
  * @param dst   first destination pixel pointer
  * @param src   source struct pointer
  * @param pred  store predicate
+ * @param r_offset  red channel offset
+ * @param g_offset  green channel offset
+ * @param b_offset  blue channel offset
+
  */
-INLINE void aipl_mve_store_bgr888_16px(uint8_t* dst,
-                                       const aipl_mve_rgb_x16_t* src,
-                                       mve_pred16_t pred)
+INLINE void aipl_mve_store_24bit_16px(uint8_t* dst,
+                                      const aipl_mve_rgb_x16_t* src,
+                                      mve_pred16_t pred,
+                                      uint8_t r_offset,
+                                      uint8_t g_offset,
+                                      uint8_t b_offset)
 {
-    vstrbq_scatter_offset_p(dst + 2, AIPL_3_BYTE_OFFSETS_U8, src->r, pred);
-    vstrbq_scatter_offset_p(dst + 1, AIPL_3_BYTE_OFFSETS_U8, src->g, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_3_BYTE_OFFSETS_U8, src->b, pred);
+    vstrbq_scatter_offset_p(dst + r_offset, AIPL_3_BYTE_OFFSETS_U8, src->r, pred);
+    vstrbq_scatter_offset_p(dst + g_offset, AIPL_3_BYTE_OFFSETS_U8, src->g, pred);
+    vstrbq_scatter_offset_p(dst + b_offset, AIPL_3_BYTE_OFFSETS_U8, src->b, pred);
 }
 
 /**

@@ -515,11 +515,11 @@ aipl_error_t aipl_white_balance_bgr888(const void* input, void* output,
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_rgb_x16_t pix;
-            aipl_mve_load_bgr888_16px(&pix, src, tail_p);
+            aipl_mve_load_24bit_16px(&pix, src, tail_p, 2, 1, 0);
 
             aipl_mve_white_balance_rgb_x16(&pix, ar, ag, ab);
 
-            aipl_mve_store_bgr888_16px(dst, &pix, tail_p);
+            aipl_mve_store_24bit_16px(dst, &pix, tail_p, 2, 1, 0);
 
             src += 48;
             dst += 48;
@@ -527,26 +527,26 @@ aipl_error_t aipl_white_balance_bgr888(const void* input, void* output,
         }
     }
 #else
-    const aipl_bgr888_px_t* src_ptr = input;
-    aipl_bgr888_px_t* dst_ptr = output;
+    const uint8_t* src_ptr = input;
+    uint8_t* dst_ptr = output;
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        const aipl_bgr888_px_t* src = src_ptr + (i * pitch);
-        aipl_bgr888_px_t* dst = dst_ptr + (i * pitch);
+        const uint8_t* src = src_ptr + i * pitch * 3;
+        uint8_t* dst = dst_ptr + i * pitch * 3;
 
         for (uint32_t j = 0; j < width; ++j)
         {
-            int16_t r = src->r * ar;
-            int16_t g = src->g * ag;
-            int16_t b = src->b * ab;
+            int16_t r = src[2] * ar;
+            int16_t g = src[1] * ag;
+            int16_t b = src[0] * ab;
 
-            dst->r = aipl_channel_cap(r);
-            dst->g = aipl_channel_cap(g);
-            dst->b = aipl_channel_cap(b);
+            dst[2] = aipl_channel_cap(r);
+            dst[1] = aipl_channel_cap(g);
+            dst[0] = aipl_channel_cap(b);
 
-            ++src;
-            ++dst;
+            src += 3;
+            dst += 3;
         }
     }
 #endif
@@ -599,21 +599,21 @@ aipl_error_t aipl_white_balance_rgb565(const void* input, void* output,
 
         for (uint32_t j = 0; j < width; ++j)
         {
-            aipl_bgr888_px_t px;
-            aipl_load_rgb565_px(&px, src);
+            uint8_t px[3];
+            aipl_load_rgb565_px(px, src, 2, 1, 0);
 
-            int16_t r = px.r * ar;
-            int16_t g = px.g * ag;
-            int16_t b = px.b * ab;
+            int16_t r = px[2] * ar;
+            int16_t g = px[1] * ag;
+            int16_t b = px[0] * ab;
 
-            px.r = aipl_channel_cap(r);
-            px.g = aipl_channel_cap(g);
-            px.b = aipl_channel_cap(b);
+            px[2] = aipl_channel_cap(r);
+            px[1] = aipl_channel_cap(g);
+            px[0] = aipl_channel_cap(b);
 
-            aipl_pack_rgb565_px(dst, &px);
+            aipl_pack_rgb565_px(dst, px, 2, 1, 0);
 
-            ++src;
-            ++dst;
+            src += 3;
+            dst += 3;
         }
     }
 #endif
