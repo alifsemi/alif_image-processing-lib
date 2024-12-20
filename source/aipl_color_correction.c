@@ -27,6 +27,13 @@
 /**********************
  *  STATIC PROTOTYPES
  **********************/
+aipl_error_t aipl_color_correction_24bit(const void* input, void* output,
+                                          uint32_t pitch,
+                                          uint32_t width, uint32_t height,
+                                          const float* ccm,
+                                          uint8_t r_offset,
+                                          uint8_t g_offset,
+                                          uint8_t b_offset);
 
 /**********************
  *  STATIC VARIABLES
@@ -67,6 +74,9 @@ aipl_error_t aipl_color_correction_rgb(const void* input, void* output,
                                                   width, height, ccm);
         case AIPL_COLOR_BGR888:
             return aipl_color_correction_bgr888(input, output, pitch,
+                                                width, height, ccm);
+        case AIPL_COLOR_RGB888:
+            return aipl_color_correction_rgb888(input, output, pitch,
                                                 width, height, ccm);
         case AIPL_COLOR_RGB565:
             return aipl_color_correction_rgb565(input, output, pitch,
@@ -576,63 +586,66 @@ aipl_error_t aipl_color_correction_rgb565(const void* input, void* output,
     return AIPL_ERR_OK;
 }
 
-aipl_error_t aipl_color_correction_rgb565(const void* input, void* output,
+/**********************
+ *   STATIC FUNCTIONS
+ **********************/
+aipl_error_t aipl_color_correction_24bit(const void* input, void* output,
                                           uint32_t pitch,
                                           uint32_t width, uint32_t height,
-                                          const float* ccm)
+                                          const float* ccm,
+                                          uint8_t r_offset,
+                                          uint8_t g_offset,
+                                          uint8_t b_offset)
 {
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
 #ifdef AIPL_HELIUM_ACCELERATION
-    const uint16_t* src_ptr = input;
-    uint16_t* dst_ptr = output;
+    const uint8_t* src_ptr = input;
+    uint8_t* dst_ptr = output;
 
     for (uint32_t i = 0; i < height; ++i)
     {
         int32_t cnt = width;
-        const uint16_t* src = src_ptr + (i * pitch);
-        uint16_t* dst = dst_ptr + (i * pitch);
+        const uint8_t* src = src_ptr + (i * pitch) * 3;
+        uint8_t* dst = dst_ptr + (i * pitch) * 3;
 
         while (cnt > 0)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_rgb_x16_t pix;
-            aipl_mve_load_rgb565_16px(&pix, (uint8_t*)src, tail_p);
+            aipl_mve_load_24bit_16px(&pix, src, tail_p,
+                                     r_offset, g_offset, b_offset);
 
             aipl_mve_color_correction_rgb_x16(&pix, ccm);
 
-            aipl_mve_store_rgb565_16px((uint8_t*)dst, &pix, tail_p);
+            aipl_mve_store_24bit_16px(dst, &pix, tail_p,
+                                      r_offset, g_offset, b_offset);
 
-            src += 16;
-            dst += 16;
+            src += 48;
+            dst += 48;
             cnt -= 16;
         }
-    }
+}
 #else
-    const aipl_rgb565_px_t* src_ptr = input;
-    aipl_rgb565_px_t* dst_ptr = output;
+    const uint8_t* src_ptr = input;
+    uint8_t* dst_ptr = output;
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        const aipl_rgb565_px_t* src = src_ptr + (i * pitch);
-        aipl_rgb565_px_t* dst = dst_ptr + (i * pitch);
+        const uint8_t* src = src_ptr + i * pitch * 3;
+        uint8_t* dst = dst_ptr + i * pitch * 3;
 
         for (uint32_t j = 0; j < width; ++j)
         {
-            uint8_t px[3];
-            aipl_load_rgb565_px(&px, src);
+            int16_t r = src[r_offset] * ccm[0] + src[g_offset] * ccm[1] + src[b_offset] * ccm[2];
+            int16_t g = src[r_offset] * ccm[3] + src[g_offset] * ccm[4] + src[b_offset] * ccm[5];
+            int16_t b = src[r_offset] * ccm[6] + src[g_offset] * ccm[7] + src[b_offset] * ccm[8];
 
-            int16_t r = px[2] * ccm[0] + px[1] * ccm[1] + px[0] * ccm[2];
-            int16_t g = px[2] * ccm[3] + px[1] * ccm[4] + px[0] * ccm[5];
-            int16_t b = px[2] * ccm[6] + px[1] * ccm[7] + px[0] * ccm[8];
-
-            px[2] = aipl_channel_cap(r);
-            px[1] = aipl_channel_cap(g);
-            px[0] = aipl_channel_cap(b);
-
-            aipl_pack_rgb565_px(dst, &px);
+            dst[r_offset] = aipl_channel_cap(r);
+            dst[g_offset] = aipl_channel_cap(g);
+            dst[b_offset] = aipl_channel_cap(b);
 
             src += 3;
             dst += 3;
@@ -642,7 +655,3 @@ aipl_error_t aipl_color_correction_rgb565(const void* input, void* output,
 
     return AIPL_ERR_OK;
 }
-
-/**********************
- *   STATIC FUNCTIONS
- **********************/
