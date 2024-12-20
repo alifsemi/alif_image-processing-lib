@@ -172,6 +172,24 @@ aipl_error_t aipl_lut_transform_rgba5551(const void* input, void* output,
                                             uint8_t* lut);
 
 /**
+ * Perform a gamma correcton of an BGR888 image
+ * using raw pointer interface
+ *
+ *
+ * @param input     input image pointer
+ * @param output    output image buffer pointer
+ * @param pitch     input image pitch
+ * @param width     image width
+ * @param height    image height
+ * @param lut       lookup table
+ * @return error code
+ */
+aipl_error_t aipl_lut_transform_bgr888(const void* input, void* output,
+                                       uint32_t pitch,
+                                       uint32_t width, uint32_t height,
+                                       uint8_t* lut);
+
+/**
  * Perform a gamma correcton of an RGB888 image
  * using raw pointer interface
  *
@@ -185,9 +203,10 @@ aipl_error_t aipl_lut_transform_rgba5551(const void* input, void* output,
  * @return error code
  */
 aipl_error_t aipl_lut_transform_rgb888(const void* input, void* output,
-                                          uint32_t pitch,
-                                          uint32_t width, uint32_t height,
-                                          uint8_t* lut);
+                                       uint32_t pitch,
+                                       uint32_t width, uint32_t height,
+                                       uint8_t* lut);
+
 
 /**
  * Perform a gamma correcton of an RGB565 image

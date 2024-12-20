@@ -46,6 +46,7 @@ aipl_color_space_t aipl_color_format_space(aipl_color_format_t format)
         case AIPL_COLOR_RGBA5551:
         case AIPL_COLOR_RGB565:
         case AIPL_COLOR_RGB888:
+        case AIPL_COLOR_BGR888:
             return AIPL_SPACE_RGB;
 
         /* YUV color formats */
@@ -83,6 +84,7 @@ uint8_t aipl_color_format_depth(aipl_color_format_t format)
         case AIPL_COLOR_RGBA5551:
         case AIPL_COLOR_RGB565:
             return 16;
+        case AIPL_COLOR_BGR888:
         case AIPL_COLOR_RGB888:
             return 24;
 
@@ -126,10 +128,12 @@ const char* aipl_color_format_str(aipl_color_format_t format)
             return "RGBA4444";
         case AIPL_COLOR_RGBA5551:
             return "RGBA5551";
-        case AIPL_COLOR_RGB565:
-            return "RGB565";
         case AIPL_COLOR_RGB888:
             return "RGB888";
+        case AIPL_COLOR_RGB565:
+            return "RGB565";
+        case AIPL_COLOR_BGR888:
+            return "BGR888";
 
         /* YUV color formats */
         case AIPL_COLOR_YV12:

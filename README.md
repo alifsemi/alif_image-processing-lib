@@ -17,7 +17,7 @@
       * RGBA8888
       * RGBA4444
       * RGBA5551
-      * RGB888
+      * BGR888
       * RGB565
       * YV12
       * I420

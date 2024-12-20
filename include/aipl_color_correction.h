@@ -175,6 +175,24 @@ aipl_error_t aipl_color_correction_rgba5551(const void* input, void* output,
                                             const float* ccm);
 
 /**
+ * Apply a color correction matrix to an BGR888 image
+ *
+ * See aipl_color_correction_rgb()
+ *
+ * @param input     input image pointer
+ * @param output    output image buffer pointer
+ * @param pitch     input image pitch
+ * @param width     image width
+ * @param height    image height
+ * @param ccm       color correction matrix (9 elements len)
+ * @return error code
+ */
+aipl_error_t aipl_color_correction_bgr888(const void* input, void* output,
+                                          uint32_t pitch,
+                                          uint32_t width, uint32_t height,
+                                          const float* ccm);
+
+/**
  * Apply a color correction matrix to an RGB888 image
  *
  * See aipl_color_correction_rgb()
@@ -191,6 +209,7 @@ aipl_error_t aipl_color_correction_rgb888(const void* input, void* output,
                                           uint32_t pitch,
                                           uint32_t width, uint32_t height,
                                           const float* ccm);
+
 
 /**
  * Apply a color correction matrix to an RGB565 image

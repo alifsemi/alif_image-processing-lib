@@ -27,6 +27,13 @@
 /**********************
  *  STATIC PROTOTYPES
  **********************/
+aipl_error_t aipl_lut_transform_24bit(const void* input, void* output,
+                                       uint32_t pitch,
+                                       uint32_t width, uint32_t height,
+                                       uint8_t* lut,
+                                       uint8_t r_offset,
+                                       uint8_t g_offset,
+                                       uint8_t b_offset);
 
 /**********************
  *  STATIC VARIABLES
@@ -40,10 +47,10 @@
  *   GLOBAL FUNCTIONS
  **********************/
 aipl_error_t aipl_lut_transform_rgb(const void* input, void* output,
-                                       uint32_t pitch,
-                                       uint32_t width, uint32_t height,
-                                       aipl_color_format_t format,
-                                       uint8_t* lut)
+                                    uint32_t pitch,
+                                    uint32_t width, uint32_t height,
+                                    aipl_color_format_t format,
+                                    uint8_t* lut)
 {
     switch (format)
     {
@@ -65,6 +72,9 @@ aipl_error_t aipl_lut_transform_rgb(const void* input, void* output,
         case AIPL_COLOR_RGBA5551:
             return aipl_lut_transform_rgba5551(input, output, pitch,
                                                   width, height, lut);
+        case AIPL_COLOR_BGR888:
+            return aipl_lut_transform_bgr888(input, output, pitch,
+                                                width, height, lut);
         case AIPL_COLOR_RGB888:
             return aipl_lut_transform_rgb888(input, output, pitch,
                                                 width, height, lut);
@@ -470,62 +480,24 @@ aipl_error_t aipl_lut_transform_rgba5551(const void* input, void* output,
     return AIPL_ERR_OK;
 }
 
+aipl_error_t aipl_lut_transform_bgr888(const void* input, void* output,
+                                          uint32_t pitch,
+                                          uint32_t width, uint32_t height,
+                                          uint8_t* lut)
+{
+    return aipl_lut_transform_24bit(input, output, pitch,
+                                    width, height, lut,
+                                    2, 1, 0);
+}
+
 aipl_error_t aipl_lut_transform_rgb888(const void* input, void* output,
                                           uint32_t pitch,
                                           uint32_t width, uint32_t height,
                                           uint8_t* lut)
 {
-    if (input == NULL || output == NULL || lut == NULL)
-        return AIPL_ERR_NULL_POINTER;
-
-#ifdef AIPL_HELIUM_ACCELERATION
-    const uint8_t* src_ptr = input;
-    uint8_t* dst_ptr = output;
-
-    for (uint32_t i = 0; i < height; ++i)
-    {
-        int32_t cnt = width;
-        const uint8_t* src = src_ptr + (i * pitch) * 3;
-        uint8_t* dst = dst_ptr + (i * pitch) * 3;
-
-        while (cnt > 0)
-        {
-            mve_pred16_t tail_p = vctp8q(cnt);
-
-            aipl_mve_rgb_x16_t pix;
-            aipl_mve_load_rgb888_16px(&pix, src, tail_p);
-
-            aipl_mve_lut_transform_rgb_x16(&pix, lut);
-
-            aipl_mve_store_rgb888_16px(dst, &pix, tail_p);
-
-            src += 48;
-            dst += 48;
-            cnt -= 16;
-        }
-    }
-#else
-    const aipl_rgb888_px_t* src_ptr = input;
-    aipl_rgb888_px_t* dst_ptr = output;
-
-    for (uint32_t i = 0; i < height; ++i)
-    {
-        const aipl_rgb888_px_t* src = src_ptr + (i * pitch);
-        aipl_rgb888_px_t* dst = dst_ptr + (i * pitch);
-
-        for (uint32_t j = 0; j < width; ++j)
-        {
-            dst->r = lut[src->r];
-            dst->g = lut[src->g];
-            dst->b = lut[src->b];
-
-            ++src;
-            ++dst;
-        }
-    }
-#endif
-
-    return AIPL_ERR_OK;
+    return aipl_lut_transform_24bit(input, output, pitch,
+                                    width, height, lut,
+                                    0, 1, 2);
 }
 
 aipl_error_t aipl_lut_transform_rgb565(const void* input, void* output,
@@ -573,14 +545,14 @@ aipl_error_t aipl_lut_transform_rgb565(const void* input, void* output,
 
         for (uint32_t j = 0; j < width; ++j)
         {
-            aipl_rgb888_px_t px;
-            aipl_load_rgb565_px(&px, src);
+            uint8_t px[3];
+            aipl_load_rgb565_px(px, src, 2, 1, 0);
 
-            px.r = lut[px.r];
-            px.g = lut[px.g];
-            px.b = lut[px.b];
+            px[2] = lut[px[2]];
+            px[1] = lut[px[1]];
+            px[0] = lut[px[0]];
 
-            aipl_pack_rgb565_px(dst, &px);
+            aipl_pack_rgb565_px(dst, px, 2, 1, 0);
 
             ++src;
             ++dst;
@@ -594,3 +566,65 @@ aipl_error_t aipl_lut_transform_rgb565(const void* input, void* output,
 /**********************
  *   STATIC FUNCTIONS
  **********************/
+aipl_error_t aipl_lut_transform_24bit(const void* input, void* output,
+                                       uint32_t pitch,
+                                       uint32_t width, uint32_t height,
+                                       uint8_t* lut,
+                                       uint8_t r_offset,
+                                       uint8_t g_offset,
+                                       uint8_t b_offset)
+{
+    if (input == NULL || output == NULL || lut == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
+#ifdef AIPL_HELIUM_ACCELERATION
+    const uint8_t* src_ptr = input;
+    uint8_t* dst_ptr = output;
+
+    for (uint32_t i = 0; i < height; ++i)
+    {
+        int32_t cnt = width;
+        const uint8_t* src = src_ptr + (i * pitch) * 3;
+        uint8_t* dst = dst_ptr + (i * pitch) * 3;
+
+        while (cnt > 0)
+        {
+            mve_pred16_t tail_p = vctp8q(cnt);
+
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_load_24bit_16px(&pix, src, tail_p,
+                                     r_offset, g_offset, b_offset);
+
+            aipl_mve_lut_transform_rgb_x16(&pix, lut);
+
+            aipl_mve_store_24bit_16px(dst, &pix, tail_p,
+                                      r_offset, g_offset, b_offset);
+
+            src += 48;
+            dst += 48;
+            cnt -= 16;
+        }
+    }
+#else
+    const uint8_t* src_ptr = input;
+    uint8_t* dst_ptr = output;
+
+    for (uint32_t i = 0; i < height; ++i)
+    {
+        const uint8_t* src = src_ptr + i * pitch * 3;
+        uint8_t* dst = dst_ptr + i * pitch * 3;
+
+        for (uint32_t j = 0; j < width; ++j)
+        {
+            dst[r_offset] = lut[src[r_offset]];
+            dst[g_offset] = lut[src[g_offset]];
+            dst[b_offset] = lut[src[b_offset]];
+
+            src += 3;
+            dst += 3;
+        }
+    }
+#endif
+
+    return AIPL_ERR_OK;
+}
