@@ -27,6 +27,13 @@
 /**********************
  *  STATIC PROTOTYPES
  **********************/
+aipl_error_t aipl_lut_transform_24bit(const void* input, void* output,
+                                       uint32_t pitch,
+                                       uint32_t width, uint32_t height,
+                                       uint8_t* lut,
+                                       uint8_t r_offset,
+                                       uint8_t g_offset,
+                                       uint8_t b_offset);
 
 /**********************
  *  STATIC VARIABLES
@@ -40,10 +47,10 @@
  *   GLOBAL FUNCTIONS
  **********************/
 aipl_error_t aipl_lut_transform_rgb(const void* input, void* output,
-                                       uint32_t pitch,
-                                       uint32_t width, uint32_t height,
-                                       aipl_color_format_t format,
-                                       uint8_t* lut)
+                                    uint32_t pitch,
+                                    uint32_t width, uint32_t height,
+                                    aipl_color_format_t format,
+                                    uint8_t* lut)
 {
     switch (format)
     {
@@ -67,6 +74,9 @@ aipl_error_t aipl_lut_transform_rgb(const void* input, void* output,
                                                   width, height, lut);
         case AIPL_COLOR_BGR888:
             return aipl_lut_transform_bgr888(input, output, pitch,
+                                                width, height, lut);
+        case AIPL_COLOR_RGB888:
+            return aipl_lut_transform_rgb888(input, output, pitch,
                                                 width, height, lut);
         case AIPL_COLOR_RGB565:
             return aipl_lut_transform_rgb565(input, output, pitch,
@@ -475,57 +485,19 @@ aipl_error_t aipl_lut_transform_bgr888(const void* input, void* output,
                                           uint32_t width, uint32_t height,
                                           uint8_t* lut)
 {
-    if (input == NULL || output == NULL || lut == NULL)
-        return AIPL_ERR_NULL_POINTER;
+    return aipl_lut_transform_24bit(input, output, pitch,
+                                    width, height, lut,
+                                    2, 1, 0);
+}
 
-#ifdef AIPL_HELIUM_ACCELERATION
-    const uint8_t* src_ptr = input;
-    uint8_t* dst_ptr = output;
-
-    for (uint32_t i = 0; i < height; ++i)
-    {
-        int32_t cnt = width;
-        const uint8_t* src = src_ptr + (i * pitch) * 3;
-        uint8_t* dst = dst_ptr + (i * pitch) * 3;
-
-        while (cnt > 0)
-        {
-            mve_pred16_t tail_p = vctp8q(cnt);
-
-            aipl_mve_rgb_x16_t pix;
-            aipl_mve_load_24bit_16px(&pix, src, tail_p, 2, 1, 0);
-
-            aipl_mve_lut_transform_rgb_x16(&pix, lut);
-
-            aipl_mve_store_24bit_16px(dst, &pix, tail_p, 2, 1, 0);
-
-            src += 48;
-            dst += 48;
-            cnt -= 16;
-        }
-    }
-#else
-    const uint8_t* src_ptr = input;
-    uint8_t* dst_ptr = output;
-
-    for (uint32_t i = 0; i < height; ++i)
-    {
-        const uint8_t* src = src_ptr + i * pitch * 3;
-        uint8_t* dst = dst_ptr + i * pitch * 3;
-
-        for (uint32_t j = 0; j < width; ++j)
-        {
-            dst[2] = lut[src[2]];
-            dst[1] = lut[src[1]];
-            dst[0] = lut[src[0]];
-
-            src += 3;
-            dst += 3;
-        }
-    }
-#endif
-
-    return AIPL_ERR_OK;
+aipl_error_t aipl_lut_transform_rgb888(const void* input, void* output,
+                                          uint32_t pitch,
+                                          uint32_t width, uint32_t height,
+                                          uint8_t* lut)
+{
+    return aipl_lut_transform_24bit(input, output, pitch,
+                                    width, height, lut,
+                                    0, 1, 2);
 }
 
 aipl_error_t aipl_lut_transform_rgb565(const void* input, void* output,
@@ -594,3 +566,65 @@ aipl_error_t aipl_lut_transform_rgb565(const void* input, void* output,
 /**********************
  *   STATIC FUNCTIONS
  **********************/
+aipl_error_t aipl_lut_transform_24bit(const void* input, void* output,
+                                       uint32_t pitch,
+                                       uint32_t width, uint32_t height,
+                                       uint8_t* lut,
+                                       uint8_t r_offset,
+                                       uint8_t g_offset,
+                                       uint8_t b_offset)
+{
+    if (input == NULL || output == NULL || lut == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
+#ifdef AIPL_HELIUM_ACCELERATION
+    const uint8_t* src_ptr = input;
+    uint8_t* dst_ptr = output;
+
+    for (uint32_t i = 0; i < height; ++i)
+    {
+        int32_t cnt = width;
+        const uint8_t* src = src_ptr + (i * pitch) * 3;
+        uint8_t* dst = dst_ptr + (i * pitch) * 3;
+
+        while (cnt > 0)
+        {
+            mve_pred16_t tail_p = vctp8q(cnt);
+
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_load_24bit_16px(&pix, src, tail_p,
+                                     r_offset, g_offset, b_offset);
+
+            aipl_mve_lut_transform_rgb_x16(&pix, lut);
+
+            aipl_mve_store_24bit_16px(dst, &pix, tail_p,
+                                      r_offset, g_offset, b_offset);
+
+            src += 48;
+            dst += 48;
+            cnt -= 16;
+        }
+    }
+#else
+    const uint8_t* src_ptr = input;
+    uint8_t* dst_ptr = output;
+
+    for (uint32_t i = 0; i < height; ++i)
+    {
+        const uint8_t* src = src_ptr + i * pitch * 3;
+        uint8_t* dst = dst_ptr + i * pitch * 3;
+
+        for (uint32_t j = 0; j < width; ++j)
+        {
+            dst[r_offset] = lut[src[r_offset]];
+            dst[g_offset] = lut[src[g_offset]];
+            dst[b_offset] = lut[src[b_offset]];
+
+            src += 3;
+            dst += 3;
+        }
+    }
+#endif
+
+    return AIPL_ERR_OK;
+}
