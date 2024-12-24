@@ -202,7 +202,7 @@
       </files>
     </component>
 
-        <component Cclass="Graphics" Cgroup="AIPL" Csub="Bayer" Cversion="1.0.0" condition="AIPL-Essential">
+    <component Cclass="Graphics" Cgroup="AIPL" Csub="Bayer" Cversion="1.0.0" condition="AIPL-Essential">
       <description>
         Alif Image Processing Library from:
           * RGGB
@@ -220,7 +220,6 @@
         <file category="sourceC"  name="source/aipl_bayer.c"/>
       </files>
     </component>
-
 
   </components>
 </package>
