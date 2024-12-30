@@ -242,8 +242,11 @@ d2_u32 aipl_dave2d_color_mode_convert(const void* input, void* output,
     D2_CHECK_ERR(d2_startframe(handle));
 
     /* Restore old framebuffer */
-    D2_CHECK_ERR(d2_framebuffer(handle, frmbf_ptr, frmbf_pitch,
-                                frmbf_width, frmbf_height, frmbf_format));
+    if (frmbf_ptr != NULL)
+    {
+        D2_CHECK_ERR(d2_framebuffer(handle, frmbf_ptr, frmbf_pitch,
+                                    frmbf_width, frmbf_height, frmbf_format));
+    }
 
     /* Invalidate CPU cache of the output */
     aipl_cpu_cache_invalidate(output, pitch * height
@@ -409,8 +412,11 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
     D2_CHECK_ERR(d2_startframe(handle));
 
     /* Restore old framebuffer */
-    D2_CHECK_ERR(d2_framebuffer(handle, frmbf_ptr, frmbf_pitch,
-                   frmbf_width, frmbf_height, frmbf_format));
+    if (frmbf_ptr != NULL)
+    {
+        D2_CHECK_ERR(d2_framebuffer(handle, frmbf_ptr, frmbf_pitch,
+                     frmbf_width, frmbf_height, frmbf_format));
+    }
 
     /* Invalidate CPU cache of the output */
     aipl_cpu_cache_invalidate(output, output_width * output_height

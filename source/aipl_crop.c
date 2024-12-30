@@ -78,7 +78,7 @@ aipl_error_t aipl_crop(const void* input, void* output,
     {
         // Update row address
         const uint8_t *ip_fb_row = ip_fb + left * (bpp / 8);
-        memmove(op_fb, ip_fb_row, width * (bpp / 8));
+        memmove(op_fb, ip_fb_row, new_width * (bpp / 8));
 
         // Update fb
         ip_fb += (width * (bpp / 8));

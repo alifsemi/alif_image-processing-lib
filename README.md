@@ -28,6 +28,11 @@
       * NV12
       * YUY2
       * UYVY
+    Supported bayer filters that can be decoded into RGB888 or BGR888 image:
+      * RGGB
+      * GRBG
+      * BGGR
+      * GBRG
 
 ## Requirements
 
@@ -40,4 +45,4 @@ This CMSIS pack requires some packs to be installed and added to the project:
 2. Set `CMSIS_PACK_ROOT` environment variables to cmsis-packs installation directory.
 3. Run `./gen_pack.sh` script
 4. Install generated CMSIS pack by following command:
-`cpackget add ./output/AlifSemiconductor.AIPL.0.9.0.pack`
+`cpackget add ./output/AlifSemiconductor.AIPL.1.0.0.pack`
