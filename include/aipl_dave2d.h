@@ -113,9 +113,12 @@ d2_u32 aipl_dave2d_color_mode_convert(const void* input, void* output,
  * @param format        input image format
  * @param output_width  output image width
  * @param output_height output image height
+ * @param x             x
+ * @param y             y
  * @param rotation      rotation
  * @param flip_u        flip horizontally
  * @param flip_v        flip vertically
+ * @param scale         enable scaling
  * @param interpolate   apply bilinear filter
  * @return D/AVE2D driver error code (see dave_errorcodes.h)
  */
@@ -124,10 +127,10 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
                              uint32_t width, uint32_t height,
                              d2_u32 format,
                              uint32_t output_width, uint32_t output_height,
+                             int32_t x, int32_t y,
                              int32_t rotation,
                              bool flip_u, bool flip_v,
-                             bool interpolate);
-
+                             bool scale, bool interpolate);
 /**
  * Convert D/AVE2D driver error code to AIPL error code
  * Save the last converted original D/AVE2D driver error code
