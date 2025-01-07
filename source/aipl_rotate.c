@@ -50,22 +50,26 @@
         return AIPL_ERR_NULL_POINTER;
 
 #ifdef AIPL_DAVE2D_ACCELERATION
-    if (aipl_dave2d_format_supported(format))
+    if (aipl_dave2d_format_supported(format)
+        && format != AIPL_COLOR_ARGB1555
+        && format != AIPL_COLOR_RGBA5551
+        && format != AIPL_COLOR_ALPHA8)
     {
         d2_u32 ret = aipl_dave2d_texturing(input, output,
                             pitch,
                             width, height,
                             aipl_dave2d_format_to_mode(format),
                             width, height,
+                            0, 0,
                             rotation,
                             false, false,
-                            false);
+                            false, false);
 
         return aipl_dave2d_error_convert(ret);
     }
 #else
-    // Software mode is not implemented
-    return AIPL_ERR_UNIMPLEMENTED;
+    // Software mode is not supported
+    return AIPL_ERR_NOT_SUPPORTED;
 #endif
 }
 
@@ -80,11 +84,11 @@ aipl_error_t aipl_rotate_img(const aipl_image_t* input,
         return AIPL_ERR_FORMAT_MISMATCH;
 
     if ((rotation == AIPL_ROTATE_0 || rotation == AIPL_ROTATE_180) &&
-        input->width != output->width || input->height != output->height)
+        (input->width != output->width || input->height != output->height))
         return AIPL_ERR_SIZE_MISMATCH;
 
     if ((rotation == AIPL_ROTATE_90 || rotation == AIPL_ROTATE_270) &&
-        input->width != output->height || input->height != output->width)
+        (input->width != output->height || input->height != output->width))
         return AIPL_ERR_SIZE_MISMATCH;
 
     return aipl_rotate(input->data, output->data,

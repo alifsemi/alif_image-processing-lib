@@ -12,6 +12,14 @@
 #include "RTE_Components.h"
 #include CMSIS_device_header
 #include <RTE_Device.h>
+#include <stddef.h>
+#include "aipl_config.h"
+#ifdef AIPL_DAVE2D_ACCELERATION
+#include "aipl_dave2d.h"
+#endif
+#ifdef AIPL_HELIUM_ACCELERATION
+#include <arm_mve.h>
+#endif
 
 #include "aipl_crop.h"
 #include "aipl_config.h"
@@ -28,6 +36,12 @@
 /**********************
  *  STATIC PROTOTYPES
  **********************/
+static aipl_error_t aipl_crop_sw(const void* input, void* output,
+                        uint32_t pitch,
+                        uint32_t width, uint32_t height,
+                        aipl_color_format_t format,
+                        uint32_t left, uint32_t top,
+                        uint32_t right, uint32_t bottom);
 
 /**********************
  *  STATIC VARIABLES
@@ -51,44 +65,37 @@ aipl_error_t aipl_crop(const void* input, void* output,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-	// Checking the boundary
-	if( (left > right) || (right > width) || (top > bottom) || (bottom > height) )
-		return AIPL_ERR_FRAME_OUT_OF_RANGE;
-
-    uint32_t bpp = aipl_color_format_depth (format);
-
-	// Check for no cropping
-	if (left == 0 && top == 0 && right == width && bottom == height) {
-	    // No-op if cropping and in-place
-        size_t size = width * height * (bpp / 8);
-	    if (input != output) {
-	        memcpy(output, input, size);
-	    }
-        aipl_cpu_cache_clean(output, size);
-	    return AIPL_ERR_OK;
-	}
-
-	// Updating the input frame column start
-	uint8_t *ip_fb = (uint8_t *)input + (top * width * (bpp / 8));
-    uint8_t *op_fb = (uint8_t *)output;
-
-    uint32_t new_width = right - left;
-    uint32_t new_hight = bottom - top;
-    for(uint32_t i = 0; i < new_hight; ++i)
+#ifdef AIPL_DAVE2D_ACCELERATION
+    if (aipl_dave2d_format_supported(format)
+        && format != AIPL_COLOR_ARGB1555
+        && format != AIPL_COLOR_RGBA5551
+        && format != AIPL_COLOR_ALPHA8)
     {
-        // Update row address
-        const uint8_t *ip_fb_row = ip_fb + left * (bpp / 8);
-        memmove(op_fb, ip_fb_row, new_width * (bpp / 8));
+        uint32_t x = left;
+        uint32_t y = top;
+        uint32_t output_width = right - left;
+        uint32_t output_height = bottom - top;
 
-        // Update fb
-        ip_fb += (width * (bpp / 8));
-        op_fb += (new_width * (bpp / 8));
+        d2_u32 ret = aipl_dave2d_texturing(input, output,
+                                           pitch,
+                                           width, height,
+                                           aipl_dave2d_format_to_mode(format),
+                                           output_width, output_height,
+                                           -x, -y,
+                                           0,
+                                           false, false,
+                                           false, false);
+
+        return aipl_dave2d_error_convert(ret);
     }
+#endif
 
-    size_t size = new_width * new_hight * (bpp / 8);
-    aipl_cpu_cache_clean(output, size);
-
-	return AIPL_ERR_OK;
+    return aipl_crop_sw(input, output,
+                        pitch,
+                        width, height,
+                        format,
+                        left, top,
+                        right, bottom);
 }
 
 aipl_error_t aipl_crop_img(const aipl_image_t* input,
@@ -122,3 +129,54 @@ aipl_error_t aipl_crop_img(const aipl_image_t* input,
 /**********************
  *   STATIC FUNCTIONS
  **********************/
+aipl_error_t aipl_crop_sw(const void* input, void* output,
+                          uint32_t pitch,
+                          uint32_t width, uint32_t height,
+                          aipl_color_format_t format,
+                          uint32_t left, uint32_t top,
+                          uint32_t right, uint32_t bottom)
+{
+    // Check pointers
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
+    // Checking the boundary
+    if( (left > right) || (right > width) || (top > bottom) || (bottom > height) )
+        return AIPL_ERR_FRAME_OUT_OF_RANGE;
+
+    uint32_t bpp = aipl_color_format_depth (format);
+
+    // Check for no cropping
+    if (left == 0 && top == 0 && right == width && bottom == height) {
+        // No-op if cropping and in-place
+        size_t size = width * height * (bpp / 8);
+        if (input != output) {
+            memcpy(output, input, size);
+        }
+        aipl_cpu_cache_clean(output, size);
+        return AIPL_ERR_OK;
+    }
+
+    // Updating the input frame column start
+    uint8_t *ip_fb = (uint8_t *)input + (top * width * (bpp / 8));
+    uint8_t *op_fb = (uint8_t *)output;
+
+    uint32_t new_width = right - left;
+    uint32_t new_hight = bottom - top;
+    for(uint32_t i = 0; i < new_hight; ++i)
+    {
+        // Update row address
+        const uint8_t *ip_fb_row = ip_fb + left * (bpp / 8);
+        memmove(op_fb, ip_fb_row, new_width * (bpp / 8));
+
+        // Update fb
+        ip_fb += (width * (bpp / 8));
+        op_fb += (new_width * (bpp / 8));
+    }
+
+    size_t size = new_width * new_hight * (bpp / 8);
+    aipl_cpu_cache_clean(output, size);
+
+    return AIPL_ERR_OK;
+}
+

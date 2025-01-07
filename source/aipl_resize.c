@@ -58,16 +58,20 @@ aipl_error_t aipl_resize(const void* input, void* output,
         return AIPL_ERR_NULL_POINTER;
 
 #ifdef AIPL_DAVE2D_ACCELERATION
-    if (aipl_dave2d_format_supported(format))
+    if (aipl_dave2d_format_supported(format)
+        && format != AIPL_COLOR_ARGB1555
+        && format != AIPL_COLOR_RGBA5551
+        && format != AIPL_COLOR_ALPHA8)
     {
         d2_u32 ret = aipl_dave2d_texturing(input, output,
                                            pitch,
                                            width, height,
                                            aipl_dave2d_format_to_mode(format),
                                            output_width, output_height,
+                                           0, 0,
                                            0,
                                            false, false,
-                                           interpolate);
+                                           true, interpolate);
 
         return aipl_dave2d_error_convert(ret);
     }
@@ -75,48 +79,30 @@ aipl_error_t aipl_resize(const void* input, void* output,
 
     switch (format)
     {
-        /* Alpha color formats */
-        case AIPL_COLOR_ALPHA8:
-            return AIPL_ERR_UNSUPPORTED_FORMAT;
-        /* RGB color formats */
-        case AIPL_COLOR_ARGB8888:
-            return AIPL_ERR_UNSUPPORTED_FORMAT;
-        case AIPL_COLOR_RGBA8888:
-            return AIPL_ERR_UNSUPPORTED_FORMAT;
-        case AIPL_COLOR_ARGB4444:
-            return AIPL_ERR_UNSUPPORTED_FORMAT;
-        case AIPL_COLOR_ARGB1555:
-            return AIPL_ERR_UNSUPPORTED_FORMAT;
-        case AIPL_COLOR_RGBA4444:
-            return AIPL_ERR_UNSUPPORTED_FORMAT;
-        case AIPL_COLOR_RGBA5551:
-            return AIPL_ERR_UNSUPPORTED_FORMAT;
-        case AIPL_COLOR_RGB565:
-            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_BGR888:
             return aipl_resize_bgr888(input, output,
                                       width, height,
                                       output_width, output_height);
+        /* Alpha color formats */
+        case AIPL_COLOR_ALPHA8:
+        /* RGB color formats */
+        case AIPL_COLOR_ARGB8888:
+        case AIPL_COLOR_RGBA8888:
+        case AIPL_COLOR_ARGB4444:
+        case AIPL_COLOR_ARGB1555:
+        case AIPL_COLOR_RGBA4444:
+        case AIPL_COLOR_RGBA5551:
+        case AIPL_COLOR_RGB565:
         /* YUV color formats */
         case AIPL_COLOR_YV12:
-            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_I420:
-            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_NV12:
-            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_NV21:
-            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_I422:
-            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_YUY2:
-            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_UYVY:
-            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_I444:
-            return AIPL_ERR_UNSUPPORTED_FORMAT;
         case AIPL_COLOR_I400:
-            return AIPL_ERR_UNSUPPORTED_FORMAT;
-
         default:
             return AIPL_ERR_UNSUPPORTED_FORMAT;
     }
@@ -152,22 +138,19 @@ static aipl_error_t aipl_resize_bgr888(const void* input, void* output,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-    const bool swapRB = false;
     const uint32_t pixel_size_B = aipl_color_format_depth(AIPL_COLOR_BGR888)/8;
 
     const uint8_t* srcImage = (const uint8_t*)input;
     uint8_t* dstImage = (uint8_t*)output;
 
 #ifdef AIPL_HELIUM_ACCELERATION
-    const uint32x4_t rgb_offset = {0,1,2,3};
-    const uint32x4_t bgr_offset = {2,1,0,3};
-    const uint32x4_t output_offset = swapRB ? bgr_offset : rgb_offset;
+    const uint32x4_t bgr_offset = {0,1,2,3};
 #endif
 
-// Copied from ei_camera.cpp in firmware-eta-compute
-// Modified for BGR888
-// This needs to be < 16 or it won't fit. Cortex-M4 only has SIMD for signed multiplies
-#define FRAC_BITS 14
+    // Copied from ei_camera.cpp in firmware-eta-compute
+    // Modified for BGR888
+    // This needs to be < 16 or it won't fit. Cortex-M4 only has SIMD for signed multiplies
+    #define FRAC_BITS 14
     const int FRAC_VAL = (1 << FRAC_BITS);
     const int FRAC_MASK = (FRAC_VAL - 1);
 
@@ -228,44 +211,25 @@ static aipl_error_t aipl_resize_bgr888(const void* input, void* output,
             p00 = vmulq(p00, ny_frac);
             p00 = vmlaq(p00, p01, y_frac);
             p00 = vrshrq(p00, FRAC_BITS);
-            vstrbq_scatter_offset_p_u32(d, output_offset, p00, vctp32q(pixel_size_B));
+            vstrbq_scatter_offset_p_u32(d, bgr_offset, p00, vctp32q(pixel_size_B));
 
             d += pixel_size_B;
 #else
             //interpolate and write out
-            if (swapRB) {
-                for (int color = 0; color < pixel_size_B;
-                    color++) // do pixel_size_B times for pixel_size_B colors
-                {
-                    uint32_t p00, p01, p10, p11;
-                    p00 = s[tx];
-                    p10 = s[tx + pixel_size_B];
-                    p01 = s[tx + srcWidth];
-                    p11 = s[tx + srcWidth + pixel_size_B];
-                    p00 = ((p00 * nx_frac) + (p10 * x_frac) + FRAC_VAL / 2) >> FRAC_BITS; // top line
-                    p01 = ((p01 * nx_frac) + (p11 * x_frac) + FRAC_VAL / 2) >> FRAC_BITS; // bottom line
-                    p00 = ((p00 * ny_frac) + (p01 * y_frac) + FRAC_VAL / 2) >> FRAC_BITS; //top + bottom
-                    d[pixel_size_B - color -1] = (uint8_t)p00; // store new pixel
-                    //ready next loop
-                    tx++;
-                }
-                d += 3;
-            } else {
-                for (int color = 0; color < pixel_size_B;
-                    color++) // do pixel_size_B times for pixel_size_B colors
-                {
-                    uint32_t p00, p01, p10, p11;
-                    p00 = s[tx];
-                    p10 = s[tx + pixel_size_B];
-                    p01 = s[tx + srcWidth];
-                    p11 = s[tx + srcWidth + pixel_size_B];
-                    p00 = ((p00 * nx_frac) + (p10 * x_frac) + FRAC_VAL / 2) >> FRAC_BITS; // top line
-                    p01 = ((p01 * nx_frac) + (p11 * x_frac) + FRAC_VAL / 2) >> FRAC_BITS; // bottom line
-                    p00 = ((p00 * ny_frac) + (p01 * y_frac) + FRAC_VAL / 2) >> FRAC_BITS; //top + bottom
-                    *d++ = (uint8_t)p00; // store new pixel
-                    //ready next loop
-                    tx++;
-                }
+            for (int color = 0; color < pixel_size_B;
+                color++) // do pixel_size_B times for pixel_size_B colors
+            {
+                uint32_t p00, p01, p10, p11;
+                p00 = s[tx];
+                p10 = s[tx + pixel_size_B];
+                p01 = s[tx + srcWidth];
+                p11 = s[tx + srcWidth + pixel_size_B];
+                p00 = ((p00 * nx_frac) + (p10 * x_frac) + FRAC_VAL / 2) >> FRAC_BITS; // top line
+                p01 = ((p01 * nx_frac) + (p11 * x_frac) + FRAC_VAL / 2) >> FRAC_BITS; // bottom line
+                p00 = ((p00 * ny_frac) + (p01 * y_frac) + FRAC_VAL / 2) >> FRAC_BITS; //top + bottom
+                *d++ = (uint8_t)p00; // store new pixel
+                //ready next loop
+                tx++;
             }
 #endif
         } // for x

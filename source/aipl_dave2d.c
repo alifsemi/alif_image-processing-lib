@@ -263,10 +263,18 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
                              uint32_t width, uint32_t height,
                              d2_u32 format,
                              uint32_t output_width, uint32_t output_height,
+                             int32_t x, int32_t y,
                              int32_t rotation,
                              bool flip_u, bool flip_v,
-                             bool interpolate)
+                             bool scale, bool interpolate)
 {
+    /* Check arguments*/
+    if (input == NULL || output == NULL)
+        return D2_NULLPOINTER;
+    if (rotation != 0 && rotation != 90 &&
+        rotation != 180 && rotation != 270)
+        return D2_INVALIDENUM;
+
     aipl_cpu_cache_clean(input, pitch * height
                                 * aipl_dave2d_mode_px_size(format));
 
@@ -296,9 +304,11 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
     D2_CHECK_ERR(d2_settexturemode(handle, interpolate ? d2_tm_filter : 0));
     D2_CHECK_ERR(d2_setfillmode(handle, d2_fm_texture));
 
-    /* Texture points in clockwise order and mapping parameters */
-    point_t p[4];
+    uint32_t new_width = scale ? output_width : width; 
+    uint32_t new_height = scale ? output_height : height; 
 
+    /* Texture points and mapping parameters */
+    point_t p[4];
     d2_s32 dxu; d2_s32 dxv;
     d2_s32 dyu; d2_s32 dyv;
 
@@ -308,12 +318,14 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
                                     output_width, output_width, output_height,
                                     format));
 
-        p[0].x =  0;                    p[0].y = 0;
-        p[1].x = output_width - 1;      p[1].y = 0;
-        p[2].x = output_width - 1;      p[2].y = output_height - 1;
-        p[3].x = 0;                     p[3].y = output_height - 1;
+        /* Set texture points in clockwise order */
+        p[0].x = x;                     p[0].y = y;
+        p[1].x = x + new_width - 1;     p[1].y = y;
+        p[2].x = x + new_width - 1;     p[2].y = y + new_height - 1;
+        p[3].x = x;                     p[3].y = y + new_height - 1;
 
-        dxu = D2_FIX16(1);      dxv = 0;
+        /* Set texture mapping parameters */
+        dxu = D2_FIX16(1);      dxv = 0;                        
         dyu = 0;                dyv = D2_FIX16(1);
     }
     if (rotation == 90) {
@@ -322,11 +334,13 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
                                     output_height, output_height, output_width,
                                     format));
 
-        p[0].x = output_height - 1;     p[0].y = 0;
-        p[1].x = output_height - 1;     p[1].y = output_width - 1;
-        p[2].x = 0;                     p[2].y = output_width - 1;
-        p[3].x = 0;                     p[3].y = 0;
+        /* Set texture points in clockwise order */
+        p[0].x = x + new_height - 1;    p[0].y = y;
+        p[1].x = x + new_height - 1;    p[1].y = y + new_width - 1;
+        p[2].x = x;                     p[2].y = y + new_width - 1;
+        p[3].x = x;                     p[3].y = y;
 
+        /* Set texture mapping parameters */
         dxu = 0;                dxv = D2_FIX16(1);
         dyu = -D2_FIX16(1);     dyv = 0;
     }
@@ -337,11 +351,13 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
                                     output_width, output_width, output_height,
                                     format));
 
-        p[0].x = output_width - 1;      p[0].y = output_height - 1;
-        p[1].x = 0;                     p[1].y = output_height - 1;
-        p[2].x = 0;                     p[2].y = 0;
-        p[3].x = output_width - 1;      p[3].y = 0;
+        /* Set texture points in clockwise order */
+        p[0].x = x + new_width - 1;     p[0].y = y + new_height - 1;
+        p[1].x = x;                     p[1].y = y + new_height - 1;
+        p[2].x = x;                     p[2].y = y;
+        p[3].x = x + new_width - 1;     p[3].y = y;
 
+        /* Set texture mapping parameters */
         dxu = -D2_FIX16(1);     dxv = 0;
         dyu = 0;                dyv = -D2_FIX16(1);
     }
@@ -351,25 +367,28 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
         D2_CHECK_ERR(d2_framebuffer(handle, output,
                                     output_height, output_height, output_width,
                                     format));
-        p[0].x = 0;                     p[0].y = output_width - 1;
-        p[1].x = 0;                     p[1].y = 0;
-        p[2].x = output_height - 1;     p[2].y = 0;
-        p[3].x = output_height - 1;     p[3].y = output_width - 1;
 
+        /* Set texture points in clockwise order */
+        p[0].x = x;                     p[0].y = y + new_width - 1;
+        p[1].x = x;                     p[1].y = y;
+        p[2].x = x + new_height - 1;    p[2].y = y;
+        p[3].x = x + new_height - 1;    p[3].y = y + new_width - 1;
+
+        /* Set texture mapping parameters */
         dxu = 0;                dxv = -D2_FIX16(1);
         dyv = 0;                dyu = D2_FIX16(1);
     }
 
     /* Apply scaling */
-    if(width != output_width)
+    if(width != new_width)
     {
-        dxu = (dxu * width) / output_width;
-        dxv = (dxv * width) / output_width;
+        dxu = (dxu * width) / new_width;
+        dxv = (dxv * width) / new_width;
     }
-    if(height != output_height)
+    if(height != new_height)
     {
-        dyu = (dyu * height) / output_height;
-        dyv = (dyv * height) / output_height;
+       dyu = (dyu * height) / new_height;
+       dyv = (dyv * height) / new_height;
     }
 
     /* Apply flipping */
