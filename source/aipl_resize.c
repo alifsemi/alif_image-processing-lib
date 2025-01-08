@@ -32,13 +32,10 @@
 /**********************
  *  STATIC VARIABLES
  **********************/
-static aipl_error_t aipl_resize_bgr888(const void* input, void* output,
-                                       int input_width, int input_height,
-                                       int output_width, int output_height);
-
-static aipl_error_t aipl_resize_rgb565(const void* input, void* output,
-                                       int input_width, int input_height,
-                                       int output_width, int output_height);
+static aipl_error_t aipl_resize_sw(const void* input, void* output,
+                                   int input_width, int input_height,
+                                   int output_width, int output_height,
+                                   aipl_color_format_t format);
 
 /**********************
  *      MACROS
@@ -79,15 +76,17 @@ aipl_error_t aipl_resize(const void* input, void* output,
 
     switch (format)
     {
-        case AIPL_COLOR_BGR888:
-            return aipl_resize_bgr888(input, output,
-                                      width, height,
-                                      output_width, output_height);
         /* Alpha color formats */
         case AIPL_COLOR_ALPHA8:
         /* RGB color formats */
         case AIPL_COLOR_ARGB8888:
         case AIPL_COLOR_RGBA8888:
+        case AIPL_COLOR_RGB888:
+        case AIPL_COLOR_BGR888:
+            return aipl_resize_sw(input, output,
+                                  width, height,
+                                  output_width, output_height,
+                                  format);
         case AIPL_COLOR_ARGB4444:
         case AIPL_COLOR_ARGB1555:
         case AIPL_COLOR_RGBA4444:
@@ -131,14 +130,15 @@ aipl_error_t aipl_resize_img(const aipl_image_t* input,
  *   STATIC FUNCTIONS
  **********************/
 
-static aipl_error_t aipl_resize_bgr888(const void* input, void* output,
-                                       int srcWidth, int srcHeight,
-                                       int dstWidth, int dstHeight)
+static aipl_error_t aipl_resize_sw(const void* input, void* output,
+                                   int srcWidth, int srcHeight,
+                                   int dstWidth, int dstHeight,
+                                   aipl_color_format_t format)
 {
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-    const uint32_t pixel_size_B = aipl_color_format_depth(AIPL_COLOR_BGR888)/8;
+    const uint32_t pixel_size_B = aipl_color_format_depth(format)/8;
 
     const uint8_t* srcImage = (const uint8_t*)input;
     uint8_t* dstImage = (uint8_t*)output;
@@ -147,10 +147,10 @@ static aipl_error_t aipl_resize_bgr888(const void* input, void* output,
     const uint32x4_t bgr_offset = {0,1,2,3};
 #endif
 
-    // Copied from ei_camera.cpp in firmware-eta-compute
-    // Modified for BGR888
-    // This needs to be < 16 or it won't fit. Cortex-M4 only has SIMD for signed multiplies
-    #define FRAC_BITS 14
+// Copied from ei_camera.cpp in firmware-eta-compute
+// Modified for BGR888
+// This needs to be < 16 or it won't fit. Cortex-M4 only has SIMD for signed multiplies
+#define FRAC_BITS 14
     const int FRAC_VAL = (1 << FRAC_BITS);
     const int FRAC_MASK = (FRAC_VAL - 1);
 

@@ -16,6 +16,7 @@
 #ifdef AIPL_HELIUM_ACCELERATION
 #include <arm_mve.h>
 #endif
+#include "aipl_cache.h"
 
 /*********************
  *      DEFINES
@@ -28,6 +29,11 @@
 /**********************
  *  STATIC PROTOTYPES
  **********************/
+static aipl_error_t aipl_rotate_sw(const uint8_t* restrict input,
+                                   uint8_t* restrict output,
+                                   uint32_t width, uint32_t height,
+                                   aipl_color_format_t format,
+                                   aipl_rotation_t rotation);
 
 /**********************
  *  STATIC VARIABLES
@@ -41,10 +47,10 @@
  *   GLOBAL FUNCTIONS
  **********************/
  aipl_error_t aipl_rotate(const void* input, void* output,
-                       uint32_t pitch,
-                       uint32_t width, uint32_t height,
-                       aipl_color_format_t format,
-                       aipl_rotation_t rotation)
+                          uint32_t pitch,
+                          uint32_t width, uint32_t height,
+                          aipl_color_format_t format,
+                          aipl_rotation_t rotation)
 {
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
@@ -67,10 +73,38 @@
 
         return aipl_dave2d_error_convert(ret);
     }
-#else
-    // Software mode is not supported
-    return AIPL_ERR_NOT_SUPPORTED;
 #endif
+
+    switch (format)
+    {
+        /* Alpha color formats */
+        case AIPL_COLOR_ALPHA8:
+        /* RGB color formats */
+        case AIPL_COLOR_RGB888:
+        case AIPL_COLOR_BGR888:
+        case AIPL_COLOR_ARGB8888:
+        case AIPL_COLOR_RGBA8888:
+        case AIPL_COLOR_ARGB4444:
+        case AIPL_COLOR_RGBA4444:
+        case AIPL_COLOR_RGB565:
+        case AIPL_COLOR_ARGB1555:
+        case AIPL_COLOR_RGBA5551:
+            return aipl_rotate_sw(input, output,
+                                width, height,
+                                format, rotation);
+        /* YUV color formats */
+        case AIPL_COLOR_YV12:
+        case AIPL_COLOR_I420:
+        case AIPL_COLOR_NV12:
+        case AIPL_COLOR_NV21:
+        case AIPL_COLOR_I422:
+        case AIPL_COLOR_YUY2:
+        case AIPL_COLOR_UYVY:
+        case AIPL_COLOR_I444:
+        case AIPL_COLOR_I400:
+        default:
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
+    }
 }
 
 aipl_error_t aipl_rotate_img(const aipl_image_t* input,
@@ -102,3 +136,63 @@ aipl_error_t aipl_rotate_img(const aipl_image_t* input,
  *   STATIC FUNCTIONS
  **********************/
 
+static aipl_error_t aipl_rotate_sw(const uint8_t* restrict input,
+                                   uint8_t* restrict output,
+                                   uint32_t width, uint32_t height,
+                                   aipl_color_format_t format,
+                                   aipl_rotation_t rotation)
+{
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
+    const int rgbBytes = aipl_color_format_depth(format)/8;
+    int x, y, j;
+
+    if (rotation == AIPL_ROTATE_90)
+    {
+        for (y = 0; y < height; ++y)
+        {
+            for (x = 0; x < width; ++x)
+            {
+                int input_offset = (y * width + x) * rgbBytes;
+                int output_offset = (x * height + height - 1 - y) * rgbBytes;
+                for (j = 0; j < rgbBytes; j++)
+                    output[output_offset++] = input[input_offset++];
+            }
+        }
+    }
+    else if (rotation == AIPL_ROTATE_180)
+    {
+        for (y = 0; y < height; ++y)
+        {
+            for (x = 0; x < width; ++x)
+            {
+                int input_offset = (y * width + x) * rgbBytes;
+                int output_offset = ((height - 1 - y) * width + width - 1 - x) * rgbBytes;
+                for (j = 0; j < rgbBytes; j++)
+                    output[output_offset++] = input[input_offset++];
+            }
+        }
+    }
+    else if (rotation == AIPL_ROTATE_270)
+    {
+        for (y = 0; y < height; ++y)
+        {
+            for (x = 0; x < width; ++x)
+            {
+                int input_offset = (y * width + x) * rgbBytes;
+                int output_offset = ((width - 1 - x) * height + y) * rgbBytes;
+                for (j = 0; j < rgbBytes; j++)
+                    output[output_offset++] = input[input_offset++];
+            }
+        }
+    }
+    else
+        return AIPL_ERR_NOT_SUPPORTED;
+
+    size_t size = width * height * rgbBytes;
+    aipl_cpu_cache_clean(output, size);
+
+    return AIPL_ERR_OK;
+
+}
