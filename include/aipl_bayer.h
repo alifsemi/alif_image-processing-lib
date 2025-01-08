@@ -57,8 +57,7 @@ typedef enum {
  **********************/
 
 /**
- * Perform de-mosaicing on an 8-bit image buffer
- * into RGB888 image
+ * Perform de-mosaicing on an 8-bit raw image buffer
  *
  * @param bayer             input raw image pointer
  * @param output            output RGB image pointer
@@ -66,29 +65,220 @@ typedef enum {
  * @param height            image height
  * @param tile              color filter tiles
  * @param method            de-mosaicing techniques
+ * @param format            output color format
  * @return error code
  */
-aipl_error_t aipl_bayer_decoding_rgb888(const void *bayer, void *output,
-                                         uint32_t width, uint32_t height,
-                                         aipl_color_filter_t tile,
-                                         aipl_bayer_method_t method);
+aipl_error_t aipl_bayer_decoding(const void *bayer, void *output,
+                                 uint32_t width, uint32_t height,
+                                 aipl_color_filter_t tile,
+                                 aipl_bayer_method_t method,
+                                 aipl_color_format_t format);
 
 /**
- * Perform de-mosaicing on an 8-bit image buffer
- * into BGR888 image
+ * Perform de-mosaicing on an 8-bit raw image buffer
+ *
+ * @param bayer             input raw image pointer
+ * @param output            output image
+ * @param tile              color filter tiles
+ * @param method            de-mosaicing techniques
+ * @return error code
+ */
+aipl_error_t aipl_bayer_decoding_img(const void *bayer,
+                                     aipl_image_t *output,
+                                     aipl_color_filter_t tile,
+                                     aipl_bayer_method_t method);
+
+/**
+ * Perform de-mosaicing on an 8-bit raw image buffer
+ * into RGB565 image using nearest inetrpolation method
  *
  * @param bayer             input raw image pointer
  * @param output            output RGB image pointer
  * @param width             image width
  * @param height            image height
  * @param tile              color filter tiles
- * @param method            de-mosaicing techniques
  * @return error code
  */
-aipl_error_t aipl_bayer_decoding_bgr888(const void *bayer, void *output,
-                                         uint32_t width, uint32_t height,
-                                         aipl_color_filter_t tile,
-                                         aipl_bayer_method_t method);
+aipl_error_t aipl_bayer_decoding_nearest_rgb565(
+    const uint8_t *restrict bayer,
+    uint8_t *restrict rgb,
+    int sx, int sy, int tile);
+
+/**
+ * Perform de-mosaicing on an 8-bit raw image buffer
+ * into RGB888 image using nearest inetrpolation method
+ *
+ * @param bayer             input raw image pointer
+ * @param output            output RGB image pointer
+ * @param width             image width
+ * @param height            image height
+ * @param tile              color filter tiles
+ * @return error code
+ */
+aipl_error_t aipl_bayer_decoding_nearest_rgb888(
+    const uint8_t *restrict bayer,
+    uint8_t *restrict rgb,
+    int sx, int sy, int tile);
+
+/**
+ * Perform de-mosaicing on an 8-bit raw image buffer
+ * into BGR888 image using nearest inetrpolation method
+ *
+ * @param bayer             input raw image pointer
+ * @param output            output RGB image pointer
+ * @param width             image width
+ * @param height            image height
+ * @param tile              color filter tiles
+ * @return error code
+ */
+aipl_error_t aipl_bayer_decoding_nearest_bgr888(
+    const uint8_t *restrict bayer,
+    uint8_t *restrict rgb,
+    int sx, int sy, int tile);
+
+/**
+ * Perform de-mosaicing on an 8-bit raw image buffer
+ * into ARGB8888 image using nearest inetrpolation method
+ *
+ * @param bayer             input raw image pointer
+ * @param output            output RGB image pointer
+ * @param width             image width
+ * @param height            image height
+ * @param tile              color filter tiles
+ * @return error code
+ */
+aipl_error_t aipl_bayer_decoding_nearest_argb8888(
+    const uint8_t *restrict bayer,
+    uint8_t *restrict rgb,
+    int sx, int sy, int tile);
+
+/**
+ * Perform de-mosaicing on an 8-bit raw image buffer
+ * into RGB565 image using simple method
+ *
+ * @param bayer             input raw image pointer
+ * @param output            output RGB image pointer
+ * @param width             image width
+ * @param height            image height
+ * @param tile              color filter tiles
+ * @return error code
+ */
+aipl_error_t aipl_bayer_decoding_simple_rgb565(
+    const uint8_t *restrict bayer,
+    uint8_t *restrict rgb,
+    int sx, int sy, int tile);
+
+/**
+ * Perform de-mosaicing on an 8-bit raw image buffer
+ * into RGB888 image using simple method
+ *
+ * @param bayer             input raw image pointer
+ * @param output            output RGB image pointer
+ * @param width             image width
+ * @param height            image height
+ * @param tile              color filter tiles
+ * @return error code
+ */
+aipl_error_t aipl_bayer_decoding_simple_rgb888(
+    const uint8_t *restrict bayer,
+    uint8_t *restrict rgb,
+    int sx, int sy, int tile);
+
+/**
+ * Perform de-mosaicing on an 8-bit raw image buffer
+ * into BGR888 image using simple method
+ *
+ * @param bayer             input raw image pointer
+ * @param output            output RGB image pointer
+ * @param width             image width
+ * @param height            image height
+ * @param tile              color filter tiles
+ * @return error code
+ */
+aipl_error_t aipl_bayer_decoding_simple_bgr888(
+    const uint8_t *restrict bayer,
+    uint8_t *restrict rgb,
+    int sx, int sy, int tile);
+
+/**
+ * Perform de-mosaicing on an 8-bit raw image buffer
+ * into ARGB8888 image using simple method
+ *
+ * @param bayer             input raw image pointer
+ * @param output            output RGB image pointer
+ * @param width             image width
+ * @param height            image height
+ * @param tile              color filter tiles
+ * @return error code
+ */
+aipl_error_t aipl_bayer_decoding_simple_argb8888(
+    const uint8_t *restrict bayer,
+    uint8_t *restrict rgb,
+    int sx, int sy, int tile);
+
+/**
+ * Perform de-mosaicing on an 8-bit raw image buffer
+ * into RGB565 image using linear interpolation method
+ *
+ * @param bayer             input raw image pointer
+ * @param output            output RGB image pointer
+ * @param width             image width
+ * @param height            image height
+ * @param tile              color filter tiles
+ * @return error code
+ */
+aipl_error_t aipl_bayer_decoding_linear_rgb565(
+    const uint8_t *restrict bayer,
+    uint8_t *restrict rgb,
+    int sx, int sy, int tile);
+
+/**
+ * Perform de-mosaicing on an 8-bit raw image buffer
+ * into RGB888 image using linear interpolation method
+ *
+ * @param bayer             input raw image pointer
+ * @param output            output RGB image pointer
+ * @param width             image width
+ * @param height            image height
+ * @param tile              color filter tiles
+ * @return error code
+ */
+aipl_error_t aipl_bayer_decoding_linear_rgb888(
+    const uint8_t *restrict bayer,
+    uint8_t *restrict rgb,
+    int sx, int sy, int tile);
+
+/**
+ * Perform de-mosaicing on an 8-bit raw image buffer
+ * into BGR888 image using linear interpolation method
+ *
+ * @param bayer             input raw image pointer
+ * @param output            output RGB image pointer
+ * @param width             image width
+ * @param height            image height
+ * @param tile              color filter tiles
+ * @return error code
+ */
+aipl_error_t aipl_bayer_decoding_linear_bgr888(
+    const uint8_t *restrict bayer,
+    uint8_t *restrict rgb,
+    int sx, int sy, int tile);
+
+/**
+ * Perform de-mosaicing on an 8-bit raw image buffer
+ * into ARGB8888 image using linear interpolation method
+ *
+ * @param bayer             input raw image pointer
+ * @param output            output RGB image pointer
+ * @param width             image width
+ * @param height            image height
+ * @param tile              color filter tiles
+ * @return error code
+ */
+aipl_error_t aipl_bayer_decoding_linear_argb8888(
+    const uint8_t *restrict bayer,
+    uint8_t *restrict rgb,
+    int sx, int sy, int tile);
 
 /**********************
  *      MACROS
