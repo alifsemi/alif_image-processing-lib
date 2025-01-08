@@ -90,12 +90,39 @@ aipl_error_t aipl_crop(const void* input, void* output,
     }
 #endif
 
-    return aipl_crop_sw(input, output,
-                        pitch,
-                        width, height,
-                        format,
-                        left, top,
-                        right, bottom);
+    switch (format)
+    {
+        /* Alpha color formats */
+        case AIPL_COLOR_ALPHA8:
+        /* RGB color formats */
+        case AIPL_COLOR_RGB888:
+        case AIPL_COLOR_BGR888:
+        case AIPL_COLOR_ARGB8888:
+        case AIPL_COLOR_RGBA8888:
+        case AIPL_COLOR_ARGB4444:
+        case AIPL_COLOR_RGBA4444:
+        case AIPL_COLOR_RGB565:
+        case AIPL_COLOR_ARGB1555:
+        case AIPL_COLOR_RGBA5551:
+            return aipl_crop_sw(input, output,
+                                pitch,
+                                width, height,
+                                format,
+                                left, top,
+                                right, bottom);
+        /* YUV color formats */
+        case AIPL_COLOR_YV12:
+        case AIPL_COLOR_I420:
+        case AIPL_COLOR_NV12:
+        case AIPL_COLOR_NV21:
+        case AIPL_COLOR_I422:
+        case AIPL_COLOR_YUY2:
+        case AIPL_COLOR_UYVY:
+        case AIPL_COLOR_I444:
+        case AIPL_COLOR_I400:
+        default:
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
+    }
 }
 
 aipl_error_t aipl_crop_img(const aipl_image_t* input,
