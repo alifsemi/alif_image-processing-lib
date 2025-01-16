@@ -1147,25 +1147,23 @@ aipl_error_t aipl_color_convert_argb8888_to_alpha8(const void* input,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint8_t* src = src_ptr + i * pitch * 4;
-        uint8_t* dst = dst_ptr + i * pitch;
+        uint8_t* dst = dst_ptr + i * width;
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 8)
         {
-            mve_pred16_t tail_p = vctp8q(cnt);
+            mve_pred16_t tail_p = vctp16q(cnt);
 
-            aipl_mve_argb_x16_t pix;
-            aipl_mve_loada_argb8888_16px(&pix, src, tail_p);
+            aipl_mve_argb_x8_t pix;
+            aipl_mve_loada_argb8888_8px(&pix, src, tail_p);
 
-            uint8x16_t alpha;
-            aipl_mve_calculate_y_argb_x16(&alpha, &pix);
+            uint16x8_t alpha;
+            aipl_mve_calculate_y_argb_x8(&alpha, &pix);
 
-            aipl_mve_store_alpha8_16px(dst, &alpha, tail_p);
+            vstrbq_p(dst, alpha, tail_p);
 
-            src += 64;
-            dst += 16;
-            cnt -= 16;
+            src += 32;
+            dst += 8;
         }
     }
 #else
@@ -1175,7 +1173,7 @@ aipl_error_t aipl_color_convert_argb8888_to_alpha8(const void* input,
     for (uint32_t i = 0; i < height; ++i)
     {
         const aipl_argb8888_px_t* src = src_ptr + i * pitch;
-        uint8_t* dst = dst_ptr + i * pitch;
+        uint8_t* dst = dst_ptr + i * width;
 
         for (uint32_t j = 0; j < width; ++j)
         {
@@ -1214,11 +1212,10 @@ aipl_error_t aipl_color_convert_argb8888_to_argb4444(const void* input,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint8_t* src = src_ptr + i * pitch * 4;
         uint16_t* dst = dst_ptr + i * pitch;
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -1229,7 +1226,6 @@ aipl_error_t aipl_color_convert_argb8888_to_argb4444(const void* input,
 
             src += 64;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -1307,10 +1303,8 @@ aipl_error_t aipl_color_convert_argb8888_to_argb1555(const void* input,
 
         for (uint32_t j = 0; j < width; ++j)
         {
-            aipl_packa_argb1555_px(dst, src);
-
-            ++src;
-            ++dst;
+            dst[j].t = (src[j].a & 0x80) | ((src[j].r >> 1) & 0x7c) | (src[j].g >> 6);
+            dst[j].b = ((src[j].g << 2) & 0xe0) | (src[j].b >> 3);
         }
     }
 #endif
@@ -1337,27 +1331,27 @@ aipl_error_t aipl_color_convert_argb8888_to_rgba8888(const void* input,
     return aipl_dave2d_error_convert(ret);
 #else
 #ifdef AIPL_HELIUM_ACCELERATION
-    const uint8_t* src_ptr = input;
-    uint8_t* dst_ptr = output;
+    const uint32_t* src_ptr = input;
+    uint32_t* dst_ptr = output;
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
-        const uint8_t* src = src_ptr + i * pitch * 4;
-        uint8_t* dst = dst_ptr + i * pitch * 4;
+        const uint32_t* src = src_ptr + i * pitch;
+        uint32_t* dst = dst_ptr + i * pitch;
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 4)
         {
-            mve_pred16_t tail_p = vctp8q(cnt);
+            mve_pred16_t tail_p = vctp32q(cnt);
 
-            aipl_mve_argb_x16_t pix;
-            aipl_mve_loada_argb8888_16px(&pix, src, tail_p);
+            uint32x4_t px = vld1q_z(src, tail_p);
 
-            aipl_mve_storea_rgba8888_16px(dst, &pix, tail_p);
+            uint32x4_t a = vshrq(px, 24);
+            px = vsliq(a, px, 8);
 
-            src += 64;
-            dst += 64;
-            cnt -= 16;
+            vst1q_p(dst, px, tail_p);
+
+            src += 4;
+            dst += 4;
         }
     }
 #else
@@ -1409,11 +1403,10 @@ aipl_error_t aipl_color_convert_argb8888_to_rgba4444(const void* input,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint8_t* src = src_ptr + i * pitch * 4;
         uint16_t* dst = dst_ptr + i * pitch;
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -1424,7 +1417,6 @@ aipl_error_t aipl_color_convert_argb8888_to_rgba4444(const void* input,
 
             src += 64;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -1473,11 +1465,10 @@ aipl_error_t aipl_color_convert_argb8888_to_rgba5551(const void* input,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint8_t* src = src_ptr + i * pitch * 4;
         uint16_t* dst = dst_ptr + i * pitch;
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -1488,7 +1479,6 @@ aipl_error_t aipl_color_convert_argb8888_to_rgba5551(const void* input,
 
             src += 64;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -1502,10 +1492,8 @@ aipl_error_t aipl_color_convert_argb8888_to_rgba5551(const void* input,
 
         for (uint32_t j = 0; j < width; ++j)
         {
-            aipl_packa_rgba5551_px(dst, src);
-
-            ++src;
-            ++dst;
+            dst[j].t = (src[j].r & 0xf8) | (src[j].g >> 5);
+            dst[j].b = ((src[j].g << 3) & 0xc0) | ((src[j].b >> 2) & 0x3e) | (src[j].a >> 7);
         }
     }
 #endif
@@ -1563,11 +1551,10 @@ aipl_error_t aipl_color_convert_argb8888_to_rgb565(const void* input,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint8_t* src = src_ptr + i * pitch * 4;
         uint16_t* dst = dst_ptr + i * pitch;
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -1578,7 +1565,6 @@ aipl_error_t aipl_color_convert_argb8888_to_rgb565(const void* input,
 
             src += 64;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -1592,10 +1578,8 @@ aipl_error_t aipl_color_convert_argb8888_to_rgb565(const void* input,
 
         for (uint32_t j = 0; j < width; ++j)
         {
-            aipl_packa_rgb565_px(dst, src);
-
-            ++src;
-            ++dst;
+            dst[j].t = (src[j].r & 0xf8) | (src[j].g >> 5);
+            dst[j].b = ((src[j].g << 3) & 0xe0) | (src[j].b >> 3);
         }
     }
 #endif
@@ -1661,49 +1645,47 @@ aipl_error_t aipl_color_convert_argb8888_to_i422(const void* input,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width / 2;
         const uint8_t* src = src_ptr + i * pitch * 4;
+        uint8_t* y_dst = y_ptr + i * width;
 
-        uint8_t* y_dst = y_ptr + i * pitch;
-        uint8_t* v_dst = v_ptr + i * pitch / 2;
-        uint8_t* u_dst = u_ptr + i * pitch / 2;
-
-        uint32_t j = 0;
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 8)
         {
-            mve_pred16_t tail_p = vctp8q(cnt);
+            mve_pred16_t tail_p = vctp16q(cnt);
 
-            aipl_mve_rgb_x16_t pix;
-            aipl_mve_load_argb8888_offset_16px(&pix, src, 2, tail_p);
+            aipl_mve_rgb_x8_t pix;
+            aipl_mve_load_argb8888_8px(&pix, src, tail_p);
 
-            uint8x16_t y;
-            aipl_mve_calculate_y_rgb_x16(&y, &pix);
+            uint16x8_t y;
+            aipl_mve_calculate_y_rgb_x8(&y, &pix);
 
-            vstrbq_scatter_offset_p(y_dst, AIPL_2_BYTE_OFFSETS_U8, y, tail_p);
+            vstrbq_p(y_dst, y, tail_p);
 
-            if (j++ & 1)
-            {
-                src += 124;
-                y_dst += 31;
-                cnt -= 16;
-            }
-            else
-            {
-                src += 4;
-                ++y_dst;
+            src += 32;
+            y_dst += 8;
+        }
 
-                uint8x16_t u;
-                aipl_mve_calculate_u_rgb_x16(&u, &pix);
+        uint8_t* u_dst = u_ptr + i * width / 2;
+        uint8_t* v_dst = v_ptr + i * width / 2;
 
-                vstrbq_p(u_dst, u, tail_p);
-                u_dst += 16;
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        {
+            mve_pred16_t tail_p = vctp16q(cnt);
 
-                uint8x16_t v;
-                aipl_mve_calculate_v_rgb_x16(&v, &pix);
+            aipl_mve_rgb_x8_t pix;
+            aipl_mve_load_argb8888_offset_8px(&pix, src, 2, tail_p);
 
-                vstrbq_p(v_dst, v, tail_p);
-                v_dst += 16;
-            }
+            uint16x8_t u;
+            aipl_mve_calculate_u_rgb_x8(&u, &pix);
+
+            uint16x8_t v;
+            aipl_mve_calculate_v_rgb_x8(&v, &pix);
+
+            vstrbq_p(u_dst, u, tail_p);
+            vstrbq_p(v_dst, v, tail_p);
+
+            src += 64;
+            u_dst += 8;
+            v_dst += 8;
         }
     }
 #else
@@ -1712,19 +1694,22 @@ aipl_error_t aipl_color_convert_argb8888_to_i422(const void* input,
     for (uint32_t i = 0; i < height; ++i)
     {
         const aipl_argb8888_px_t* src = src_ptr + i * pitch;
+        uint8_t* y_dst = y_ptr + i * width;
 
-        uint8_t* y_dst = y_ptr + i * pitch;
-        uint8_t* v_dst = v_ptr + i * pitch / 2;
-        uint8_t* u_dst = u_ptr + i * pitch / 2;
-
-        for (uint32_t j = 0; j < width; j += 2)
+        for (uint32_t j = 0; j < width; ++j)
         {
-            aipl_packa_yuv_y(y_dst++, src);
-            aipl_packa_yuv_u(u_dst++, src);
-            aipl_packa_yuv_v(v_dst++, src++);
+            y_dst[j] = ((66 * src[j].r + 129 * src[j].g + 25 * src[j].b + 128) >> 8) + 16;
+        }
 
-            aipl_packa_yuv_y(y_dst++, src++);
-       }
+        uint8_t* u_dst = u_ptr + i * width / 2;
+        uint8_t* v_dst = v_ptr + i * width / 2;
+
+        for (uint32_t j = 0; j < width / 2; ++j)
+        {
+            uint32_t j2 = 2 * j;
+            u_dst[j] = ((-38 * src[j2].r - 74 * src[j2].g + 112 * src[j2].b + 128) >> 8) + 128;
+            v_dst[j] = ((112 * src[j2].r - 94 * src[j2].g - 18 * src[j2].b + 128) >> 8) + 128;
+        }
     }
 #endif
 
@@ -1754,41 +1739,38 @@ aipl_error_t aipl_color_convert_argb8888_to_i444(const void* input,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint8_t* src = src_ptr + i * pitch * 4;
 
-        uint8_t* y_dst = y_ptr + i * pitch;
-        uint8_t* v_dst = v_ptr + i * pitch;
+        uint8_t* y_dst = y_ptr + i * width;
+        uint8_t* v_dst = v_ptr + i * width;
         uint8_t* u_dst = u_ptr + i * pitch;
 
-        uint32_t j = 0;
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 8)
         {
-            mve_pred16_t tail_p = vctp8q(cnt);
+            mve_pred16_t tail_p = vctp16q(cnt);
 
-            aipl_mve_rgb_x16_t pix;
-            aipl_mve_load_argb8888_16px(&pix, src, tail_p);
+            aipl_mve_rgb_x8_t pix;
+            aipl_mve_load_argb8888_8px(&pix, src, tail_p);
 
-            uint8x16_t y;
-            aipl_mve_calculate_y_rgb_x16(&y, &pix);
+            uint16x8_t y;
+            aipl_mve_calculate_y_rgb_x8(&y, &pix);
 
             vstrbq_p(y_dst, y, tail_p);
 
-            uint8x16_t u;
-            aipl_mve_calculate_u_rgb_x16(&u, &pix);
+            uint16x8_t u;
+            aipl_mve_calculate_u_rgb_x8(&u, &pix);
 
             vstrbq_p(u_dst, u, tail_p);
 
-            uint8x16_t v;
-            aipl_mve_calculate_v_rgb_x16(&v, &pix);
+            uint16x8_t v;
+            aipl_mve_calculate_v_rgb_x8(&v, &pix);
 
             vstrbq_p(v_dst, v, tail_p);
 
-            src += 64;
-            y_dst += 16;
-            u_dst += 16;
-            v_dst += 16;
-            cnt -= 16;
+            src += 32;
+            y_dst += 8;
+            u_dst += 8;
+            v_dst += 8;
         }
     }
 #else
@@ -1798,15 +1780,15 @@ aipl_error_t aipl_color_convert_argb8888_to_i444(const void* input,
     {
         const aipl_argb8888_px_t* src = src_ptr + i * pitch;
 
-        uint8_t* y_dst = y_ptr + i * pitch;
-        uint8_t* v_dst = v_ptr + i * pitch;
-        uint8_t* u_dst = u_ptr + i * pitch;
+        uint8_t* y_dst = y_ptr + i * width;
+        uint8_t* v_dst = v_ptr + i * width;
+        uint8_t* u_dst = u_ptr + i * width;
 
         for (uint32_t j = 0; j < width; ++j)
         {
-            aipl_packa_yuv_y(y_dst++, src);
-            aipl_packa_yuv_u(u_dst++, src);
-            aipl_packa_yuv_v(v_dst++, src++);
+            y_dst[j] = ((66 * src[j].r + 129 * src[j].g + 25 * src[j].b + 128) >> 8) + 16;
+            u_dst[j] = ((-38 * src[j].r - 74 * src[j].g + 112 * src[j].b + 128) >> 8) + 128;
+            v_dst[j] = ((112 * src[j].r - 94 * src[j].g - 18 * src[j].b + 128) >> 8) + 128;
         }
     }
 #endif
@@ -14685,11 +14667,10 @@ aipl_error_t aipl_color_convert_argb8888_to_24bit(const void* input,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint8_t* src = src_ptr + i * pitch * 4;
         uint8_t* dst = dst_ptr + i * pitch * 3;
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -14701,7 +14682,6 @@ aipl_error_t aipl_color_convert_argb8888_to_24bit(const void* input,
 
             src += 64;
             dst += 48;
-            cnt -= 16;
         }
     }
 #else
@@ -15879,78 +15859,78 @@ aipl_error_t aipl_color_convert_argb8888_to_yuv_planar(const void* input,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width / 2;
         const uint8_t* src = src_ptr + i * pitch * 4;
+        uint8_t* y_dst = y_ptr + i * width;
 
-        uint8_t* y_dst = y_ptr + i * pitch;
-        uint8_t* v_dst = v_ptr + i * pitch / 4;
-        uint8_t* u_dst = u_ptr + i * pitch / 4;
-
-        uint32_t j = 0;
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 8)
         {
-            mve_pred16_t tail_p = vctp8q(cnt);
+            mve_pred16_t tail_p = vctp16q(cnt);
 
-            aipl_mve_rgb_x16_t pix;
-            aipl_mve_load_argb8888_offset_16px(&pix, src, 2, tail_p);
+            aipl_mve_rgb_x8_t pix;
+            aipl_mve_load_argb8888_8px(&pix, src, tail_p);
 
-            uint8x16_t y;
-            aipl_mve_calculate_y_rgb_x16(&y, &pix);
+            uint16x8_t y;
+            aipl_mve_calculate_y_rgb_x8(&y, &pix);
 
-            vstrbq_scatter_offset_p(y_dst, AIPL_2_BYTE_OFFSETS_U8, y, tail_p);
+            vstrbq_p(y_dst, y, tail_p);
 
-            if (j++ & 1)
-            {
-                src += 124;
-                y_dst += 31;
-                cnt -= 16;
-            }
-            else
-            {
-                src += 4;
-                ++y_dst;
+            src += 32;
+            y_dst += 8;
+        }
+    }
 
-                if (!(i & 1))
-                {
-                    uint8x16_t u;
-                    aipl_mve_calculate_u_rgb_x16(&u, &pix);
+    for (uint32_t i = 0; i < height; i += 2)
+    {
+        const uint8_t* src = src_ptr + i * pitch * 4;
+        uint8_t* u_dst = u_ptr + i / 2 * width / 2;
+        uint8_t* v_dst = v_ptr + i / 2 * width / 2;
 
-                    vstrbq_p(u_dst, u, tail_p);
-                    u_dst += 16;
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        {
+            mve_pred16_t tail_p = vctp16q(cnt);
 
-                    uint8x16_t v;
-                    aipl_mve_calculate_v_rgb_x16(&v, &pix);
+            aipl_mve_rgb_x8_t pix;
+            aipl_mve_load_argb8888_offset_8px(&pix, src, 2, tail_p);
 
-                    vstrbq_p(v_dst, v, tail_p);
-                    v_dst += 16;
-                }
-            }
+            uint16x8_t u;
+            aipl_mve_calculate_u_rgb_x8(&u, &pix);
+
+            uint16x8_t v;
+            aipl_mve_calculate_v_rgb_x8(&v, &pix);
+
+            vstrbq_p(u_dst, u, tail_p);
+            vstrbq_p(v_dst, v, tail_p);
+
+            src += 64;
+            u_dst += 8;
+            v_dst += 8;
         }
     }
 #else
     const aipl_argb8888_px_t* src_ptr = input;
 
+    for (uint32_t i = 0; i < height; ++i)
+    {
+        const aipl_argb8888_px_t* src = src_ptr + i * pitch;
+        uint8_t* y_dst = y_ptr + i * width;
+
+        for (uint32_t j = 0; j < width; ++j)
+        {
+            y_dst[j] = ((66 * src[j].r + 129 * src[j].g + 25 * src[j].b + 128) >> 8) + 16;
+        }
+    }
+
     for (uint32_t i = 0; i < height; i += 2)
     {
-        const aipl_argb8888_px_t* src0 = src_ptr + i * pitch;
-        const aipl_argb8888_px_t* src1 = src0 + pitch;
+        const aipl_argb8888_px_t* src = src_ptr + i * pitch;
+        uint8_t* u_dst = u_ptr + i / 2 * width / 2;
+        uint8_t* v_dst = v_ptr + i / 2 * width / 2;
 
-        uint8_t* y_dst0 = y_ptr + i * pitch;
-        uint8_t* y_dst1 = y_dst0 + pitch;
-        uint8_t* v_dst = v_ptr + i * pitch / 4;
-        uint8_t* u_dst = u_ptr + i * pitch / 4;
-
-        for (uint32_t j = 0; j < width; j += 2)
+        for (uint32_t j = 0; j < width / 2; ++j)
         {
-            aipl_packa_yuv_y(y_dst0++, src0);
-            aipl_packa_yuv_u(u_dst++, src0);
-            aipl_packa_yuv_v(v_dst++, src0++);
-
-            aipl_packa_yuv_y(y_dst0++, src0++);
-
-            aipl_packa_yuv_y(y_dst1++, src1++);
-
-            aipl_packa_yuv_y(y_dst1++, src1++);
+            uint32_t j2 = 2 * j;
+            u_dst[j] = ((-38 * src[j2].r - 74 * src[j2].g + 112 * src[j2].b + 128) >> 8) + 128;
+            v_dst[j] = ((112 * src[j2].r - 94 * src[j2].g - 18 * src[j2].b + 128) >> 8) + 128;
         }
     }
 #endif
@@ -15976,80 +15956,78 @@ aipl_error_t aipl_color_convert_argb8888_to_yuv_semi_planar(const void* input,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width / 2;
         const uint8_t* src = src_ptr + i * pitch * 4;
+        uint8_t* y_dst = y_ptr + i * width;
 
-        uint8_t* y_dst = y_ptr + i * pitch;
-        uint8_t* v_dst = v_ptr + i * pitch / 2;
-        uint8_t* u_dst = u_ptr + i * pitch / 2;
-
-        uint32_t j = 0;
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 8)
         {
-            mve_pred16_t tail_p = vctp8q(cnt);
+            mve_pred16_t tail_p = vctp16q(cnt);
 
-            aipl_mve_rgb_x16_t pix;
-            aipl_mve_load_argb8888_offset_16px(&pix, src, 2, tail_p);
+            aipl_mve_rgb_x8_t pix;
+            aipl_mve_load_argb8888_8px(&pix, src, tail_p);
 
-            uint8x16_t y;
-            aipl_mve_calculate_y_rgb_x16(&y, &pix);
+            uint16x8_t y;
+            aipl_mve_calculate_y_rgb_x8(&y, &pix);
 
-            vstrbq_scatter_offset_p(y_dst, AIPL_2_BYTE_OFFSETS_U8, y, tail_p);
+            vstrbq_p(y_dst, y, tail_p);
 
-            if (j++ & 1)
-            {
-                src += 124;
-                y_dst += 31;
-                cnt -= 16;
-            }
-            else
-            {
-                src += 4;
-                ++y_dst;
+            src += 32;
+            y_dst += 8;
+        }
+    }
 
-                if (!(i & 1))
-                {
-                    uint8x16_t u;
-                    aipl_mve_calculate_u_rgb_x16(&u, &pix);
+    for (uint32_t i = 0; i < height; i += 2)
+    {
+        const uint8_t* src = src_ptr + i * pitch * 4;
+        uint8_t* u_dst = u_ptr + i * width / 2;
+        uint8_t* v_dst = v_ptr + i * width / 2;
 
-                    vstrbq_scatter_offset_p(u_dst, AIPL_2_BYTE_OFFSETS_U8, u, tail_p);
-                    u_dst += 32;
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        {
+            mve_pred16_t tail_p = vctp16q(cnt);
 
-                    uint8x16_t v;
-                    aipl_mve_calculate_v_rgb_x16(&v, &pix);
+            aipl_mve_rgb_x8_t pix;
+            aipl_mve_load_argb8888_offset_8px(&pix, src, 2, tail_p);
 
-                    vstrbq_scatter_offset_p(v_dst, AIPL_2_BYTE_OFFSETS_U8, v, tail_p);
-                    v_dst += 32;
-                }
-            }
+            uint16x8_t u;
+            aipl_mve_calculate_u_rgb_x8(&u, &pix);
+
+            uint16x8_t v;
+            aipl_mve_calculate_v_rgb_x8(&v, &pix);
+
+            vstrbq_scatter_offset_p(u_dst, AIPL_2_BYTE_OFFSETS_U16, u, tail_p);
+            vstrbq_scatter_offset_p(v_dst, AIPL_2_BYTE_OFFSETS_U16, v, tail_p);
+
+            src += 64;
+            u_dst += 16;
+            v_dst += 16;
         }
     }
 #else
     const aipl_argb8888_px_t* src_ptr = input;
 
+    for (uint32_t i = 0; i < height; ++i)
+    {
+        const aipl_argb8888_px_t* src = src_ptr + i * pitch;
+        uint8_t* y_dst = y_ptr + i * width;
+
+        for (uint32_t j = 0; j < width; ++j)
+        {
+            y_dst[j] = ((66 * src[j].r + 129 * src[j].g + 25 * src[j].b + 128) >> 8) + 16;
+        }
+    }
+
     for (uint32_t i = 0; i < height; i += 2)
     {
-        const aipl_argb8888_px_t* src0 = src_ptr + i * pitch;
-        const aipl_argb8888_px_t* src1 = src0 + pitch;
+        const aipl_argb8888_px_t* src = src_ptr + i * pitch;
+        uint8_t* u_dst = u_ptr + i * width / 2;
+        uint8_t* v_dst = v_ptr + i * width / 2;
 
-        uint8_t* y_dst0 = y_ptr + i * pitch;
-        uint8_t* y_dst1 = y_dst0 + pitch;
-        uint8_t* v_dst = v_ptr + i * pitch / 2;
-        uint8_t* u_dst = u_ptr + i * pitch / 2;
-
-        for (uint32_t j = 0; j < width; j += 2)
+        for (uint32_t j = 0; j < width / 2; ++j)
         {
-            aipl_packa_yuv_y(y_dst0++, src0);
-            aipl_packa_yuv_u(u_dst, src0);
-            aipl_packa_yuv_v(v_dst, src0++);
-            u_dst += 2;
-            v_dst += 2;
-
-            aipl_packa_yuv_y(y_dst0++, src0++);
-
-            aipl_packa_yuv_y(y_dst1++, src1++);
-
-            aipl_packa_yuv_y(y_dst1++, src1++);
+            uint32_t j2 = 2 * j;
+            u_dst[j2] = ((-38 * src[j2].r - 74 * src[j2].g + 112 * src[j2].b + 128) >> 8) + 128;
+            v_dst[j2] = ((112 * src[j2].r - 94 * src[j2].g - 18 * src[j2].b + 128) >> 8) + 128;
         }
     }
 #endif
@@ -16075,49 +16053,47 @@ aipl_error_t aipl_color_convert_argb8888_to_yuv_packed(const void* input,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width / 2;
         const uint8_t* src = src_ptr + i * pitch * 4;
+        uint8_t* y_dst = y_ptr + i * width * 2;
 
-        uint8_t* y_dst = y_ptr + i * pitch * 2;
-        uint8_t* v_dst = v_ptr + i * pitch * 2;
-        uint8_t* u_dst = u_ptr + i * pitch * 2;
-
-        uint32_t j = 0;
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 8)
         {
-            mve_pred16_t tail_p = vctp8q(cnt);
+            mve_pred16_t tail_p = vctp16q(cnt);
 
-            aipl_mve_rgb_x16_t pix;
-            aipl_mve_load_argb8888_offset_16px(&pix, src, 2, tail_p);
+            aipl_mve_rgb_x8_t pix;
+            aipl_mve_load_argb8888_8px(&pix, src, tail_p);
 
-            uint8x16_t y;
-            aipl_mve_calculate_y_rgb_x16(&y, &pix);
+            uint16x8_t y;
+            aipl_mve_calculate_y_rgb_x8(&y, &pix);
 
-            vstrbq_scatter_offset_p(y_dst, AIPL_4_BYTE_OFFSETS_U8, y, tail_p);
+            vstrbq_scatter_offset_p(y_dst, AIPL_2_BYTE_OFFSETS_U16, y, tail_p);
 
-            if (j++ & 1)
-            {
-                src += 124;
-                y_dst += 62;
-                cnt -= 16;
-            }
-            else
-            {
-                src += 4;
-                y_dst += 2;
+            src += 32;
+            y_dst += 16;
+        }
 
-                uint8x16_t u;
-                aipl_mve_calculate_u_rgb_x16(&u, &pix);
+        uint8_t* u_dst = u_ptr + i * width * 2;
+        uint8_t* v_dst = v_ptr + i * width * 2;
 
-                vstrbq_scatter_offset_p(u_dst, AIPL_4_BYTE_OFFSETS_U8, u, tail_p);
-                u_dst += 64;
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        {
+            mve_pred16_t tail_p = vctp16q(cnt);
 
-                uint8x16_t v;
-                aipl_mve_calculate_v_rgb_x16(&v, &pix);
+            aipl_mve_rgb_x8_t pix;
+            aipl_mve_load_argb8888_offset_8px(&pix, src, 2, tail_p);
 
-                vstrbq_scatter_offset_p(v_dst, AIPL_4_BYTE_OFFSETS_U8, v, tail_p);
-                v_dst += 64;
-            }
+            uint16x8_t u;
+            aipl_mve_calculate_u_rgb_x8(&u, &pix);
+
+            uint16x8_t v;
+            aipl_mve_calculate_v_rgb_x8(&v, &pix);
+
+            vstrbq_scatter_offset_p(u_dst, AIPL_4_BYTE_OFFSETS_U16, u, tail_p);
+            vstrbq_scatter_offset_p(v_dst, AIPL_4_BYTE_OFFSETS_U16, v, tail_p);
+
+            src += 64;
+            u_dst += 32;
+            v_dst += 32;
         }
     }
 #else
@@ -16126,22 +16102,17 @@ aipl_error_t aipl_color_convert_argb8888_to_yuv_packed(const void* input,
     for (uint32_t i = 0; i < height; ++i)
     {
         const aipl_argb8888_px_t* src = src_ptr + i * pitch;
-
-        uint8_t* y_dst = y_ptr + i * pitch * 2;
-        uint8_t* v_dst = v_ptr + i * pitch * 2;
-        uint8_t* u_dst = u_ptr + i * pitch * 2;
+        uint8_t* y_dst = y_ptr + i * width * 2;
+        uint8_t* u_dst = u_ptr + i * width * 2;
+        uint8_t* v_dst = v_ptr + i * width * 2;
 
         for (uint32_t j = 0; j < width; j += 2)
         {
-            aipl_packa_yuv_y(y_dst, src);
-            aipl_packa_yuv_u(u_dst, src);
-            aipl_packa_yuv_v(v_dst, src++);
-            y_dst += 2;
-            u_dst += 4;
-            v_dst += 4;
-
-            aipl_packa_yuv_y(y_dst, src++);
-            y_dst += 2;
+            uint32_t j2 = 2 * j;
+            y_dst[j2] = ((66 * src[j].r + 129 * src[j].g + 25 * src[j].b + 128) >> 8) + 16;
+            y_dst[j2 + 2] = ((66 * src[j + 1].r + 129 * src[j + 1].g + 25 * src[j + 1].b + 128) >> 8) + 16;
+            u_dst[j2] = ((-38 * src[j].r - 74 * src[j].g + 112 * src[j].b + 128) >> 8) + 128;
+            v_dst[j2] = ((112 * src[j].r - 94 * src[j].g - 18 * src[j].b + 128) >> 8) + 128;
         }
     }
 #endif
@@ -21592,12 +21563,15 @@ aipl_error_t aipl_color_convert_alpha8_to_yuv_packed(const uint8_t* input,
     if (input == NULL || y_dst == NULL || u_dst == NULL || v_dst == NULL)
         return AIPL_ERR_NULL_POINTER;
 
+    uint8_t* start = y_dst;
+    if (u_dst < start) start = u_dst;
+    if (v_dst < start) start = v_dst;
+    memset(start, 0x80, width * height * 2);
+
     for (uint32_t i = 0; i < height; ++i)
     {
         const uint8_t* y_s = input + i * pitch;
         uint8_t* y_d = y_dst + i * width * 2;
-        uint8_t* u_d = u_dst + i * width * 2;
-        uint8_t* v_d = v_dst + i * width * 2;
 
 #ifdef AIPL_HELIUM_ACCELERATION
         for (int32_t cnt = width / 2; cnt > 0; cnt -= 16)
@@ -21610,24 +21584,14 @@ aipl_error_t aipl_color_convert_alpha8_to_yuv_packed(const uint8_t* input,
             y = vldrbq_gather_offset_z(y_s + 1, AIPL_2_BYTE_OFFSETS_U8, tail_p);
             vstrbq_scatter_offset_p(y_d + 2, AIPL_4_BYTE_OFFSETS_U8, y, tail_p);
 
-            uint8x16_t u = vdupq_n_u8(0x80);
-            vstrbq_scatter_offset_p(u_d, AIPL_4_BYTE_OFFSETS_U8, u, tail_p);
-
-            uint8x16_t v = vdupq_n_u8(0x80);
-            vstrbq_scatter_offset_p(v_d, AIPL_4_BYTE_OFFSETS_U8, v, tail_p);
-
             y_s += 32;
             y_d += 64;
-            u_d += 64;
-            v_d += 64;
         }
 #else
         for (uint32_t j = 0; j < width * 2; j += 4)
         {
             y_d[j] = y_s[j / 2];
             y_d[j + 2] = y_s[j / 2 + 1];
-            u_d[j] = 0x80;
-            v_d[j] = 0x80;
         }
 #endif
     }
