@@ -335,6 +335,23 @@ INLINE void aipl_mve_loada_argb1555_16px(aipl_mve_argb_x16_t* dst,
 }
 
 /**
+ * Load 8 RGBA8888 pixels with alpha channel
+ *
+ * @param dst   destination struct pointer
+ * @param src   first source pixel pointer
+ * @param pred  load predicate
+ */
+INLINE void aipl_mve_loada_rgba8888_8px(aipl_mve_argb_x8_t* dst,
+                                        const uint8_t* src,
+                                        mve_pred16_t pred)
+{
+    dst->r = vldrbq_gather_offset_z(src + 3, AIPL_4_BYTE_OFFSETS_U16, pred);
+    dst->g = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U16, pred);
+    dst->b = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U16, pred);
+    dst->a = vldrbq_gather_offset_z(src, AIPL_4_BYTE_OFFSETS_U16, pred);
+}
+
+/**
  * Load 16 RGBA8888 pixels with alpha channel
  *
  * @param dst   destination struct pointer
@@ -402,8 +419,6 @@ INLINE void aipl_mve_load_argb8888_8px(aipl_mve_rgb_x8_t* dst,
                                        const uint8_t* src,
                                        mve_pred16_t pred)
 {
-    const uint16x8_t pixel_offsets = vmulq_n_u16(vidupq_n_u16(0, 1), 4);
-
     dst->r = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U16, pred);
     dst->g = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U16, pred);
     dst->b = vldrbq_gather_offset_z(src, AIPL_4_BYTE_OFFSETS_U16, pred);
@@ -546,6 +561,22 @@ INLINE void aipl_mve_load_argb1555_offset_16px(aipl_mve_rgb_x16_t* dst,
 }
 
 /**
+ * Load 8 RGBA8888 pixels without alpha channel
+ *
+ * @param dst   destination struct pointer
+ * @param src   first source pixel pointer
+ * @param pred  load predicate
+ */
+INLINE void aipl_mve_load_rgba8888_8px(aipl_mve_rgb_x8_t* dst,
+                                       const uint8_t* src,
+                                       mve_pred16_t pred)
+{
+    dst->r = vldrbq_gather_offset_z(src + 3, AIPL_4_BYTE_OFFSETS_U16, pred);
+    dst->g = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U16, pred);
+    dst->b = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U16, pred);
+}
+
+/**
  * Load 16 RGBA8888 pixels without alpha channel
  *
  * @param dst   destination struct pointer
@@ -559,6 +590,25 @@ INLINE void aipl_mve_load_rgba8888_16px(aipl_mve_rgb_x16_t* dst,
     dst->r = vldrbq_gather_offset_z(src + 3, AIPL_4_BYTE_OFFSETS_U8, pred);
     dst->g = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U8, pred);
     dst->b = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U8, pred);
+}
+
+/**
+ * Load 8 RGBA8888 pixels with alpha channel
+ * and custom offset between pixels
+ *
+ * @param dst       destination struct pointer
+ * @param src       first source pixel pointer
+ * @param offset    pixel offset
+ * @param pred      load predicate
+ */
+INLINE void aipl_mve_load_rgba8888_offset_8px(aipl_mve_rgb_x8_t* dst,
+                                              const uint8_t* src,
+                                              uint8_t offset,
+                                              mve_pred16_t pred)
+{
+    dst->r = vldrbq_gather_offset_z(src + 3, AIPL_OFFSETS_U16(offset, 4), pred);
+    dst->g = vldrbq_gather_offset_z(src + 2, AIPL_OFFSETS_U16(offset, 4), pred);
+    dst->b = vldrbq_gather_offset_z(src + 1, AIPL_OFFSETS_U16(offset, 4), pred);
 }
 
 /**
