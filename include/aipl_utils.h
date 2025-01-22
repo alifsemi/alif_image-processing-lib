@@ -419,9 +419,9 @@ INLINE void aipl_load_rgba4444_px(uint8_t* dst,
                                   uint8_t g_offset,
                                   uint8_t b_offset)
 {
-    dst[r_offset] = src->rg & 0xf0;
-    dst[g_offset] = src->g << 4;
-    dst[b_offset] = src->ba & 0xf0;
+    dst[r_offset] = (src->rg & 0xf0) | (src->rg >> 4);
+    dst[g_offset] = (src->rg << 4) | (src->rg & 0x0f);
+    dst[b_offset] = (src->ba & 0xf0) | (src->ba >> 4);
 }
 
 /**
@@ -538,10 +538,10 @@ INLINE void aipl_loada_argb1555_px(aipl_argb8888_px_t* dst,
 INLINE void aipl_loada_rgba4444_px(aipl_argb8888_px_t* dst,
                                    const aipl_rgba4444_px_t* src)
 {
-    dst->r = src->rg & 0xf0;
-    dst->g = src->g << 4;
-    dst->b = src->ba & 0xf0;
-    dst->a = src->a << 4;
+    dst->r = (src->rg & 0xf0) | (src->rg >> 4);
+    dst->g = (src->rg << 4) | (src->rg & 0x0f);
+    dst->b = (src->ba & 0xf0) | (src->ba >> 4);
+    dst->a = (src->ba << 4) | (src->ba & 0x0f);
 }
 
 /**

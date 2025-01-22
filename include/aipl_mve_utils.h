@@ -664,9 +664,9 @@ INLINE void aipl_mve_load_rgba4444_16px(aipl_mve_rgb_x16_t* dst,
     uint8x16_t rg = vldrbq_gather_offset_z(src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
     uint8x16_t ba = vldrbq_gather_offset_z(src, AIPL_2_BYTE_OFFSETS_U8, pred);
 
-    dst->r = vandq(rg, vdupq_n_u8(0xf0));
-    dst->g = vshlq_n(rg, 4);
-    dst->b = vandq(ba, vdupq_n_u8(0xf0));
+    dst->r = vorrq(vandq(rg, vdupq_n_u8(0xf0)), vshrq(rg, 4));
+    dst->g = vmulq(vandq(rg, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->b = vorrq(vandq(ba, vdupq_n_u8(0xf0)), vshrq(ba, 4));
 }
 
 /**
