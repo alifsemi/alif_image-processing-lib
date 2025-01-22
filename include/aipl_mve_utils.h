@@ -295,6 +295,26 @@ INLINE void aipl_mve_loada_argb8888_offset_16px(aipl_mve_argb_x16_t* dst,
 }
 
 /**
+ * Load 8 ARGB4444 pixels with alpha channel
+ *
+ * @param dst   destination struct pointer
+ * @param src   first source pixel pointer
+ * @param pred  load predicate
+ */
+INLINE void aipl_mve_loada_argb4444_8px(aipl_mve_argb_x8_t* dst,
+                                         const uint8_t* src,
+                                         mve_pred16_t pred)
+{
+    uint16x8_t ar = vldrbq_gather_offset_z(src + 1, AIPL_2_BYTE_OFFSETS_U16, pred);
+    uint16x8_t gb = vldrbq_gather_offset_z(src, AIPL_2_BYTE_OFFSETS_U16, pred);
+
+    dst->a = vorrq(vandq(ar, vdupq_n_u16(0x00f0)), vshrq(ar, 4));
+    dst->r = vmulq(vandq(ar, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
+    dst->g = vorrq(vandq(gb, vdupq_n_u16(0x00f0)), vshrq(gb, 4));
+    dst->b = vmulq(vandq(gb, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
+}
+
+/**
  * Load 16 ARGB4444 pixels with alpha channel
  *
  * @param dst   destination struct pointer
@@ -309,9 +329,9 @@ INLINE void aipl_mve_loada_argb4444_16px(aipl_mve_argb_x16_t* dst,
     uint8x16_t gb = vldrbq_gather_offset_z(src, AIPL_2_BYTE_OFFSETS_U8, pred);
 
     dst->a = vorrq(vandq(ar, vdupq_n_u8(0xf0)), vshrq(ar, 4));
-    dst->r = vshlq_n(ar, 4);
-    dst->g = vandq(gb, vdupq_n_u8(0xf0));
-    dst->b = vshlq_n(gb, 4);
+    dst->r = vmulq(vandq(ar, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->g = vorrq(vandq(gb, vdupq_n_u8(0xf0)), vshrq(gb, 4));
+    dst->b = vmulq(vandq(gb, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
 }
 
 /**
@@ -492,9 +512,9 @@ INLINE void aipl_mve_load_argb4444_16px(aipl_mve_rgb_x16_t* dst,
     uint8x16_t ar = vldrbq_gather_offset_z(src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
     uint8x16_t gb = vldrbq_gather_offset_z(src, AIPL_2_BYTE_OFFSETS_U8, pred);
 
-    dst->r = vshlq_n(ar, 4);
-    dst->g = vandq(gb, vdupq_n_u8(0xf0));
-    dst->b = vshlq_n(gb, 4);
+    dst->r = vmulq(vandq(ar, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->g = vorrq(vandq(gb, vdupq_n_u8(0xf0)), vshrq(gb, 4));
+    dst->b = vmulq(vandq(gb, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
 }
 
 /**
