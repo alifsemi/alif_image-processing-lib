@@ -531,9 +531,12 @@ INLINE void aipl_mve_load_argb1555_16px(aipl_mve_rgb_x16_t* dst,
     uint8x16_t upper = vldrbq_gather_offset_z(src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
     uint8x16_t lower = vldrbq_gather_offset_z(src, AIPL_2_BYTE_OFFSETS_U8, pred);
 
-    dst->r = vandq(vshlq_n(upper, 1), vdupq_n_u8(0xf0));
+    dst->r = vandq(vshlq_n(upper, 1), vdupq_n_u8(0xf8));
+    dst->r = vorrq(dst->r, vshrq(dst->r, 5));
     dst->g = vorrq(vshlq_n(upper, 6), vshrq(vandq(lower, vdupq_n_u8(0xe0)), 2));
+    dst->g = vorrq(dst->g, vshrq(dst->g, 5));
     dst->b = vshlq_n(lower, 3);
+    dst->b = vorrq(dst->b, vshrq(dst->b, 5));
 }
 
 /**
