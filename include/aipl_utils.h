@@ -126,10 +126,8 @@ INLINE void aipl_packa_argb4444_px(aipl_argb4444_px_t* dst,
 INLINE void aipl_packa_argb1555_px(aipl_argb1555_px_t* dst,
                                    const aipl_argb8888_px_t* src)
 {
-    dst->h = ((uint16_t)(src->a & 0x80) << 8)
-             | ((uint16_t)(src->r & 0xf8) << 7)
-             | ((uint16_t)(src->g & 0xf8) << 2)
-             | (src->b >> 3);
+    dst->t = (src->a & 0x80) | ((src->r >> 1) & 0x7c) | (src->g >> 6);
+    dst->b = ((src->g << 2) & 0xe0) | (src->b >> 3);
 }
 
 /**
@@ -244,9 +242,8 @@ INLINE void aipl_pack_argb1555_px(aipl_argb1555_px_t* dst,
                                   uint8_t g_offset,
                                   uint8_t b_offset)
 {
-    dst->h = 0x8000 | ((uint16_t)(src[r_offset] & 0xf8) << 7)
-             | ((uint16_t)(src[g_offset] & 0xf8) << 2)
-             | (src[b_offset] >> 3);
+    dst->t = 0x80 | ((src[r_offset] >> 1) & 0x7c) | (src[g_offset] >> 6);
+    dst->b = ((src[g_offset] << 2) & 0xe0) | (src[b_offset] >> 3);
 }
 
 /**
@@ -283,10 +280,8 @@ INLINE void aipl_pack_rgba5551_px(aipl_rgba5551_px_t* dst,
                                   uint8_t g_offset,
                                   uint8_t b_offset)
 {
-    dst->h = ((uint16_t)(src[r_offset] & 0xf8) << 8)
-             | ((uint16_t)(src[g_offset] & 0xf8) << 3)
-             | ((src[b_offset] & 0xf8) >> 2)
-             | 0x01;
+    dst->t = (src[r_offset] & 0xf8) | (src[g_offset] >> 5);
+    dst->b = ((src[g_offset] << 3) & 0xc0) | ((src[b_offset] >> 2) & 0x3e) | 0x01;
 }
 
 /**

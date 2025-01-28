@@ -739,6 +739,27 @@ INLINE void aipl_mve_load_rgba5551_offset_16px(aipl_mve_rgb_x16_t* dst,
     dst->b = vshlq_n(vandq(lower, vdupq_n_u8(0x3e)), 2);
 }
 
+/**
+ * Load 8 24bit pixels
+ *
+ * @param dst       destination struct pointer
+ * @param src       first source pixel pointer
+ * @param pred      load predicate
+ * @param r_offset  red channel offset
+ * @param g_offset  green channel offset
+ * @param b_offset  blue channel offset
+ */
+INLINE void aipl_mve_load_24bit_8px(aipl_mve_rgb_x8_t* dst,
+                                    const uint8_t* src,
+                                    mve_pred16_t pred,
+                                    uint8_t r_offset,
+                                    uint8_t g_offset,
+                                    uint8_t b_offset)
+{
+    dst->r = vldrbq_gather_offset_z(src + r_offset, AIPL_3_BYTE_OFFSETS_U16, pred);
+    dst->g = vldrbq_gather_offset_z(src + g_offset, AIPL_3_BYTE_OFFSETS_U16, pred);
+    dst->b = vldrbq_gather_offset_z(src + b_offset, AIPL_3_BYTE_OFFSETS_U16, pred);
+}
 
 /**
  * Load 16 24bit pixels
@@ -760,6 +781,30 @@ INLINE void aipl_mve_load_24bit_16px(aipl_mve_rgb_x16_t* dst,
     dst->r = vldrbq_gather_offset_z(src + r_offset, AIPL_3_BYTE_OFFSETS_U8, pred);
     dst->g = vldrbq_gather_offset_z(src + g_offset, AIPL_3_BYTE_OFFSETS_U8, pred);
     dst->b = vldrbq_gather_offset_z(src + b_offset, AIPL_3_BYTE_OFFSETS_U8, pred);
+}
+
+/**
+ * Load 8 24bit pixels with custom offsets between pixels
+ *
+ * @param dst       destination struct pointer
+ * @param src       first source pixel pointer
+ * @param offset    pixel offset
+ * @param pred      load predicate
+ * @param r_offset  red channel offset
+ * @param g_offset  green channel offset
+ * @param b_offset  blue channel offset
+ */
+INLINE void aipl_mve_load_24bit_offset_8px(aipl_mve_rgb_x8_t* dst,
+                                           const uint8_t* src,
+                                           uint8_t offset,
+                                           mve_pred16_t pred,
+                                           uint8_t r_offset,
+                                           uint8_t g_offset,
+                                           uint8_t b_offset)
+{
+    dst->r = vldrbq_gather_offset_z(src + r_offset, AIPL_OFFSETS_U16(offset, 3), pred);
+    dst->g = vldrbq_gather_offset_z(src + g_offset, AIPL_OFFSETS_U16(offset, 3), pred);
+    dst->b = vldrbq_gather_offset_z(src + b_offset, AIPL_OFFSETS_U16(offset, 3), pred);
 }
 
 /**
