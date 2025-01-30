@@ -45,6 +45,18 @@ extern "C" {
 #define AIPL_3_BYTE_OFFSETS_U16 AIPL_OFFSETS_U16(1, 3)
 #define AIPL_2_BYTE_OFFSETS_U16 AIPL_OFFSETS_U16(1, 2)
 
+/**
+ * Create 4 offset values
+ *
+ * @param N number of pixels
+ * @param S pixel size
+ */
+#define AIPL_OFFSETS_U32(N, S) (vmulq_n_u32(vidupq_n_u32(0, N), S))
+
+#define AIPL_8_BYTE_OFFSETS_U32 AIPL_OFFSETS_U32(1, 8)
+#define AIPL_4_BYTE_OFFSETS_U32 AIPL_OFFSETS_U32(1, 4)
+#define AIPL_2_BYTE_OFFSETS_U32 AIPL_OFFSETS_U32(1, 2)
+
 #define INLINE inline __attribute__((always_inline))
 
 /**********************

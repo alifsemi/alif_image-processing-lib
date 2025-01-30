@@ -585,6 +585,66 @@ INLINE uint8_t aipl_channel_cap(int16_t val)
 }
 
 /**
+ * Convert signed channel value to usigned 4 bits,
+ * cap the value to [0; 15] and shift the bits
+ * to upper half
+ *
+ * @param val uncapped channel value
+ * @return capped channel value
+ */
+INLINE uint8_t aipl_channel_cap_upper_4bit(int8_t val)
+{
+    if (val & 0x80) return 0;
+    else if (val & 0xf0) return 0xf0;
+    else return val << 4;
+}
+
+/**
+ * Convert signed channel value to usigned 5 bits,
+ * cap the value to [0; 31] and shift the bits by
+ * specified value
+ *
+ * @param val   uncapped channel value
+ * @param shift bit shift value [0; 7]
+ * @return capped channel value
+ */
+INLINE uint8_t aipl_channel_cap_5bit(int8_t val, uint8_t shift)
+{
+    if (val & 0x80) return 0;
+    else if (val & 0xe0) return 0x1f;
+    else return val << shift;
+}
+
+/**
+ * Convert signed channel value to usigned 6 bits
+ * and cap the value to [0; 63]
+ *
+ * @param val   uncapped channel value
+ * @return capped channel value
+ */
+INLINE uint8_t aipl_channel_cap_6bit(int8_t val)
+{
+    if (val & 0x80) return 0;
+    else if (val & 0xc0) return 0x3f;
+    else return val;
+}
+
+/**
+ * Convert signed channel value to usigned 4 bits,
+ * cap the value to [0; 15] and shift the bits
+ * to upper half
+ *
+ * @param val uncapped channel value
+ * @return capped channel value
+ */
+INLINE uint8_t aipl_channel_cap_4bit(int8_t val)
+{
+    if (val & 0x80) return 0;
+    else if (val & 0xf0) return 0x0f;
+    else return val;
+}
+
+/**
  * Get 24bit from YUV
  *
  * @param dst       destination 24bit pixel pointer
