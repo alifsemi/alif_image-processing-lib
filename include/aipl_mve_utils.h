@@ -55,6 +55,7 @@ extern "C" {
 
 #define AIPL_8_BYTE_OFFSETS_U32 AIPL_OFFSETS_U32(1, 8)
 #define AIPL_4_BYTE_OFFSETS_U32 AIPL_OFFSETS_U32(1, 4)
+#define AIPL_3_BYTE_OFFSETS_U32 AIPL_OFFSETS_U32(1, 3)
 #define AIPL_2_BYTE_OFFSETS_U32 AIPL_OFFSETS_U32(1, 2)
 
 #define INLINE inline __attribute__((always_inline))
