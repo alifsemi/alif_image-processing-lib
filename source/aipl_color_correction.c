@@ -12,9 +12,8 @@
 #include "aipl_config.h"
 #ifdef AIPL_HELIUM_ACCELERATION
 #include "aipl_mve_utils.h"
-#else
-#include "aipl_utils.h"
 #endif
+#include "aipl_utils.h"
 
 /*********************
  *      DEFINES
@@ -119,11 +118,10 @@ aipl_error_t aipl_color_correction_argb8888(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint8_t* src = src_ptr + (i * pitch) * 4;
-        uint8_t* dst = dst_ptr + (i * pitch) * 4;
+        uint8_t* dst = dst_ptr + (i * width) * 4;
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -136,7 +134,6 @@ aipl_error_t aipl_color_correction_argb8888(const void* input, void* output,
 
             src += 64;
             dst += 64;
-            cnt -= 16;
         }
     }
 #else
@@ -182,11 +179,10 @@ aipl_error_t aipl_color_correction_argb4444(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint16_t* src = src_ptr + (i * pitch);
-        uint16_t* dst = dst_ptr + (i * pitch);
+        uint16_t* dst = dst_ptr + (i * width);
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -199,7 +195,6 @@ aipl_error_t aipl_color_correction_argb4444(const void* input, void* output,
 
             src += 16;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -209,7 +204,7 @@ aipl_error_t aipl_color_correction_argb4444(const void* input, void* output,
     for (uint32_t i = 0; i < height; ++i)
     {
         const aipl_argb4444_px_t* src = src_ptr + (i * pitch);
-        aipl_argb4444_px_t* dst = dst_ptr + (i * pitch);
+        aipl_argb4444_px_t* dst = dst_ptr + (i * width);
 
         for (uint32_t j = 0; j < width; ++j)
         {
@@ -249,11 +244,10 @@ aipl_error_t aipl_color_correction_argb1555(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint16_t* src = src_ptr + (i * pitch);
-        uint16_t* dst = dst_ptr + (i * pitch);
+        uint16_t* dst = dst_ptr + (i * width);
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -266,7 +260,6 @@ aipl_error_t aipl_color_correction_argb1555(const void* input, void* output,
 
             src += 16;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -276,7 +269,7 @@ aipl_error_t aipl_color_correction_argb1555(const void* input, void* output,
     for (uint32_t i = 0; i < height; ++i)
     {
         const aipl_argb1555_px_t* src = src_ptr + (i * pitch);
-        aipl_argb1555_px_t* dst = dst_ptr + (i * pitch);
+        aipl_argb1555_px_t* dst = dst_ptr + (i * width);
 
         for (uint32_t j = 0; j < width; ++j)
         {
@@ -316,11 +309,10 @@ aipl_error_t aipl_color_correction_rgba8888(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint8_t* src = src_ptr + (i * pitch) * 4;
-        uint8_t* dst = dst_ptr + (i * pitch) * 4;
+        uint8_t* dst = dst_ptr + (i * width) * 4;
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -333,7 +325,6 @@ aipl_error_t aipl_color_correction_rgba8888(const void* input, void* output,
 
             src += 64;
             dst += 64;
-            cnt -= 16;
         }
     }
 #else
@@ -343,7 +334,7 @@ aipl_error_t aipl_color_correction_rgba8888(const void* input, void* output,
     for (uint32_t i = 0; i < height; ++i)
     {
         const aipl_rgba8888_px_t* src = src_ptr + (i * pitch);
-        aipl_rgba8888_px_t* dst = dst_ptr + (i * pitch);
+        aipl_rgba8888_px_t* dst = dst_ptr + (i * width);
 
         for (uint32_t j = 0; j < width; ++j)
         {
@@ -379,11 +370,10 @@ aipl_error_t aipl_color_correction_rgba4444(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint16_t* src = src_ptr + (i * pitch);
         uint16_t* dst = dst_ptr + (i * pitch);
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -396,7 +386,6 @@ aipl_error_t aipl_color_correction_rgba4444(const void* input, void* output,
 
             src += 16;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -406,7 +395,7 @@ aipl_error_t aipl_color_correction_rgba4444(const void* input, void* output,
     for (uint32_t i = 0; i < height; ++i)
     {
         const aipl_rgba4444_px_t* src = src_ptr + (i * pitch);
-        aipl_rgba4444_px_t* dst = dst_ptr + (i * pitch);
+        aipl_rgba4444_px_t* dst = dst_ptr + (i * width);
 
         for (uint32_t j = 0; j < width; ++j)
         {
@@ -446,11 +435,10 @@ aipl_error_t aipl_color_correction_rgba5551(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint16_t* src = src_ptr + (i * pitch);
-        uint16_t* dst = dst_ptr + (i * pitch);
+        uint16_t* dst = dst_ptr + (i * width);
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -463,7 +451,6 @@ aipl_error_t aipl_color_correction_rgba5551(const void* input, void* output,
 
             src += 16;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -473,7 +460,7 @@ aipl_error_t aipl_color_correction_rgba5551(const void* input, void* output,
     for (uint32_t i = 0; i < height; ++i)
     {
         const aipl_rgba5551_px_t* src = src_ptr + (i * pitch);
-        aipl_rgba5551_px_t* dst = dst_ptr + (i * pitch);
+        aipl_rgba5551_px_t* dst = dst_ptr + (i * width);
 
         for (uint32_t j = 0; j < width; ++j)
         {
@@ -533,11 +520,10 @@ aipl_error_t aipl_color_correction_rgb565(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint16_t* src = src_ptr + (i * pitch);
-        uint16_t* dst = dst_ptr + (i * pitch);
+        uint16_t* dst = dst_ptr + (i * width);
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -550,7 +536,6 @@ aipl_error_t aipl_color_correction_rgb565(const void* input, void* output,
 
             src += 16;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -560,7 +545,7 @@ aipl_error_t aipl_color_correction_rgb565(const void* input, void* output,
     for (uint32_t i = 0; i < height; ++i)
     {
         const aipl_rgb565_px_t* src = src_ptr + (i * pitch);
-        aipl_rgb565_px_t* dst = dst_ptr + (i * pitch);
+        aipl_rgb565_px_t* dst = dst_ptr + (i * width);
 
         for (uint32_t j = 0; j < width; ++j)
         {
@@ -575,10 +560,11 @@ aipl_error_t aipl_color_correction_rgb565(const void* input, void* output,
             px[1] = aipl_channel_cap(g);
             px[0] = aipl_channel_cap(b);
 
-            aipl_pack_rgb565_px(dst, px, 2, 1, 0);
+            dst->t = (px[2] & 0xf8) | (px[1] >> 5);
+            dst->b = ((px[1] << 3) & 0xe0) | (px[0] >> 3);
 
-            src += 3;
-            dst += 3;
+            ++src;
+            ++dst;
         }
     }
 #endif
@@ -606,11 +592,10 @@ aipl_error_t aipl_color_correction_24bit(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint8_t* src = src_ptr + (i * pitch) * 3;
-        uint8_t* dst = dst_ptr + (i * pitch) * 3;
+        uint8_t* dst = dst_ptr + (i * width) * 3;
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -625,7 +610,6 @@ aipl_error_t aipl_color_correction_24bit(const void* input, void* output,
 
             src += 48;
             dst += 48;
-            cnt -= 16;
         }
 }
 #else
@@ -635,7 +619,7 @@ aipl_error_t aipl_color_correction_24bit(const void* input, void* output,
     for (uint32_t i = 0; i < height; ++i)
     {
         const uint8_t* src = src_ptr + i * pitch * 3;
-        uint8_t* dst = dst_ptr + i * pitch * 3;
+        uint8_t* dst = dst_ptr + i * width * 3;
 
         for (uint32_t j = 0; j < width; ++j)
         {

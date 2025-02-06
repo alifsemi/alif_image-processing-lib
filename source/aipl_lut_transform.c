@@ -122,11 +122,10 @@ aipl_error_t aipl_lut_transform_argb8888(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint8_t* src = src_ptr + (i * pitch) * 4;
         uint8_t* dst = dst_ptr + (i * pitch) * 4;
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -139,7 +138,6 @@ aipl_error_t aipl_lut_transform_argb8888(const void* input, void* output,
 
             src += 64;
             dst += 64;
-            cnt -= 16;
         }
     }
 #else
@@ -181,11 +179,10 @@ aipl_error_t aipl_lut_transform_argb4444(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint16_t* src = src_ptr + (i * pitch);
         uint16_t* dst = dst_ptr + (i * pitch);
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -198,7 +195,6 @@ aipl_error_t aipl_lut_transform_argb4444(const void* input, void* output,
 
             src += 16;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -244,11 +240,10 @@ aipl_error_t aipl_lut_transform_argb1555(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint16_t* src = src_ptr + (i * pitch);
         uint16_t* dst = dst_ptr + (i * pitch);
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -261,7 +256,6 @@ aipl_error_t aipl_lut_transform_argb1555(const void* input, void* output,
 
             src += 16;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -307,11 +301,10 @@ aipl_error_t aipl_lut_transform_rgba8888(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint8_t* src = src_ptr + (i * pitch) * 4;
         uint8_t* dst = dst_ptr + (i * pitch) * 4;
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -324,7 +317,6 @@ aipl_error_t aipl_lut_transform_rgba8888(const void* input, void* output,
 
             src += 64;
             dst += 64;
-            cnt -= 16;
         }
     }
 #else
@@ -367,11 +359,10 @@ aipl_error_t aipl_lut_transform_rgba4444(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint16_t* src = src_ptr + (i * pitch);
         uint16_t* dst = dst_ptr + (i * pitch);
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -384,7 +375,6 @@ aipl_error_t aipl_lut_transform_rgba4444(const void* input, void* output,
 
             src += 16;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -431,11 +421,10 @@ aipl_error_t aipl_lut_transform_rgba5551(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint16_t* src = src_ptr + (i * pitch);
         uint16_t* dst = dst_ptr + (i * pitch);
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -448,7 +437,6 @@ aipl_error_t aipl_lut_transform_rgba5551(const void* input, void* output,
 
             src += 16;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -514,11 +502,10 @@ aipl_error_t aipl_lut_transform_rgb565(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint16_t* src = src_ptr + (i * pitch);
         uint16_t* dst = dst_ptr + (i * pitch);
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -531,7 +518,6 @@ aipl_error_t aipl_lut_transform_rgb565(const void* input, void* output,
 
             src += 16;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -583,11 +569,10 @@ aipl_error_t aipl_lut_transform_24bit(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint8_t* src = src_ptr + (i * pitch) * 3;
         uint8_t* dst = dst_ptr + (i * pitch) * 3;
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -602,7 +587,6 @@ aipl_error_t aipl_lut_transform_24bit(const void* input, void* output,
 
             src += 48;
             dst += 48;
-            cnt -= 16;
         }
     }
 #else
