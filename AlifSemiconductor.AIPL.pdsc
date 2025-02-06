@@ -5,11 +5,7 @@
   <description>Alif Semiconductor image processing library that uses D/AVE2D and Helium acceleration</description>
   <url>https://github.com/alifsemi/alif_image-processing-lib/raw/main/</url>
   <supportContact>support@alifsemi.com</supportContact>
-  <!-- optional license file -->
-  <!--
-  <license>
-  </license>
-  -->
+  <license>License.txt</license>
 
   <releases>
     <release version="1.0.0" tag="v1.0.0" url="https://github.com/alifsemi/alif_image-processing-lib/releases/download/v1.0.0/AlifSemiconductor.AlifImageProcessingLib.1.0.0.pack" date="2024-12-23">

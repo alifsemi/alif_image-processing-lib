@@ -1,7 +1,16 @@
-/**
- * @file aipl_bayer.c
+/* Copyright (C) 2022-2024 Alif Semiconductor - All Rights Reserved.
+ * Use, distribution and modification of this code is permitted under the
+ * terms stated in the Alif Semiconductor Software License Agreement
  *
- * Bayer pattern decoding functions
+ * You should have received a copy of the Alif Semiconductor Software
+ * License Agreement with this file. If not, please write to:
+ * contact@alifsemi.com, or visit: https://alifsemi.com/license
+ *
+ */
+
+/******************************************************************************
+ * @file    aipl_bayer.c
+ * @brief   Bayer pattern decoding functions
  *
  * The original Bayer decoding functions are copied from libdc1394:
  * https://sourceforge.net/p/libdc1394/code/ci/master/tree/dc1394/bayer.c
@@ -19,7 +28,8 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+ *
+******************************************************************************/
 
 /*********************
  *      INCLUDES
