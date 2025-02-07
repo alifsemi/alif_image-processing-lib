@@ -66,6 +66,8 @@ const char* aipl_error_str(aipl_error_t error)
         return "AIPL_ERR_BAYER_INVALID_METHOD";
     case AIPL_ERR_BAYER_INVALID_FILTER:
         return "AIPL_ERR_BAYER_INVALID_FILTER";
+    case AIPL_ERR_NOT_SUPPORTED:
+        return "AIPL_ERR_NOT_SUPPORTED";
 
     default:
         return "AIPL_ERR_UNKNOWN";
