@@ -143,7 +143,7 @@ aipl_error_t aipl_color_correction_argb8888(const void* input, void* output,
     for (uint32_t i = 0; i < height; ++i)
     {
         const aipl_argb8888_px_t* src = src_ptr + (i * pitch);
-        aipl_argb8888_px_t* dst = dst_ptr + (i * pitch);
+        aipl_argb8888_px_t* dst = dst_ptr + (i * width);
 
         for (uint32_t j = 0; j < width; ++j)
         {
@@ -371,7 +371,7 @@ aipl_error_t aipl_color_correction_rgba4444(const void* input, void* output,
     for (uint32_t i = 0; i < height; ++i)
     {
         const uint16_t* src = src_ptr + (i * pitch);
-        uint16_t* dst = dst_ptr + (i * pitch);
+        uint16_t* dst = dst_ptr + (i * width);
 
         for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
