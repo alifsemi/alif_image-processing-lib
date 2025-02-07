@@ -159,20 +159,6 @@ INLINE void aipl_packa_rgba5551_px(aipl_rgba5551_px_t* dst,
 }
 
 /**
- * Pack ARGB8888 pixel into RGB565
- *
- * @param dst desitnation pixel pointer
- * @param src source pixel pointer
- */
-INLINE void aipl_packa_rgb565_px(aipl_rgb565_px_t* dst,
-                                 const aipl_argb8888_px_t* src)
-{
-    dst->h = ((uint16_t)(src->r & 0xf8) << 8)
-             | ((uint16_t)(src->g & 0xfc) << 3)
-             | (src->b >> 3);
-}
-
-/**
  * Pack ARGB8888 pixel into Y channel
  *
  * @param dst destination pointer
@@ -182,30 +168,6 @@ INLINE void aipl_packa_yuv_y(uint8_t* dst,
                              const aipl_argb8888_px_t* src)
 {
     *dst = ((66 * src->r + 129 * src->g + 25 * src->b + 128) >> 8) + 16;
-}
-
-/**
- * Pack ARGB8888 pixel into U channel
- *
- * @param dst destination pointer
- * @param src source pixel pointer
- */
-INLINE void aipl_packa_yuv_u(uint8_t* dst,
-                             const aipl_argb8888_px_t* src)
-{
-    *dst = ((-38 * src->r - 74 * src->g + 112 * src->b + 128) >> 8) + 128;
-}
-
-/**
- * Pack ARGB8888 pixel into V channel
- *
- * @param dst destination pointer
- * @param src source pixel pointer
- */
-INLINE void aipl_packa_yuv_v(uint8_t* dst,
-                             const aipl_argb8888_px_t* src)
-{
-    *dst = ((112 * src->r - 94 * src->g - 18 * src->b + 128) >> 8) + 128;
 }
 
 /**
@@ -642,32 +604,6 @@ INLINE uint8_t aipl_channel_cap_4bit(int8_t val)
     if (val & 0x80) return 0;
     else if (val & 0xf0) return 0x0f;
     else return val;
-}
-
-/**
- * Get 24bit from YUV
- *
- * @param dst       destination 24bit pixel pointer
- * @param y         Y channel value
- * @param u         U channel value
- * @param v         V channel value
- * @param r_offset  red channel offset
- * @param g_offset  green channel offset
- * @param b_offset  blue channel offset
- */
-INLINE void aipl_yuv_to_24bit(uint8_t* dst,
-                              uint8_t y, uint8_t u, uint8_t v,
-                              uint8_t r_offset,
-                              uint8_t g_offset,
-                              uint8_t b_offset)
-{
-    int16_t c = y - 16;
-    int16_t d = u - 128;
-    int16_t e = v - 128;
-
-    dst[r_offset] = aipl_channel_cap((298 * c + 409 * e + 128) >> 8);
-    dst[g_offset] = aipl_channel_cap((298 * c - 100 * d - 208 * e + 128) >> 8);
-    dst[b_offset] = aipl_channel_cap((298 * c + 516 * d + 128) >> 8);
 }
 
 /**
