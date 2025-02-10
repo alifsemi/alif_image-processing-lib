@@ -38,6 +38,8 @@ DEFAULT_ARGS="-v"
 PACK_BASE_FILES="
   aipl_config.h
   License.txt
+  LICENSE-LGPL-3.0.txt
+  README.md
 "
 
 # Specify file names to be deleted from pack build directory
