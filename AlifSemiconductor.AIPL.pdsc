@@ -113,6 +113,9 @@
 
     <component Cclass="Graphics" Cgroup="Acceleration" Csub="Helium" Cversion="1.0.0">
       <description>A hardware acceleration from ARM Helium</description>
+      <files>
+        <file category="include"  name="include/"/>
+      </files>
 
       <RTE_Components_h>
 
@@ -188,7 +191,7 @@
           * YUY2
           * UYVY
       </description>
-            <files>
+      <files>
         <!-- include folder / device header file -->
         <file category="include"  name="include/"/>
         <!-- include headers -->
