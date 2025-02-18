@@ -209,13 +209,13 @@ aipl_error_t aipl_lut_transform_argb4444(const void* input, void* output,
         for (uint32_t j = 0; j < width; ++j)
         {
             aipl_argb8888_px_t px;
-            aipl_loada_argb4444_px(&px, src);
+            aipl_cnvt_px_argb4444_to_argb8888(&px, src);
 
             px.r = lut[px.r];
             px.g = lut[px.g];
             px.b = lut[px.b];
 
-            aipl_packa_argb4444_px(dst, &px);
+            aipl_cnvt_px_argb8888_to_argb4444(dst, &px);
 
             ++src;
             ++dst;
@@ -270,13 +270,13 @@ aipl_error_t aipl_lut_transform_argb1555(const void* input, void* output,
         for (uint32_t j = 0; j < width; ++j)
         {
             aipl_argb8888_px_t px;
-            aipl_loada_argb1555_px(&px, src);
+            aipl_cnvt_px_argb1555_to_argb8888(&px, src);
 
             px.r = lut[px.r];
             px.g = lut[px.g];
             px.b = lut[px.b];
 
-            aipl_packa_argb1555_px(dst, &px);
+            aipl_cnvt_px_argb8888_to_argb1555(dst, &px);
 
             ++src;
             ++dst;
@@ -389,13 +389,13 @@ aipl_error_t aipl_lut_transform_rgba4444(const void* input, void* output,
         for (uint32_t j = 0; j < width; ++j)
         {
             aipl_argb8888_px_t px;
-            aipl_loada_rgba4444_px(&px, src);
+            aipl_cnvt_px_rgba4444_to_argb8888(&px, src);
 
             px.r = lut[px.r];
             px.g = lut[px.g];
             px.b = lut[px.b];
 
-            aipl_packa_rgba4444_px(dst, &px);
+            aipl_cnvt_px_argb8888_to_rgba4444(dst, &px);
 
             ++src;
             ++dst;
@@ -451,13 +451,13 @@ aipl_error_t aipl_lut_transform_rgba5551(const void* input, void* output,
         for (uint32_t j = 0; j < width; ++j)
         {
             aipl_argb8888_px_t px;
-            aipl_loada_rgba5551_px(&px, src);
+            aipl_cnvt_px_rgba5551_to_argb8888(&px, src);
 
             px.r = lut[px.r];
             px.g = lut[px.g];
             px.b = lut[px.b];
 
-            aipl_packa_rgba5551_px(dst, &px);
+            aipl_cnvt_px_argb8888_to_rgba5551(dst, &px);
 
             ++src;
             ++dst;
@@ -532,13 +532,13 @@ aipl_error_t aipl_lut_transform_rgb565(const void* input, void* output,
         for (uint32_t j = 0; j < width; ++j)
         {
             uint8_t px[3];
-            aipl_load_rgb565_px(px, src, 2, 1, 0);
+            aipl_cnvt_px_rgb565_to_24bit(px, src, 2, 1, 0);
 
             px[2] = lut[px[2]];
             px[1] = lut[px[1]];
             px[0] = lut[px[0]];
 
-            aipl_pack_rgb565_px(dst, px, 2, 1, 0);
+            aipl_cnvt_px_24bit_to_rgb565(dst, px, 2, 1, 0);
 
             ++src;
             ++dst;

@@ -214,7 +214,7 @@ aipl_error_t aipl_white_balance_argb4444(const void* input, void* output,
         for (uint32_t j = 0; j < width; ++j)
         {
             aipl_argb8888_px_t px;
-            aipl_loada_argb4444_px(&px, src);
+            aipl_cnvt_px_argb4444_to_argb8888(&px, src);
 
             int16_t r = px.r * ar;
             int16_t g = px.g * ag;
@@ -224,7 +224,7 @@ aipl_error_t aipl_white_balance_argb4444(const void* input, void* output,
             px.g = aipl_channel_cap(g);
             px.b = aipl_channel_cap(b);
 
-            aipl_packa_argb4444_px(dst, &px);
+            aipl_cnvt_px_argb8888_to_argb4444(dst, &px);
 
             ++src;
             ++dst;
@@ -279,7 +279,7 @@ aipl_error_t aipl_white_balance_argb1555(const void* input, void* output,
         for (uint32_t j = 0; j < width; ++j)
         {
             aipl_argb8888_px_t px;
-            aipl_loada_argb1555_px(&px, src);
+            aipl_cnvt_px_argb1555_to_argb8888(&px, src);
 
             int16_t r = px.r * ar;
             int16_t g = px.g * ag;
@@ -289,7 +289,7 @@ aipl_error_t aipl_white_balance_argb1555(const void* input, void* output,
             px.g = aipl_channel_cap(g);
             px.b = aipl_channel_cap(b);
 
-            aipl_packa_argb1555_px(dst, &px);
+            aipl_cnvt_px_argb8888_to_argb1555(dst, &px);
 
             ++src;
             ++dst;
@@ -404,7 +404,7 @@ aipl_error_t aipl_white_balance_rgba4444(const void* input, void* output,
         for (uint32_t j = 0; j < width; ++j)
         {
             aipl_argb8888_px_t px;
-            aipl_loada_rgba4444_px(&px, src);
+            aipl_cnvt_px_rgba4444_to_argb8888(&px, src);
 
             int16_t r = px.r * ar;
             int16_t g = px.g * ag;
@@ -414,7 +414,7 @@ aipl_error_t aipl_white_balance_rgba4444(const void* input, void* output,
             px.g = aipl_channel_cap(g);
             px.b = aipl_channel_cap(b);
 
-            aipl_packa_rgba4444_px(dst, &px);
+            aipl_cnvt_px_argb8888_to_rgba4444(dst, &px);
 
             ++src;
             ++dst;
@@ -469,7 +469,7 @@ aipl_error_t aipl_white_balance_rgba5551(const void* input, void* output,
         for (uint32_t j = 0; j < width; ++j)
         {
             aipl_argb8888_px_t px;
-            aipl_loada_rgba5551_px(&px, src);
+            aipl_cnvt_px_rgba5551_to_argb8888(&px, src);
 
             int16_t r = px.r * ar;
             int16_t g = px.g * ag;
@@ -479,7 +479,7 @@ aipl_error_t aipl_white_balance_rgba5551(const void* input, void* output,
             px.g = aipl_channel_cap(g);
             px.b = aipl_channel_cap(b);
 
-            aipl_packa_rgba5551_px(dst, &px);
+            aipl_cnvt_px_argb8888_to_rgba5551(dst, &px);
 
             ++src;
             ++dst;
@@ -556,7 +556,7 @@ aipl_error_t aipl_white_balance_rgb565(const void* input, void* output,
         for (uint32_t j = 0; j < width; ++j)
         {
             uint8_t px[3];
-            aipl_load_rgb565_px(px, src, 2, 1, 0);
+            aipl_cnvt_px_rgb565_to_24bit(px, src, 2, 1, 0);
 
             int16_t r = px[2] * ar;
             int16_t g = px[1] * ag;
@@ -566,10 +566,10 @@ aipl_error_t aipl_white_balance_rgb565(const void* input, void* output,
             px[1] = aipl_channel_cap(g);
             px[0] = aipl_channel_cap(b);
 
-            aipl_pack_rgb565_px(dst, px, 2, 1, 0);
+            aipl_cnvt_px_24bit_to_rgb565(dst, px, 2, 1, 0);
 
-            src += 3;
-            dst += 3;
+            ++src;
+            ++dst;
         }
     }
 #endif
