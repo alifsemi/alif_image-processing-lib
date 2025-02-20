@@ -126,11 +126,11 @@ aipl_error_t aipl_color_correction_argb8888(const void* input, void* output,
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_argb_x16_t pix;
-            aipl_mve_loada_argb8888_16px(&pix, src, tail_p);
+            aipl_mve_ldr_16px_argb8888(&pix, src, tail_p);
 
             aipl_mve_color_correction_argb_x16(&pix, ccm);
 
-            aipl_mve_storea_argb8888_16px(dst, &pix, tail_p);
+            aipl_mve_str_16px_argb8888(dst, pix, tail_p);
 
             src += 64;
             dst += 64;
@@ -187,11 +187,11 @@ aipl_error_t aipl_color_correction_argb4444(const void* input, void* output,
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_argb_x16_t pix;
-            aipl_mve_loada_argb4444_16px(&pix, (uint8_t*)src, tail_p);
+            aipl_mve_ldr_16px_argb4444(&pix, src, tail_p);
 
             aipl_mve_color_correction_argb_x16(&pix, ccm);
 
-            aipl_mve_storea_argb4444_16px((uint8_t*)dst, &pix, tail_p);
+            aipl_mve_str_16px_extended_argb4444(dst, pix, tail_p);
 
             src += 16;
             dst += 16;
@@ -252,11 +252,11 @@ aipl_error_t aipl_color_correction_argb1555(const void* input, void* output,
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_argb_x16_t pix;
-            aipl_mve_loada_argb1555_16px(&pix, (uint8_t*)src, tail_p);
+            aipl_mve_ldr_16px_argb1555(&pix, src, tail_p);
 
             aipl_mve_color_correction_argb_x16(&pix, ccm);
 
-            aipl_mve_storea_argb1555_16px((uint8_t*)dst, &pix, tail_p);
+            aipl_mve_str_16px_argb1555(dst, pix, tail_p);
 
             src += 16;
             dst += 16;
@@ -317,11 +317,11 @@ aipl_error_t aipl_color_correction_rgba8888(const void* input, void* output,
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_argb_x16_t pix;
-            aipl_mve_loada_rgba8888_16px(&pix, src, tail_p);
+            aipl_mve_ldr_16px_rgba8888(&pix, src, tail_p);
 
             aipl_mve_color_correction_argb_x16(&pix, ccm);
 
-            aipl_mve_storea_rgba8888_16px(dst, &pix, tail_p);
+            aipl_mve_str_16px_rgba8888(dst, pix, tail_p);
 
             src += 64;
             dst += 64;
@@ -378,11 +378,11 @@ aipl_error_t aipl_color_correction_rgba4444(const void* input, void* output,
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_argb_x16_t pix;
-            aipl_mve_loada_rgba4444_16px(&pix, (uint8_t*)src, tail_p);
+            aipl_mve_ldr_16px_rgba4444(&pix, src, tail_p);
 
             aipl_mve_color_correction_argb_x16(&pix, ccm);
 
-            aipl_mve_storea_rgba4444_16px((uint8_t*)dst, &pix, tail_p);
+            aipl_mve_str_16px_rgba4444(dst, pix, tail_p);
 
             src += 16;
             dst += 16;
@@ -443,11 +443,11 @@ aipl_error_t aipl_color_correction_rgba5551(const void* input, void* output,
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_argb_x16_t pix;
-            aipl_mve_loada_rgba5551_16px(&pix, (uint8_t*)src, tail_p);
+            aipl_mve_ldr_16px_rgba5551(&pix, src, tail_p);
 
             aipl_mve_color_correction_argb_x16(&pix, ccm);
 
-            aipl_mve_storea_rgba5551_16px((uint8_t*)dst, &pix, tail_p);
+            aipl_mve_str_16px_rgba5551(dst, pix, tail_p);
 
             src += 16;
             dst += 16;
@@ -528,11 +528,11 @@ aipl_error_t aipl_color_correction_rgb565(const void* input, void* output,
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_rgb_x16_t pix;
-            aipl_mve_load_rgb565_16px(&pix, (uint8_t*)src, tail_p);
+            aipl_mve_ldr_16px_rgb565(&pix, src, tail_p);
 
             aipl_mve_color_correction_rgb_x16(&pix, ccm);
 
-            aipl_mve_store_rgb565_16px((uint8_t*)dst, &pix, tail_p);
+            aipl_mve_str_16px_rgb565(dst, pix, tail_p);
 
             src += 16;
             dst += 16;
@@ -599,13 +599,13 @@ aipl_error_t aipl_color_correction_24bit(const void* input, void* output,
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_rgb_x16_t pix;
-            aipl_mve_load_24bit_16px(&pix, src, tail_p,
-                                     r_offset, g_offset, b_offset);
+            aipl_mve_ldr_16px_rgb(&pix, src, tail_p,
+                                  r_offset, g_offset, b_offset);
 
             aipl_mve_color_correction_rgb_x16(&pix, ccm);
 
-            aipl_mve_store_24bit_16px(dst, &pix, tail_p,
-                                      r_offset, g_offset, b_offset);
+            aipl_mve_str_16px_rgb(dst, pix, tail_p,
+                                  r_offset, g_offset, b_offset);
 
             src += 48;
             dst += 48;

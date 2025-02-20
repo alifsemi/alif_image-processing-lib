@@ -98,6 +98,2469 @@ typedef struct {
 /**********************
  * GLOBAL PROTOTYPES
  **********************/
+
+/**
+ * Load 4 ARGB8888 pixels from memory to
+ * Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pointer
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_4px_argb8888(uint32x4_t* dst,
+                                      const uint32_t* src,
+                                      mve_pred16_t pred)
+{
+    *dst = vld1q_z(src, pred);
+}
+
+/**
+ * Load 8 ARGB8888 pixels from memory to
+ * A, R, G and B Helium vector registers
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pointer
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_argb8888(aipl_mve_argb_x8_t* dst,
+                                      const uint8_t* src,
+                                      mve_pred16_t pred)
+{
+    dst->a = vldrbq_gather_offset_z(src + 3, AIPL_4_BYTE_OFFSETS_U16, pred);
+    dst->r = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U16, pred);
+    dst->g = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U16, pred);
+    dst->b = vldrbq_gather_offset_z(src, AIPL_4_BYTE_OFFSETS_U16, pred);
+}
+
+/**
+ * Load 8 XRGB8888 pixels from memory to
+ * R, G and B Helium vector registers
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pointer
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_xrgb8888(aipl_mve_rgb_x8_t* dst,
+                                      const uint8_t* src,
+                                      mve_pred16_t pred)
+{
+    dst->r = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U16, pred);
+    dst->g = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U16, pred);
+    dst->b = vldrbq_gather_offset_z(src, AIPL_4_BYTE_OFFSETS_U16, pred);
+}
+
+/**
+ * Load 8 XRGB8888 pixels from memory with offset to
+ * R, G and B Helium vector registers
+ *
+ * @param dst       destination pixel vector pointer
+ * @param src       source pointer
+ * @param offset    pixel offset
+ * @param pred      vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_offset_xrgb8888(aipl_mve_rgb_x8_t* dst,
+                                             const uint8_t* src,
+                                             uint8_t offset,
+                                             mve_pred16_t pred)
+{
+    dst->r = vldrbq_gather_offset_z(src + 2, AIPL_OFFSETS_U16(offset, 4), pred);
+    dst->g = vldrbq_gather_offset_z(src + 1, AIPL_OFFSETS_U16(offset, 4), pred);
+    dst->b = vldrbq_gather_offset_z(src, AIPL_OFFSETS_U16(offset, 4), pred);
+}
+
+/**
+ * Load 16 XRGB8888 pixels from memory to
+ * R, G and B Helium vector registers
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pointer
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_16px_xrgb8888(aipl_mve_rgb_x16_t* dst,
+                                       const uint8_t* src,
+                                       mve_pred16_t pred)
+{
+    dst->r = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U8, pred);
+    dst->g = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U8, pred);
+    dst->b = vldrbq_gather_offset_z(src, AIPL_4_BYTE_OFFSETS_U8, pred);
+}
+
+/**
+ * Load 16 ARGB8888 pixels from memory to
+ * A, R, G and B Helium vector registers
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pointer
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_16px_argb8888(aipl_mve_argb_x16_t* dst,
+                                       const uint8_t* src,
+                                       mve_pred16_t pred)
+{
+    dst->a = vldrbq_gather_offset_z(src + 3, AIPL_4_BYTE_OFFSETS_U8, pred);
+    dst->r = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U8, pred);
+    dst->g = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U8, pred);
+    dst->b = vldrbq_gather_offset_z(src, AIPL_4_BYTE_OFFSETS_U8, pred);
+}
+
+/**
+ * Convert 4 ARGB8888 pixels to RGBA8888
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_4px_argb8888_to_rgba8888(uint32x4_t* dst,
+                                                   uint32x4_t src)
+{
+    uint32x4_t a = vshrq(src, 24);
+    *dst = vsliq(a, src, 8);
+}
+
+/**
+ * Convert 8 XRGB8888 pixels to Y channel
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_xrgb8888_to_yuv_y(uint16x8_t* dst,
+                                                aipl_mve_rgb_x8_t src)
+{
+    *dst = vmulq(src.r, 66);
+    *dst = vmlaq(*dst, src.g, 129);
+    *dst = vmlaq(*dst, src.b, 25);
+
+    *dst = vshrq(vaddq(*dst, 128), 8);
+    *dst = vaddq(*dst, 16);
+}
+
+/**
+ * Convert 8 XRGB8888 pixels to U channel
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_xrgb8888_to_yuv_u(uint16x8_t* dst,
+                                                aipl_mve_rgb_x8_t src)
+{
+    *dst = vmulq(src.r, -38);
+    *dst = vmlaq(*dst, src.g, -74);
+    *dst = vmlaq(*dst, src.b, 112);
+
+    *dst = vshrq(vaddq(*dst, 128), 8);
+    *dst = vaddq(*dst, 128);
+}
+
+/**
+ * Convert 8 XRGB8888 pixels to V channel
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_xrgb8888_to_yuv_v(uint16x8_t* dst,
+                                                aipl_mve_rgb_x8_t src)
+{
+    *dst = vmulq(src.r, 112);
+    *dst = vmlaq(*dst, src.g, -94);
+    *dst = vmlaq(*dst, src.b, -18);
+
+    *dst = vshrq(vaddq(*dst, 128), 8);
+    *dst = vaddq(*dst, 128);
+}
+
+/**
+ * Store 4 ARGB8888 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_4px_argb8888(uint32_t* dst,
+                                      uint32x4_t src,
+                                      mve_pred16_t pred)
+{
+    vst1q_p(dst, src, pred);
+}
+
+/**
+ * Store 8 ARGB8888 pixels to memory from
+ * A, R, G and B Helium vector registers
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_8px_argb8888(uint8_t* dst,
+                                      aipl_mve_argb_x8_t src,
+                                      mve_pred16_t pred)
+{
+    vstrbq_scatter_offset_p(dst + 3, AIPL_4_BYTE_OFFSETS_U16, src.a, pred);
+    vstrbq_scatter_offset_p(dst + 2, AIPL_4_BYTE_OFFSETS_U16, src.r, pred);
+    vstrbq_scatter_offset_p(dst + 1, AIPL_4_BYTE_OFFSETS_U16, src.g, pred);
+    vstrbq_scatter_offset_p(dst, AIPL_4_BYTE_OFFSETS_U16, src.b, pred);
+}
+
+/**
+ * Store 16 XRGB8888 pixels to memory from
+ * R, G and B Helium vector registers
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_16px_xrgb8888(uint8_t* dst,
+                                       aipl_mve_rgb_x16_t src,
+                                       mve_pred16_t pred)
+{
+    vstrbq_scatter_offset_p(dst + 3, AIPL_4_BYTE_OFFSETS_U8, vdupq_n_u8(0xff), pred);
+    vstrbq_scatter_offset_p(dst + 2, AIPL_4_BYTE_OFFSETS_U8, src.r, pred);
+    vstrbq_scatter_offset_p(dst + 1, AIPL_4_BYTE_OFFSETS_U8, src.g, pred);
+    vstrbq_scatter_offset_p(dst, AIPL_4_BYTE_OFFSETS_U8, src.b, pred);
+}
+
+/**
+ * Store 16 ARGB8888 pixels to memory from
+ * A, R, G and B Helium vector registers
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_16px_argb8888(uint8_t* dst,
+                                       aipl_mve_argb_x16_t src,
+                                       mve_pred16_t pred)
+{
+    vstrbq_scatter_offset_p(dst + 3, AIPL_4_BYTE_OFFSETS_U8, src.a, pred);
+    vstrbq_scatter_offset_p(dst + 2, AIPL_4_BYTE_OFFSETS_U8, src.r, pred);
+    vstrbq_scatter_offset_p(dst + 1, AIPL_4_BYTE_OFFSETS_U8, src.g, pred);
+    vstrbq_scatter_offset_p(dst, AIPL_4_BYTE_OFFSETS_U8, src.b, pred);
+}
+
+/**
+ * Load 8 ARGB4444 pixels from memory with offset to
+ * Helium vector register
+ *
+ * @param dst       destination pixel vectors
+ * @param src       source pixel vectors
+ * @param offset    pixel offset
+ * @param pred      vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_offset_argb4444(uint16x8_t* dst,
+                                             const uint16_t* src,
+                                             uint8_t offset,
+                                             mve_pred16_t pred)
+{
+    *dst = vldrhq_gather_offset_z(src, AIPL_OFFSETS_U16(offset, 2), pred);
+}
+
+/**
+ * Load 8 ARGB4444 pixels from memory with extend to
+ * A, R, G and B Helium vector registers
+ *
+ * @param dst       destination pixel vectors
+ * @param src       source pixel vectors
+ * @param pred      vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_extend_argb4444(aipl_mve_argb_x8_t* dst,
+                                             const uint16_t* src,
+                                             mve_pred16_t pred)
+{
+    uint16x8_t ar = vldrbq_gather_offset_z((uint8_t*)src + 1, AIPL_2_BYTE_OFFSETS_U16, pred);
+    uint16x8_t gb = vldrbq_gather_offset_z((uint8_t*)src, AIPL_2_BYTE_OFFSETS_U16, pred);
+
+    dst->a = vorrq(vandq(ar, vdupq_n_u16(0x00f0)), vshrq(ar, 4));
+    dst->r = vmulq(vandq(ar, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
+    dst->g = vorrq(vandq(gb, vdupq_n_u16(0x00f0)), vshrq(gb, 4));
+    dst->b = vmulq(vandq(gb, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
+}
+
+/**
+ * Load 8 ARGB4444 pixels from memory to
+ * Helium vector register
+ *
+ * @param dst   destination pixel vectors
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_argb4444(uint16x8_t* dst,
+                                      const uint16_t* src,
+                                      mve_pred16_t pred)
+{
+    *dst = vldrhq_z_u16(src, pred);
+}
+
+/**
+ * Load 16 XRGB4444 pixels to memory from
+ * R, G and B Helium vector registers
+ *
+ * @param dst   destination pixel vectors
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_16px_xrgb4444(aipl_mve_rgb_x16_t* dst,
+                                       const uint16_t* src,
+                                       mve_pred16_t pred)
+{
+    uint8x16_t ar = vldrbq_gather_offset_z((uint8_t*)src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
+    uint8x16_t gb = vldrbq_gather_offset_z((uint8_t*)src, AIPL_2_BYTE_OFFSETS_U8, pred);
+
+    dst->r = vmulq(vandq(ar, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->g = vorrq(vandq(gb, vdupq_n_u8(0xf0)), vshrq(gb, 4));
+    dst->b = vmulq(vandq(gb, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+}
+
+/**
+ * Load 16 ARGB4444 pixels to memory from
+ * A, R, G and B Helium vector registers
+ *
+ * @param dst   destination pixel vectors
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_16px_argb4444(aipl_mve_argb_x16_t* dst,
+                                       const uint16_t* src,
+                                       mve_pred16_t pred)
+{
+    uint8x16_t ar = vldrbq_gather_offset_z((uint8_t*)src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
+    uint8x16_t gb = vldrbq_gather_offset_z((uint8_t*)src, AIPL_2_BYTE_OFFSETS_U8, pred);
+
+    dst->a = vorrq(vandq(ar, vdupq_n_u8(0xf0)), vshrq(ar, 4));
+    dst->r = vmulq(vandq(ar, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->g = vorrq(vandq(gb, vdupq_n_u8(0xf0)), vshrq(gb, 4));
+    dst->b = vmulq(vandq(gb, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+}
+
+/**
+ * Convert 8 ARGB4444 pixels to RGBA4444
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_argb4444_to_rgba4444(uint16x8_t* dst,
+                                                   uint16x8_t src)
+{
+    *dst = vshrq(src, 12);
+    *dst = vsliq(*dst, src, 4);
+}
+
+/**
+ * Convert 8 ARGB4444 pixels to Y channel
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_argb4444_to_yuv_y(uint16x8_t* dst,
+                                                uint16x8_t src)
+{
+    uint16x8_t r = vandq(vshrq(src, 8), vdupq_n_u16(0x000f));
+    uint16x8_t g = vandq(vshrq(src, 4), vdupq_n_u16(0x000f));
+    uint16x8_t b = vandq(src, vdupq_n_u16(0x000f));
+
+    *dst = vmulq(r, 66 * 0x11);
+    *dst = vmlaq(*dst, g, 129 * 0x11);
+    *dst = vmlaq(*dst, b, 25 * 0x11);
+    *dst = vshrq(vaddq(*dst, 128), 8);
+    *dst = vaddq(*dst, 16);
+}
+
+/**
+ * Convert 8 ARGB4444 pixels to U and V channels
+ * using Helium vector register
+ *
+ * @param u_dst U channel destination vector pointer
+ * @param v_dst V channel destination vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_argb4444_to_yuv_uv(uint16x8_t* u_dst,
+                                                 uint16x8_t* v_dst,
+                                                 uint16x8_t src)
+{
+    uint16x8_t r = vandq(vshrq(src, 8), vdupq_n_u16(0x000f));
+    uint16x8_t g = vandq(vshrq(src, 4), vdupq_n_u16(0x000f));
+    uint16x8_t b = vandq(src, vdupq_n_u16(0x000f));
+
+    *u_dst = vmulq(r, -38 * 0x11);
+    *u_dst = vmlaq(*u_dst, g, -74 * 0x11);
+    *u_dst = vmlaq(*u_dst, b, 112 * 0x11);
+    *u_dst = vshrq(vaddq(*u_dst, 128), 8);
+    *u_dst = vaddq(*u_dst, 128);
+
+    *v_dst = vmulq(r, 112 * 0x11);
+    *v_dst = vmlaq(*v_dst, g, -94 * 0x11);
+    *v_dst = vmlaq(*v_dst, b, -18 * 0x11);
+    *v_dst = vshrq(vaddq(*v_dst, 128), 8);
+    *v_dst = vaddq(*v_dst, 128);
+}
+
+/**
+ * Convert 8 ARGB4444 pixels to Y, U and V channels
+ * using Helium vector register
+ *
+ * @param y_dst Y channel destination vector pointer
+ * @param u_dst U channel destination vector pointer
+ * @param v_dst V channel destination vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_argb4444_to_yuv(uint16x8_t* y_dst,
+                                              uint16x8_t* u_dst,
+                                              uint16x8_t* v_dst,
+                                              uint16x8_t src)
+{
+    uint16x8_t r = vandq(vshrq(src, 8), vdupq_n_u16(0x000f));
+    uint16x8_t g = vandq(vshrq(src, 4), vdupq_n_u16(0x000f));
+    uint16x8_t b = vandq(src, vdupq_n_u16(0x000f));
+
+    *y_dst = vmulq(r, 66 * 0x11);
+    *y_dst = vmlaq(*y_dst, g, 129 * 0x11);
+    *y_dst = vmlaq(*y_dst, b, 25 * 0x11);
+    *y_dst = vshrq(vaddq(*y_dst, 128), 8);
+    *y_dst = vaddq(*y_dst, 16);
+
+    *u_dst = vmulq(r, -38 * 0x11);
+    *u_dst = vmlaq(*u_dst, g, -74 * 0x11);
+    *u_dst = vmlaq(*u_dst, b, 112 * 0x11);
+    *u_dst = vshrq(vaddq(*u_dst, 128), 8);
+    *u_dst = vaddq(*u_dst, 128);
+
+    *v_dst = vmulq(r, 112 * 0x11);
+    *v_dst = vmlaq(*v_dst, g, -94 * 0x11);
+    *v_dst = vmlaq(*v_dst, b, -18 * 0x11);
+    *v_dst = vshrq(vaddq(*v_dst, 128), 8);
+    *v_dst = vaddq(*v_dst, 128);
+}
+
+/**
+ * Store 8 ARGB4444 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_8px_argb4444(uint16_t* dst,
+                                      uint16x8_t src,
+                                      mve_pred16_t pred)
+{
+    vstrhq_p(dst, src, pred);
+}
+
+/**
+ * Store 8 ARGB4444 pixels to memory from extended
+ * A, R, G and B Helium vector registers
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_8px_extended_argb4444(uint16_t* dst,
+                                               aipl_mve_argb_x8_t src,
+                                               mve_pred16_t pred)
+{
+    uint8x16_t ar = vreinterpretq_u8(src.a);
+    ar = vsriq(ar, vreinterpretq_u8(src.r), 4);
+    uint8x16_t gb = vreinterpretq_u8(src.g);
+    gb = vsriq(gb, vreinterpretq_u8(src.b), 4);
+    uint16x8_t pix = vreinterpretq_u16(vmovntq(gb, vreinterpretq_u16(ar)));
+
+    vst1q_p(dst, pix, pred);
+}
+
+/**
+ * Store 16 ARGB4444 pixels to memory from extended
+ * A, R, G and B Helium vector registers
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_16px_extended_argb4444(uint16_t* dst,
+                                                aipl_mve_argb_x16_t src,
+                                                mve_pred16_t pred)
+{
+    uint8x16_t ar = vsriq(src.a, src.r, 4);
+    uint8x16_t gb = vsriq(src.g, src.b, 4);
+
+    vstrbq_scatter_offset_p((uint8_t*)dst + 1, AIPL_2_BYTE_OFFSETS_U8, ar, pred);
+    vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, gb, pred);
+
+}
+
+/**
+ * Store 16 XRGB4444 pixels to memory from extended
+ * R, G and B Helium vector registers
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_16px_xrgb4444(uint16_t* dst,
+                                       aipl_mve_rgb_x16_t src,
+                                       mve_pred16_t pred)
+{
+    uint8x16_t ar = vsriq(vdupq_n_u8(0xf0), src.r, 4);
+    uint8x16_t gb = vsriq(src.g, src.b, 4);
+
+    vstrbq_scatter_offset_p((uint8_t*)dst + 1, AIPL_2_BYTE_OFFSETS_U8, ar, pred);
+    vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, gb, pred);
+}
+
+/**
+ * Load 8 ARGB1555 pixels from memory with offset to
+ * Helium vector register
+ *
+ * @param dst       destination pixel vectors
+ * @param src       source pixel vectors
+ * @param offset    pixel offset
+ * @param pred      vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_offset_argb1555(uint16x8_t* dst,
+                                             const uint16_t* src,
+                                             uint8_t offset,
+                                             mve_pred16_t pred)
+{
+    *dst = vldrhq_gather_offset_z(src, AIPL_OFFSETS_U16(offset, 2), pred);
+}
+
+/**
+ * Load 8 ARGB1555 pixels from memory to
+ * Helium vector register
+ *
+ * @param dst   destination pixel vectors
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_argb1555(uint16x8_t* dst,
+                                      const uint16_t* src,
+                                      mve_pred16_t pred)
+{
+    *dst = vldrhq_z_u16(src, pred);
+}
+
+/**
+ * Load 16 XRGB1555 pixels from memory to
+ * R, G and B Helium vector registers
+ *
+ * @param dst   destination pixel vectors
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_16px_xrgb1555(aipl_mve_rgb_x16_t* dst,
+                                       const uint16_t* src,
+                                       mve_pred16_t pred)
+{
+    uint8x16_t upper = vldrbq_gather_offset_z((uint8_t*)src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
+    uint8x16_t lower = vldrbq_gather_offset_z((uint8_t*)src, AIPL_2_BYTE_OFFSETS_U8, pred);
+
+    dst->r = vandq(vshlq_n(upper, 1), vdupq_n_u8(0xf8));
+    dst->r = vorrq(dst->r, vshrq(dst->r, 5));
+    dst->g = vorrq(vshlq_n(upper, 6), vshrq(vandq(lower, vdupq_n_u8(0xe0)), 2));
+    dst->g = vorrq(dst->g, vshrq(dst->g, 5));
+    dst->b = vshlq_n(lower, 3);
+    dst->b = vorrq(dst->b, vshrq(dst->b, 5));
+}
+
+/**
+ * Load 16 ARGB1555 pixels from memory to
+ * A, G, R and B Helium vector registers
+ *
+ * @param dst   destination pixel vectors
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_16px_argb1555(aipl_mve_argb_x16_t* dst,
+                                       const uint16_t* src,
+                                       mve_pred16_t pred)
+{
+    uint8x16_t upper = vldrbq_gather_offset_z((uint8_t*)src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
+    uint8x16_t lower = vldrbq_gather_offset_z((uint8_t*)src, AIPL_2_BYTE_OFFSETS_U8, pred);
+
+    dst->a = vmulq(vshrq(upper, 7), vdupq_n_u8(0xff));
+    dst->r = vandq(vshlq_n(upper, 1), vdupq_n_u8(0xf0));
+    dst->r = vorrq(dst->r, vshrq(dst->r, 5));
+    dst->g = vorrq(vshlq_n(upper, 6), vshrq(vandq(lower, vdupq_n_u8(0xe0)), 2));
+    dst->g = vorrq(dst->g, vshrq(dst->g, 5));
+    dst->b = vshlq_n(lower, 3);
+    dst->b = vorrq(dst->b, vshrq(dst->b, 5));
+}
+
+/**
+ * Convert 8 ARGB1555 pixels to Y channel
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_argb1555_to_yuv_y(uint16x8_t* dst,
+                                                uint16x8_t src)
+{
+    uint16x8_t r = vandq(vshrq(src, 10), vdupq_n_u16(0x001f));
+    uint16x8_t g = vandq(vshrq(src, 5), vdupq_n_u16(0x001f));
+    uint16x8_t b = vandq(src, vdupq_n_u16(0x001f));
+
+    *dst = vmulq(r, 543);
+    *dst = vmlaq(*dst, g, 1061);
+    *dst = vmlaq(*dst, b, 205);
+    *dst = vshrq(vaddq(*dst, 128), 8);
+    *dst = vaddq(*dst, 16);
+}
+
+/**
+ * Convert 8 ARGB1555 pixels to U and V channels
+ * using Helium vector register
+ *
+ * @param u_dst U channel destination vector pointer
+ * @param v_dst V channel destination vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_argb1555_to_yuv_uv(uint16x8_t* u_dst,
+                                                 uint16x8_t* v_dst,
+                                                 uint16x8_t src)
+{
+    uint16x8_t r = vandq(vshrq(src, 10), vdupq_n_u16(0x001f));
+    uint16x8_t g = vandq(vshrq(src, 5), vdupq_n_u16(0x001f));
+    uint16x8_t b = vandq(src, vdupq_n_u16(0x001f));
+
+    *u_dst = vmulq(r, -312);
+    *u_dst = vmlaq(*u_dst, g, -608);
+    *u_dst = vmlaq(*u_dst, b, 920);
+    *u_dst = vshrq(vaddq(*u_dst, 128), 8);
+    *u_dst = vaddq(*u_dst, 128);
+
+    *v_dst = vmulq(r, 920);
+    *v_dst = vmlaq(*v_dst, g, -773);
+    *v_dst = vmlaq(*v_dst, b, -147);
+    *v_dst = vshrq(vaddq(*v_dst, 128), 8);
+    *v_dst = vaddq(*v_dst, 128);
+}
+
+/**
+ * Convert 8 ARGB1555 pixels to Y, U and V channels
+ * using Helium vector register
+ *
+ * @param y_dst Y channel destination vector pointer
+ * @param u_dst U channel destination vector pointer
+ * @param v_dst V channel destination vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_argb1555_to_yuv(uint16x8_t* y_dst,
+                                              uint16x8_t* u_dst,
+                                              uint16x8_t* v_dst,
+                                              uint16x8_t src)
+{
+    uint16x8_t r = vandq(vshrq(src, 10), vdupq_n_u16(0x001f));
+    uint16x8_t g = vandq(vshrq(src, 5), vdupq_n_u16(0x001f));
+    uint16x8_t b = vandq(src, vdupq_n_u16(0x001f));
+
+    *y_dst = vmulq(r, 543);
+    *y_dst = vmlaq(*y_dst, g, 1061);
+    *y_dst = vmlaq(*y_dst, b, 205);
+    *y_dst = vshrq(vaddq(*y_dst, 128), 8);
+    *y_dst = vaddq(*y_dst, 16);
+
+    *u_dst = vmulq(r, -312);
+    *u_dst = vmlaq(*u_dst, g, -608);
+    *u_dst = vmlaq(*u_dst, b, 920);
+    *u_dst = vshrq(vaddq(*u_dst, 128), 8);
+    *u_dst = vaddq(*u_dst, 128);
+
+    *v_dst = vmulq(r, 920);
+    *v_dst = vmlaq(*v_dst, g, -773);
+    *v_dst = vmlaq(*v_dst, b, -147);
+    *v_dst = vshrq(vaddq(*v_dst, 128), 8);
+    *v_dst = vaddq(*v_dst, 128);
+}
+
+/**
+ * Store 8 ARGB1555 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_8px_argb1555(uint16_t* dst,
+                                      uint16x8_t src,
+                                      mve_pred16_t pred)
+{
+    vstrhq_p(dst, src, pred);
+}
+
+/**
+ * Store 16 XRGB1555 pixels to memory from
+ * R, G and B Helium vector registers
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_16px_xrgb1555(uint16_t* dst,
+                                       aipl_mve_rgb_x16_t src,
+                                       mve_pred16_t pred)
+{
+    uint8x16_t upper = vsriq(vdupq_n_u8(0x80), src.r, 1);
+    upper = vsriq(upper, src.g, 6);
+    uint8x16_t lower = vshlq_n(src.g, 2);
+    lower = vsriq(lower, src.b, 3);
+
+    vstrbq_scatter_offset_p((uint8_t*)dst + 1, AIPL_2_BYTE_OFFSETS_U8, upper, pred);
+    vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, lower, pred);
+}
+
+/**
+ * Store 16 ARGB1555 pixels to memory from
+ * A, R, G and B Helium vector registers
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_16px_argb1555(uint16_t* dst,
+                                       aipl_mve_argb_x16_t src,
+                                       mve_pred16_t pred)
+{
+    uint8x16_t upper = vsriq(src.a, src.r, 1);
+    upper = vsriq(upper, src.g, 6);
+    uint8x16_t lower = vshlq_n(src.g, 2);
+    lower = vsriq(lower, src.b, 3);
+
+    vstrbq_scatter_offset_p((uint8_t*)dst + 1, AIPL_2_BYTE_OFFSETS_U8, upper, pred);
+    vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, lower, pred);
+}
+
+/**
+ * Load 4 RGBA8888 pixels from memory to
+ * Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pointer
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_4px_rgba8888(uint32x4_t* dst,
+                                      const uint32_t* src,
+                                      mve_pred16_t pred)
+{
+    *dst = vld1q_z(src, pred);
+}
+
+/**
+ * Load 8 RGBA8888 pixels from memory to
+ * A, R, G and B Helium vector registers
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pointer
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_rgba8888(aipl_mve_argb_x8_t* dst,
+                                      const uint8_t* src,
+                                      mve_pred16_t pred)
+{
+    dst->r = vldrbq_gather_offset_z(src + 3, AIPL_4_BYTE_OFFSETS_U16, pred);
+    dst->g = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U16, pred);
+    dst->b = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U16, pred);
+    dst->a = vldrbq_gather_offset_z(src, AIPL_4_BYTE_OFFSETS_U16, pred);
+}
+
+/**
+ * Load 8 RGBX8888 pixels from memory to
+ * R, G and B Helium vector registers
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pointer
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_rgbx8888(aipl_mve_rgb_x8_t* dst,
+                                      const uint8_t* src,
+                                      mve_pred16_t pred)
+{
+    dst->r = vldrbq_gather_offset_z(src + 3, AIPL_4_BYTE_OFFSETS_U16, pred);
+    dst->g = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U16, pred);
+    dst->b = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U16, pred);
+}
+
+/**
+ * Load 8 RGBX8888 pixels from memory with offset to
+ * R, G and B Helium vector registers
+ *
+ * @param dst       destination pixel vector pointer
+ * @param src       source pointer
+ * @param offset    pixel offset
+ * @param pred      vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_offset_rgbx8888(aipl_mve_rgb_x8_t* dst,
+                                             const uint8_t* src,
+                                             uint8_t offset,
+                                             mve_pred16_t pred)
+{
+    dst->r = vldrbq_gather_offset_z(src + 3, AIPL_OFFSETS_U16(offset, 4), pred);
+    dst->g = vldrbq_gather_offset_z(src + 2, AIPL_OFFSETS_U16(offset, 4), pred);
+    dst->b = vldrbq_gather_offset_z(src + 1, AIPL_OFFSETS_U16(offset, 4), pred);
+}
+
+/**
+ * Load 16 RGBX8888 pixels from memory to
+ * R, G and B Helium vector registers
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pointer
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_16px_rgbx8888(aipl_mve_rgb_x16_t* dst,
+                                       const uint8_t* src,
+                                       mve_pred16_t pred)
+{
+    dst->r = vldrbq_gather_offset_z(src + 3, AIPL_4_BYTE_OFFSETS_U8, pred);
+    dst->g = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U8, pred);
+    dst->b = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U8, pred);
+}
+
+/**
+ * Load 16 RGBA8888 pixels from memory to
+ * R, G and B Helium vector registers
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pointer
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_16px_rgba8888(aipl_mve_argb_x16_t* dst,
+                                       const uint8_t* src,
+                                       mve_pred16_t pred)
+{
+    dst->r = vldrbq_gather_offset_z(src + 3, AIPL_4_BYTE_OFFSETS_U8, pred);
+    dst->g = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U8, pred);
+    dst->b = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U8, pred);
+    dst->a = vldrbq_gather_offset_z(src, AIPL_4_BYTE_OFFSETS_U8, pred);
+}
+
+/**
+ * Convert 4 RGBA8888 pixels to ARGB8888
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_4px_rgba8888_to_argb8888(uint32x4_t* dst,
+                                                   uint32x4_t src)
+{
+    uint32x4_t a = vshlq_n(src, 24);
+    *dst = vsriq(a, *dst, 8);
+}
+
+/**
+ * Convert 8 RGBX8888 pixels to Y channel
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_rgbx8888_to_yuv_y(uint16x8_t* dst,
+                                                aipl_mve_rgb_x8_t src)
+{
+    aipl_mve_cnvt_8px_xrgb8888_to_yuv_y(dst, src);
+}
+
+/**
+ * Convert 8 RGBX8888 pixels to U channel
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_rgbx8888_to_yuv_u(uint16x8_t* dst,
+                                                aipl_mve_rgb_x8_t src)
+{
+    aipl_mve_cnvt_8px_xrgb8888_to_yuv_u(dst, src);
+}
+
+/**
+ * Convert 8 RGBX8888 pixels to V channel
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_rgbx8888_to_yuv_v(uint16x8_t* dst,
+                                                aipl_mve_rgb_x8_t src)
+{
+    aipl_mve_cnvt_8px_xrgb8888_to_yuv_v(dst, src);
+}
+
+/**
+ * Store 4 RGBA8888 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_4px_rgba8888(uint32_t* dst,
+                                      uint32x4_t src,
+                                      mve_pred16_t pred)
+{
+    vst1q_p(dst, src, pred);
+}
+
+/**
+ * Store 8 RGBA8888 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_8px_rgba8888(uint8_t* dst,
+                                      aipl_mve_argb_x8_t src,
+                                      mve_pred16_t pred)
+{
+    vstrbq_scatter_offset_p(dst + 3, AIPL_4_BYTE_OFFSETS_U16, src.r, pred);
+    vstrbq_scatter_offset_p(dst + 2, AIPL_4_BYTE_OFFSETS_U16, src.g, pred);
+    vstrbq_scatter_offset_p(dst + 1, AIPL_4_BYTE_OFFSETS_U16, src.b, pred);
+    vstrbq_scatter_offset_p(dst, AIPL_4_BYTE_OFFSETS_U16, src.a, pred);
+}
+
+/**
+ * Store 16 RGBX8888 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_16px_rgbx8888(uint8_t* dst,
+                                       aipl_mve_rgb_x16_t src,
+                                       mve_pred16_t pred)
+{
+    vstrbq_scatter_offset_p(dst + 3, AIPL_4_BYTE_OFFSETS_U8, src.r, pred);
+    vstrbq_scatter_offset_p(dst + 2, AIPL_4_BYTE_OFFSETS_U8, src.g, pred);
+    vstrbq_scatter_offset_p(dst + 1, AIPL_4_BYTE_OFFSETS_U8, src.b, pred);
+    vstrbq_scatter_offset_p(dst, AIPL_4_BYTE_OFFSETS_U8, vdupq_n_u8(0xff), pred);
+}
+
+/**
+ * Store 16 RGBA8888 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_16px_rgba8888(uint8_t* dst,
+                                       aipl_mve_argb_x16_t src,
+                                       mve_pred16_t pred)
+{
+    vstrbq_scatter_offset_p(dst + 3, AIPL_4_BYTE_OFFSETS_U8, src.r, pred);
+    vstrbq_scatter_offset_p(dst + 2, AIPL_4_BYTE_OFFSETS_U8, src.g, pred);
+    vstrbq_scatter_offset_p(dst + 1, AIPL_4_BYTE_OFFSETS_U8, src.b, pred);
+    vstrbq_scatter_offset_p(dst, AIPL_4_BYTE_OFFSETS_U8, src.a, pred);
+}
+
+/**
+ * Load 8 RGBA4444 pixels from memory with offset to
+ * Helium vector register
+ *
+ * @param dst       destination pixel vectors
+ * @param src       source pixel vectors
+ * @param offset    pixel offset
+ * @param pred      vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_offset_rgba4444(uint16x8_t* dst,
+                                             const uint16_t* src,
+                                             uint8_t offset,
+                                             mve_pred16_t pred)
+{
+    *dst = vldrhq_gather_offset_z(src, AIPL_OFFSETS_U16(offset, 2), pred);
+}
+
+/**
+ * Load 8 RGBA4444 pixels from memory to
+ * Helium vector register
+ *
+ * @param dst   destination pixel vectors
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_rgba4444(uint16x8_t* dst,
+                                      const uint16_t* src,
+                                      mve_pred16_t pred)
+{
+    *dst = vldrhq_z_u16(src, pred);
+}
+
+/**
+ * Load 8 RGBA4444 pixels from memory with offset to
+ * A, R, G and B Helium vector registers
+ *
+ * @param dst       destination pixel vectors
+ * @param src       source pixel vectors
+ * @param pred      vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_extend_rgba4444(aipl_mve_argb_x8_t* dst,
+                                             const uint16_t* src,
+                                             mve_pred16_t pred)
+{
+    uint16x8_t rg = vldrbq_gather_offset_z((uint8_t*)src + 1, AIPL_2_BYTE_OFFSETS_U16, pred);
+    uint16x8_t ba = vldrbq_gather_offset_z((uint8_t*)src, AIPL_2_BYTE_OFFSETS_U16, pred);
+
+    dst->r = vorrq(vandq(rg, vdupq_n_u16(0x00f0)), vshrq(rg, 4));
+    dst->g = vmulq(vandq(rg, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
+    dst->b = vorrq(vandq(ba, vdupq_n_u16(0x00f0)), vshrq(ba, 4));
+    dst->a = vmulq(vandq(ba, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
+}
+
+/**
+ * Load 16 RGBX4444 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destination pixel vectors
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_16px_rgbx4444(aipl_mve_rgb_x16_t* dst,
+                                       const uint16_t* src,
+                                       mve_pred16_t pred)
+{
+    uint8x16_t rg = vldrbq_gather_offset_z((uint8_t*)src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
+    uint8x16_t ba = vldrbq_gather_offset_z((uint8_t*)src, AIPL_2_BYTE_OFFSETS_U8, pred);
+
+    dst->r = vorrq(vandq(rg, vdupq_n_u8(0xf0)), vshrq(rg, 4));
+    dst->g = vmulq(vandq(rg, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->b = vorrq(vandq(ba, vdupq_n_u8(0xf0)), vshrq(ba, 4));
+}
+
+/**
+ * Load 16 RGBA4444 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destination pixel vectors
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_16px_rgba4444(aipl_mve_argb_x16_t* dst,
+                                       const uint16_t* src,
+                                       mve_pred16_t pred)
+{
+    uint8x16_t rg = vldrbq_gather_offset_z((uint8_t*)src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
+    uint8x16_t ba = vldrbq_gather_offset_z((uint8_t*)src, AIPL_2_BYTE_OFFSETS_U8, pred);
+
+    dst->r = vorrq(vandq(rg, vdupq_n_u8(0xf0)), vshrq(rg, 4));
+    dst->g = vmulq(vandq(rg, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->b = vorrq(vandq(ba, vdupq_n_u8(0xf0)), vshrq(ba, 4));
+    dst->a = vmulq(vandq(ba, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+}
+
+/**
+ * Convert 8 RGBA4444 pixels to ARGB4444
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_rgba4444_to_argb4444(uint16x8_t* dst,
+                                                   uint16x8_t src)
+{
+    *dst = vshlq_n(src, 12);
+    *dst = vsriq(*dst, src, 4);
+}
+
+/**
+ * Convert 8 RGBA4444 pixels to Y channel
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_rgba4444_to_yuv_y(uint16x8_t* dst,
+                                                uint16x8_t src)
+{
+    uint16x8_t r = vandq(vshrq(src, 12), vdupq_n_u16(0x000f));
+    uint16x8_t g = vandq(vshrq(src, 8), vdupq_n_u16(0x000f));
+    uint16x8_t b = vandq(vshrq(src, 4), vdupq_n_u16(0x000f));
+
+    *dst = vmulq(r, 66 * 0x11);
+    *dst = vmlaq(*dst, g, 129 * 0x11);
+    *dst = vmlaq(*dst, b, 25 * 0x11);
+    *dst = vshrq(vaddq(*dst, 128), 8);
+    *dst = vaddq(*dst, 16);
+}
+
+/**
+ * Convert 8 RGBA4444 pixels to U and V channels
+ * using Helium vector register
+ *
+ * @param u_dst U channel destination vector pointer
+ * @param v_dst V channel destination vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_rgba4444_to_yuv_uv(uint16x8_t* u_dst,
+                                                 uint16x8_t* v_dst,
+                                                 uint16x8_t src)
+{
+    uint16x8_t r = vandq(vshrq(src, 12), vdupq_n_u16(0x000f));
+    uint16x8_t g = vandq(vshrq(src, 8), vdupq_n_u16(0x000f));
+    uint16x8_t b = vandq(vshrq(src, 4), vdupq_n_u16(0x000f));
+
+    *u_dst = vmulq(r, -38 * 0x11);
+    *u_dst = vmlaq(*u_dst, g, -74 * 0x11);
+    *u_dst = vmlaq(*u_dst, b, 112 * 0x11);
+    *u_dst = vshrq(vaddq(*u_dst, 128), 8);
+    *u_dst = vaddq(*u_dst, 128);
+
+    *v_dst = vmulq(r, 112 * 0x11);
+    *v_dst = vmlaq(*v_dst, g, -94 * 0x11);
+    *v_dst = vmlaq(*v_dst, b, -18 * 0x11);
+    *v_dst = vshrq(vaddq(*v_dst, 128), 8);
+    *v_dst = vaddq(*v_dst, 128);
+}
+
+/**
+ * Convert 8 RGBA4444 pixels to Y, U and V channels
+ * using Helium vector register
+ *
+ * @param y_dst Y channel destination vector pointer
+ * @param u_dst U channel destination vector pointer
+ * @param v_dst V channel destination vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_rgba4444_to_yuv(uint16x8_t* y_dst,
+                                              uint16x8_t* u_dst,
+                                              uint16x8_t* v_dst,
+                                              uint16x8_t src)
+{
+    uint16x8_t r = vandq(vshrq(src, 12), vdupq_n_u16(0x000f));
+    uint16x8_t g = vandq(vshrq(src, 8), vdupq_n_u16(0x000f));
+    uint16x8_t b = vandq(vshrq(src, 4), vdupq_n_u16(0x000f));
+
+    *y_dst = vmulq(r, 66 * 0x11);
+    *y_dst = vmlaq(*y_dst, g, 129 * 0x11);
+    *y_dst = vmlaq(*y_dst, b, 25 * 0x11);
+    *y_dst = vshrq(vaddq(*y_dst, 128), 8);
+    *y_dst = vaddq(*y_dst, 16);
+
+    *u_dst = vmulq(r, -38 * 0x11);
+    *u_dst = vmlaq(*u_dst, g, -74 * 0x11);
+    *u_dst = vmlaq(*u_dst, b, 112 * 0x11);
+    *u_dst = vshrq(vaddq(*u_dst, 128), 8);
+    *u_dst = vaddq(*u_dst, 128);
+
+    *v_dst = vmulq(r, 112 * 0x11);
+    *v_dst = vmlaq(*v_dst, g, -94 * 0x11);
+    *v_dst = vmlaq(*v_dst, b, -18 * 0x11);
+    *v_dst = vshrq(vaddq(*v_dst, 128), 8);
+    *v_dst = vaddq(*v_dst, 128);
+}
+
+/**
+ * Store 8 RGBA4444 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_8px_rgba4444(uint16_t* dst,
+                                      uint16x8_t src,
+                                      mve_pred16_t pred)
+{
+    vstrhq_p(dst, src, pred);
+}
+
+/**
+ * Store 8 RGBA4444 pixels to memory from
+ * A, R, G and B Helium vector registers
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_8px_extended_rgba4444(uint16_t* dst,
+                                               aipl_mve_argb_x8_t src,
+                                               mve_pred16_t pred)
+{
+    uint8x16_t rg = vreinterpretq_u8(src.r);
+    rg = vsriq(rg, vreinterpretq_u8(src.g), 4);
+    uint8x16_t ba = vreinterpretq_u8(src.b);
+    ba = vsriq(ba, vreinterpretq_u8(src.a), 4);
+    uint16x8_t pix = vreinterpretq_u16(vmovntq(ba, vreinterpretq_u16(rg)));
+
+    vst1q_p(dst, pix, pred);
+}
+
+/**
+ * Store 16 RGBX4444 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_16px_rgbx4444(uint16_t* dst,
+                                       aipl_mve_rgb_x16_t src,
+                                       mve_pred16_t pred)
+{
+    uint8x16_t rg = vsriq(src.r, src.g, 4);
+    uint8x16_t ba = vsriq(src.b, vdupq_n_u8(0xff), 4);
+
+    vstrbq_scatter_offset_p((uint8_t*)dst + 1, AIPL_2_BYTE_OFFSETS_U8, rg, pred);
+    vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, ba, pred);
+}
+
+/**
+ * Store 16 RGBA4444 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_16px_rgba4444(uint16_t* dst,
+                                       aipl_mve_argb_x16_t src,
+                                       mve_pred16_t pred)
+{
+    uint8x16_t rg = vsriq(src.r, src.g, 4);
+    uint8x16_t ba = vsriq(src.b, src.a, 4);
+
+    vstrbq_scatter_offset_p((uint8_t*)dst + 1, AIPL_2_BYTE_OFFSETS_U8, rg, pred);
+    vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, ba, pred);
+}
+
+/**
+ * Load 8 RGBA5551 pixels from memory with offset to
+ * Helium vector register
+ *
+ * @param dst       destination pixel vectors
+ * @param src       source pixel vectors
+ * @param offset    pixel offset
+ * @param pred      vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_offset_rgba5551(uint16x8_t* dst,
+                                             const uint16_t* src,
+                                             uint8_t offset,
+                                             mve_pred16_t pred)
+{
+    *dst = vldrhq_gather_offset_z(src, AIPL_OFFSETS_U16(offset, 2), pred);
+}
+
+/**
+ * Load 8 RGBA5551 pixels from memory to
+ * Helium vector register
+ *
+ * @param dst   destination pixel vectors
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_rgba5551(uint16x8_t* dst,
+                                      const uint16_t* src,
+                                      mve_pred16_t pred)
+{
+    *dst = vldrhq_z_u16(src, pred);
+}
+
+/**
+ * Load 16 RGBX5551 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destination pixel vectors
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_16px_rgbx5551(aipl_mve_rgb_x16_t* dst,
+                                       const uint16_t* src,
+                                       mve_pred16_t pred)
+{
+    uint8x16_t upper = vldrbq_gather_offset_z((uint8_t*)src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
+    uint8x16_t lower = vldrbq_gather_offset_z((uint8_t*)src, AIPL_2_BYTE_OFFSETS_U8, pred);
+
+    dst->r = vandq(upper, vdupq_n_u8(0xf8));
+    dst->r = vorrq(dst->r, vshrq(dst->r, 5));
+    dst->g = vorrq(vshlq_n(upper, 5), vshrq(vandq(lower, vdupq_n_u8(0xc0)), 3));
+    dst->g = vorrq(dst->g, vshrq(dst->g, 5));
+    dst->b = vshlq_n(vandq(lower, vdupq_n_u8(0x3e)), 2);
+    dst->b = vorrq(dst->b, vshrq(dst->b, 5));
+}
+
+/**
+ * Load 16 RGBA5551 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destination pixel vectors
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_16px_rgba5551(aipl_mve_argb_x16_t* dst,
+                                       const uint16_t* src,
+                                       mve_pred16_t pred)
+{
+    uint8x16_t upper = vldrbq_gather_offset_z((uint8_t*)src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
+    uint8x16_t lower = vldrbq_gather_offset_z((uint8_t*)src, AIPL_2_BYTE_OFFSETS_U8, pred);
+
+    dst->r = vandq(upper, vdupq_n_u8(0xf8));
+    dst->r = vorrq(dst->r, vshrq(dst->r, 5));
+    dst->g = vorrq(vshlq_n(upper, 5), vshrq(vandq(lower, vdupq_n_u8(0xc0)), 3));
+    dst->g = vorrq(dst->g, vshrq(dst->g, 5));
+    dst->b = vshlq_n(vandq(lower, vdupq_n_u8(0x3e)), 2);
+    dst->b = vorrq(dst->b, vshrq(dst->b, 5));
+    dst->a = vmulq(vandq(lower, vdupq_n_u8(0x01)), vdupq_n_u8(0xff));
+}
+
+/**
+ * Convert 8 RGBA5551 pixels to Y channel
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_rgba5551_to_yuv_y(uint16x8_t* dst,
+                                                uint16x8_t src)
+{
+    uint16x8_t r = vandq(vshrq(src, 11), vdupq_n_u16(0x001f));
+    uint16x8_t g = vandq(vshrq(src, 6), vdupq_n_u16(0x001f));
+    uint16x8_t b = vandq(vshrq(src, 1), vdupq_n_u16(0x001f));
+
+    *dst = vmulq(r, 543);
+    *dst = vmlaq(*dst, g, 1061);
+    *dst = vmlaq(*dst, b, 205);
+    *dst = vshrq(vaddq(*dst, 128), 8);
+    *dst = vaddq(*dst, 16);
+}
+
+/**
+ * Convert 8 RGBA5551 pixels to U and V channels
+ * using Helium vector register
+ *
+ * @param u_dst U channel destination vector pointer
+ * @param v_dst V channel destination vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_rgba5551_to_yuv_uv(uint16x8_t* u_dst,
+                                                 uint16x8_t* v_dst,
+                                                 uint16x8_t src)
+{
+    uint16x8_t r = vandq(vshrq(src, 11), vdupq_n_u16(0x001f));
+    uint16x8_t g = vandq(vshrq(src, 6), vdupq_n_u16(0x001f));
+    uint16x8_t b = vandq(vshrq(src, 1), vdupq_n_u16(0x001f));
+
+    *u_dst = vmulq(r, -312);
+    *u_dst = vmlaq(*u_dst, g, -608);
+    *u_dst = vmlaq(*u_dst, b, 920);
+    *u_dst = vshrq(vaddq(*u_dst, 128), 8);
+    *u_dst = vaddq(*u_dst, 128);
+
+    *v_dst = vmulq(r, 920);
+    *v_dst = vmlaq(*v_dst, g, -773);
+    *v_dst = vmlaq(*v_dst, b, -147);
+    *v_dst = vshrq(vaddq(*v_dst, 128), 8);
+    *v_dst = vaddq(*v_dst, 128);
+}
+
+/**
+ * Convert 8 RGBA5551 pixels to Y, U and V channels
+ * using Helium vector register
+ *
+ * @param y_dst Y channel destination vector pointer
+ * @param u_dst U channel destination vector pointer
+ * @param v_dst V channel destination vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_rgba5551_to_yuv(uint16x8_t* y_dst,
+                                              uint16x8_t* u_dst,
+                                              uint16x8_t* v_dst,
+                                              uint16x8_t src)
+{
+    uint16x8_t r = vandq(vshrq(src, 11), vdupq_n_u16(0x001f));
+    uint16x8_t g = vandq(vshrq(src, 6), vdupq_n_u16(0x001f));
+    uint16x8_t b = vandq(vshrq(src, 1), vdupq_n_u16(0x001f));
+
+    *y_dst = vmulq(r, 543);
+    *y_dst = vmlaq(*y_dst, g, 1061);
+    *y_dst = vmlaq(*y_dst, b, 205);
+    *y_dst = vshrq(vaddq(*y_dst, 128), 8);
+    *y_dst = vaddq(*y_dst, 16);
+
+    *u_dst = vmulq(r, -312);
+    *u_dst = vmlaq(*u_dst, g, -608);
+    *u_dst = vmlaq(*u_dst, b, 920);
+    *u_dst = vshrq(vaddq(*u_dst, 128), 8);
+    *u_dst = vaddq(*u_dst, 128);
+
+    *v_dst = vmulq(r, 920);
+    *v_dst = vmlaq(*v_dst, g, -773);
+    *v_dst = vmlaq(*v_dst, b, -147);
+    *v_dst = vshrq(vaddq(*v_dst, 128), 8);
+    *v_dst = vaddq(*v_dst, 128);
+}
+
+/**
+ * Store 8 RGBA5551 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_8px_rgba5551(uint16_t* dst,
+                                      uint16x8_t src,
+                                      mve_pred16_t pred)
+{
+    vstrhq_p(dst, src, pred);
+}
+
+/**
+ * Store 16 RGBX5551 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_16px_rgbx5551(uint16_t* dst,
+                                       aipl_mve_rgb_x16_t src,
+                                       mve_pred16_t pred)
+{
+    uint8x16_t upper = vsriq(src.r, src.g, 5);
+    uint8x16_t lower = vshlq_n(src.g, 3);
+    lower = vsriq(lower, src.b, 2);
+    lower = vorrq(lower, vdupq_n_u8(0x01));
+
+    vstrbq_scatter_offset_p((uint8_t*)dst + 1, AIPL_2_BYTE_OFFSETS_U8, upper, pred);
+    vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, lower, pred);
+}
+
+/**
+ * Store 16 RGBA5551 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_16px_rgba5551(uint16_t* dst,
+                                       aipl_mve_argb_x16_t src,
+                                       mve_pred16_t pred)
+{
+    uint8x16_t upper = vsriq(src.r, src.g, 5);
+    uint8x16_t lower = vshlq_n(src.g, 3);
+    lower = vsriq(lower, src.b, 2);
+    lower = vsriq(lower, src.a, 7);
+
+    vstrbq_scatter_offset_p((uint8_t*)dst + 1, AIPL_2_BYTE_OFFSETS_U8, upper, pred);
+    vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, lower, pred);
+}
+
+/**
+ * Load 8 RGB565 pixels from memory with offset to
+ * Helium vector register
+ *
+ * @param dst       destination pixel vectors
+ * @param src       source pixel vectors
+ * @param offset    pixel offset
+ * @param pred      vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_offset_rgb565(uint16x8_t* dst,
+                                           const uint16_t* src,
+                                           uint8_t offset,
+                                           mve_pred16_t pred)
+{
+    *dst = vldrhq_gather_offset_z(src, AIPL_OFFSETS_U16(offset, 2), pred);
+}
+
+/**
+ * Load 8 RGB565 pixels from memory to
+ * Helium vector register
+ *
+ * @param dst   destination pixel vectors
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_rgb565(uint16x8_t* dst,
+                                    const uint16_t* src,
+                                    mve_pred16_t pred)
+{
+    *dst = vldrhq_z_u16(src, pred);
+}
+
+/**
+ * Load 16 RGB565 pixels from memory to
+ * Helium vector register
+ *
+ * @param dst   destination pixel vectors
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_16px_rgb565(aipl_mve_rgb_x16_t* dst,
+                                     const uint16_t* src,
+                                     mve_pred16_t pred)
+{
+    uint8x16_t upper = vldrbq_gather_offset_z((uint8_t*)src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
+    uint8x16_t lower = vldrbq_gather_offset_z((uint8_t*)src, AIPL_2_BYTE_OFFSETS_U8, pred);
+
+    dst->r = vandq(upper, vdupq_n_u8(0xf8));
+    dst->r = vorrq(dst->r, vshrq(dst->r, 5));
+    dst->g = vorrq(vshlq_n(upper, 5), vshrq(vandq(lower, vdupq_n_u8(0xe0)), 3));
+    dst->g = vorrq(dst->g, vshrq(dst->g, 6));
+    dst->b = vshlq_n(lower, 3);
+    dst->b = vorrq(dst->b, vshrq(dst->b, 5));
+}
+
+/**
+ * Convert 8 RGB565 pixels to Y channel
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_rgb565_to_yuv_y(uint16x8_t* dst,
+                                              uint16x8_t src)
+{
+    uint16x8_t r = vandq(vshrq(src, 11), vdupq_n_u16(0x001f));
+    uint16x8_t g = vandq(vshrq(src, 5), vdupq_n_u16(0x003f));
+    uint16x8_t b = vandq(src, vdupq_n_u16(0x001f));
+
+    *dst = vmulq(r, 543);
+    *dst = vmlaq(*dst, g, 522);
+    *dst = vmlaq(*dst, b, 205);
+    *dst = vshrq(vaddq(*dst, 128), 8);
+    *dst = vaddq(*dst, 16);
+}
+
+/**
+ * Convert 8 RGB565 pixels to U and V channels
+ * using Helium vector register
+ *
+ * @param u_dst U channel destination vector pointer
+ * @param v_dst V channel destination vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_rgb565_to_yuv_uv(uint16x8_t* u_dst,
+                                               uint16x8_t* v_dst,
+                                               uint16x8_t src)
+{
+    uint16x8_t r = vandq(vshrq(src, 11), vdupq_n_u16(0x001f));
+    uint16x8_t g = vandq(vshrq(src, 5), vdupq_n_u16(0x003f));
+    uint16x8_t b = vandq(src, vdupq_n_u16(0x001f));
+
+    *u_dst = vmulq(r, -312);
+    *u_dst = vmlaq(*u_dst, g, -299);
+    *u_dst = vmlaq(*u_dst, b, 920);
+    *u_dst = vshrq(vaddq(*u_dst, 128), 8);
+    *u_dst = vaddq(*u_dst, 128);
+
+    *v_dst = vmulq(r, 920);
+    *v_dst = vmlaq(*v_dst, g, -380);
+    *v_dst = vmlaq(*v_dst, b, -147);
+    *v_dst = vshrq(vaddq(*v_dst, 128), 8);
+    *v_dst = vaddq(*v_dst, 128);
+}
+
+/**
+ * Convert 8 RGB565 pixels to Y, U and V channels
+ * using Helium vector register
+ *
+ * @param y_dst Y channel destination vector pointer
+ * @param u_dst U channel destination vector pointer
+ * @param v_dst V channel destination vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_rgb565_to_yuv(uint16x8_t* y_dst,
+                                            uint16x8_t* u_dst,
+                                            uint16x8_t* v_dst,
+                                            uint16x8_t src)
+{
+    uint16x8_t r = vandq(vshrq(src, 11), vdupq_n_u16(0x001f));
+    uint16x8_t g = vandq(vshrq(src, 5), vdupq_n_u16(0x003f));
+    uint16x8_t b = vandq(src, vdupq_n_u16(0x001f));
+
+    *y_dst = vmulq(r, 543);
+    *y_dst = vmlaq(*y_dst, g, 522);
+    *y_dst = vmlaq(*y_dst, b, 205);
+    *y_dst = vshrq(vaddq(*y_dst, 128), 8);
+    *y_dst = vaddq(*y_dst, 16);
+
+    *u_dst = vmulq(r, -312);
+    *u_dst = vmlaq(*u_dst, g, -299);
+    *u_dst = vmlaq(*u_dst, b, 920);
+    *u_dst = vshrq(vaddq(*u_dst, 128), 8);
+    *u_dst = vaddq(*u_dst, 128);
+
+    *v_dst = vmulq(r, 920);
+    *v_dst = vmlaq(*v_dst, g, -380);
+    *v_dst = vmlaq(*v_dst, b, -147);
+    *v_dst = vshrq(vaddq(*v_dst, 128), 8);
+    *v_dst = vaddq(*v_dst, 128);
+}
+
+/**
+ * Store 8 RGB565 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_8px_rgb565(uint16_t* dst,
+                                    uint16x8_t src,
+                                    mve_pred16_t pred)
+{
+    vstrhq_p(dst, src, pred);
+}
+
+/**
+ * Store 16 RGB565 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_16px_rgb565(uint16_t* dst,
+                                     aipl_mve_rgb_x16_t src,
+                                     mve_pred16_t pred)
+{
+    uint8x16_t upper = vsriq(src.r, src.g, 5);
+    uint8x16_t lower = vshlq_n(src.g, 3);
+    lower = vsriq(lower, src.b, 3);
+
+    vstrbq_scatter_offset_p((uint8_t*)dst + 1, AIPL_2_BYTE_OFFSETS_U8, upper, pred);
+    vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, lower, pred);
+}
+
+/**
+ * Load 8 RGB pixels from memory to
+ * Helium vector registers
+ *
+ * @param dst       destintation pointer
+ * @param src       source pixel vectors
+ * @param pred      vector predicate
+ * @param r_offset  red channel offset
+ * @param g_offset  green channel offset
+ * @param b_offset  blue channel offset
+ */
+INLINE void aipl_mve_ldr_8px_rgb(aipl_mve_rgb_x8_t* dst,
+                                 const uint8_t* src,
+                                 mve_pred16_t pred,
+                                 uint8_t r_offset,
+                                 uint8_t g_offset,
+                                 uint8_t b_offset)
+{
+    dst->r = vldrbq_gather_offset_z(src + r_offset, AIPL_3_BYTE_OFFSETS_U16, pred);
+    dst->g = vldrbq_gather_offset_z(src + g_offset, AIPL_3_BYTE_OFFSETS_U16, pred);
+    dst->b = vldrbq_gather_offset_z(src + b_offset, AIPL_3_BYTE_OFFSETS_U16, pred);
+}
+
+/**
+ * Load 8 RGB pixels from memory with offset to
+ * Helium vector registers
+ *
+ * @param dst       destintation pointer
+ * @param src       source pixel vectors
+ * @param offset    pixels offset
+ * @param pred      vector predicate
+ * @param r_offset  red channel offset
+ * @param g_offset  green channel offset
+ * @param b_offset  blue channel offset
+ */
+INLINE void aipl_mve_ldr_8px_offset_rgb(aipl_mve_rgb_x8_t* dst,
+                                        const uint8_t* src,
+                                        uint8_t offset,
+                                        mve_pred16_t pred,
+                                        uint8_t r_offset,
+                                        uint8_t g_offset,
+                                        uint8_t b_offset)
+{
+    dst->r = vldrbq_gather_offset_z(src + r_offset, AIPL_OFFSETS_U16(offset, 3), pred);
+    dst->g = vldrbq_gather_offset_z(src + g_offset, AIPL_OFFSETS_U16(offset, 3), pred);
+    dst->b = vldrbq_gather_offset_z(src + b_offset, AIPL_OFFSETS_U16(offset, 3), pred);
+}
+
+/**
+ * Load 16 RGB pixels from memory to
+ * Helium vector registers
+ *
+ * @param dst       destintation pointer
+ * @param src       source pixel vectors
+ * @param pred      vector predicate
+ * @param r_offset  red channel offset
+ * @param g_offset  green channel offset
+ * @param b_offset  blue channel offset
+ */
+INLINE void aipl_mve_ldr_16px_rgb(aipl_mve_rgb_x16_t* dst,
+                                  const uint8_t* src,
+                                  mve_pred16_t pred,
+                                  uint8_t r_offset,
+                                  uint8_t g_offset,
+                                  uint8_t b_offset)
+{
+    dst->r = vldrbq_gather_offset_z(src + r_offset, AIPL_3_BYTE_OFFSETS_U8, pred);
+    dst->g = vldrbq_gather_offset_z(src + g_offset, AIPL_3_BYTE_OFFSETS_U8, pred);
+    dst->b = vldrbq_gather_offset_z(src + b_offset, AIPL_3_BYTE_OFFSETS_U8, pred);
+}
+
+/**
+ * Convert 8 RGB pixels to Y channel
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_rgb_to_yuv_y(uint16x8_t* dst,
+                                           aipl_mve_rgb_x8_t src)
+{
+    aipl_mve_cnvt_8px_xrgb8888_to_yuv_y(dst, src);
+}
+
+/**
+ * Convert 8 RGB pixels to U channel
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_rgb_to_yuv_u(uint16x8_t* dst,
+                                           aipl_mve_rgb_x8_t src)
+{
+    aipl_mve_cnvt_8px_xrgb8888_to_yuv_u(dst, src);
+}
+
+/**
+ * Convert 8 RGB pixels to V channel
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_rgb_to_yuv_v(uint16x8_t* dst,
+                                           aipl_mve_rgb_x8_t src)
+{
+    aipl_mve_cnvt_8px_xrgb8888_to_yuv_v(dst, src);
+}
+
+/**
+ * Store 16 RGB pixels to memory from
+ * Helium vector register
+ *
+ * @param dst       destintation pointer
+ * @param src       source pixel vectors
+ * @param pred      vector predicate
+ * @param r_offset  red channel offset
+ * @param g_offset  green channel offset
+ * @param b_offset  blue channel offset
+ */
+INLINE void aipl_mve_str_16px_rgb(uint8_t* dst,
+                                  aipl_mve_rgb_x16_t src,
+                                  mve_pred16_t pred,
+                                  uint8_t r_offset,
+                                  uint8_t g_offset,
+                                  uint8_t b_offset)
+{
+    vstrbq_scatter_offset_p(dst + r_offset, AIPL_3_BYTE_OFFSETS_U8, src.r, pred);
+    vstrbq_scatter_offset_p(dst + g_offset, AIPL_3_BYTE_OFFSETS_U8, src.g, pred);
+    vstrbq_scatter_offset_p(dst + b_offset, AIPL_3_BYTE_OFFSETS_U8, src.b, pred);
+}
+
+/**
+ * Load 4 I400 pixels from memory to
+ * Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pointer
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_4px_i400(uint32x4_t* dst,
+                                  const uint8_t* src,
+                                  mve_pred16_t pred)
+{
+    *dst = vldrbq_z_u32(src, pred);
+}
+
+/**
+ * Load 8 I400 pixels from memory to
+ * Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pointer
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_8px_i400(uint16x8_t* dst,
+                                  const uint8_t* src,
+                                  mve_pred16_t pred)
+{
+    *dst = vldrbq_z_u16(src, pred);
+}
+
+/**
+ * Load 16 I400 pixels from memory to
+ * Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pointer
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_ldr_16px_i400(uint8x16_t* dst,
+                                   const uint8_t* src,
+                                   mve_pred16_t pred)
+{
+    *dst = vldrbq_z_u8(src, pred);
+}
+
+/**
+ * Convert 4 I400 pixels to ARGB8888
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_4px_i400_to_argb8888(uint32x4_t* dst,
+                                               uint32x4_t src)
+{
+    *dst = vmulq(src, vdupq_n_u32(0x00010101));
+    *dst = vorrq(*dst, vdupq_n_u32(0xff000000));
+}
+
+/**
+ * Convert 8 I400 pixels to ARGB4444
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_i400_to_argb4444(uint16x8_t* dst,
+                                               uint16x8_t src)
+{
+    *dst = vshrq(src, 4);
+    *dst = vmulq(*dst, vdupq_n_u16(0x0111));
+    *dst = vorrq(*dst, vdupq_n_u16(0xf000));
+}
+
+/**
+ * Convert 8 I400 pixels to ARGB1555
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_i400_to_argb1555(uint16x8_t* dst,
+                                               uint16x8_t src)
+{
+    *dst = vshrq(src, 3);
+    *dst = vmulq(*dst, vdupq_n_u16(0x0421));
+    *dst = vorrq(*dst, vdupq_n_u16(0x8000));
+}
+
+/**
+ * Convert 4 I400 pixels to RGBA8888
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_4px_i400_to_rgba8888(uint32x4_t* dst,
+                                               uint32x4_t src)
+{
+    *dst = vmulq(src, vdupq_n_u32(0x01010100));
+    *dst = vorrq(*dst, vdupq_n_u32(0x000000ff));
+}
+
+/**
+ * Convert 8 I400 pixels to RGBA4444
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_i400_to_rgba4444(uint16x8_t* dst,
+                                               uint16x8_t src)
+{
+    *dst = vshrq(src, 4);
+    *dst = vmulq(*dst, vdupq_n_u16(0x1110));
+    *dst = vorrq(*dst, vdupq_n_u16(0x000f));
+}
+
+/**
+ * Convert 8 I400 pixels to RGBA5551
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_i400_to_rgba5551(uint16x8_t* dst,
+                                               uint16x8_t src)
+{
+    *dst = vshrq(src, 3);
+    *dst = vmulq(*dst, vdupq_n_u16(0x0842));
+    *dst = vorrq(*dst, vdupq_n_u16(0x0001));
+}
+
+/**
+ * Convert 8 I400 pixels to RGB565
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_8px_i400_to_rgb565(uint16x8_t* dst,
+                                             uint16x8_t src)
+{
+    *dst = vshrq(src, 3);
+    *dst = vmulq(*dst, vdupq_n_u16(0x0841));
+}
+
+/**
+ * Convert 16 I400 pixels to RGB
+ * using Helium vector register
+ *
+ * @param dst   destination pixel vector pointer
+ * @param src   source pixel vector
+ */
+INLINE void aipl_mve_cnvt_16px_i400_to_rgb(aipl_mve_rgb_x16_t* dst,
+                                           uint8x16_t src)
+{
+    dst->r = src;
+    dst->g = src;
+    dst->b = src;
+}
+
+/**
+ * Store 8 I400 pixels to memory from
+ * Helium vector register
+ *
+ * @param dst   destintation pointer
+ * @param src   source pixel vectors
+ * @param pred  vector predicate
+ */
+INLINE void aipl_mve_str_8px_i400(uint8_t* dst,
+                                  uint16x8_t src,
+                                  mve_pred16_t pred)
+{
+    vstrbq_p(dst, src, pred);
+}
+
+/**
+ * A util function for color conversions from YUV formats.
+ * Precalculate the values of RGB channels (4 pixels)
+ *
+ * @param r_dst output red channel precalculated value
+ * @param g_dst output green channel precalculated value
+ * @param b_dst output blue channel precalculated value
+ * @param u     U channel vector
+ * @param v     V channel vector
+ */
+INLINE void aipl_mve_pre_cnvt_4px_yuv_to_rgb(int32x4_t* r_dst,
+                                             int32x4_t* g_dst,
+                                             int32x4_t* b_dst,
+                                             uint32x4_t u,
+                                             uint32x4_t v)
+{
+    int32x4_t d = vreinterpretq_s32(u);
+    int32x4_t e = vreinterpretq_s32(v);
+
+    d = vsubq(d, 128);
+    e = vsubq(e, 128);
+
+    *r_dst = vmlaq(vdupq_n_s32(128), e, 409);
+    *g_dst = vmlaq(vdupq_n_s32(128), d, -100);
+    *g_dst = vmlaq(*g_dst, e, -208);
+    *b_dst = vmlaq(vdupq_n_s32(128), d, 516);
+}
+
+/**
+ * A util function for color conversions from YUV formats.
+ * Precalculate the values of RGB channels (8 pixels)
+ *
+ * @param r0_dst output red channel precalculated value
+ * @param g0_dst output green channel precalculated value
+ * @param b0_dst output blue channel precalculated value
+ * @param r1_dst output red channel precalculated value
+ * @param g1_dst output green channel precalculated value
+ * @param b1_dst output blue channel precalculated value
+ * @param u      U channel source vector
+ * @param v      V channel source vector
+ */
+INLINE void aipl_mve_pre_cnvt_8px_yuv_to_rgb(int32x4_t* r0_dst,
+                                             int32x4_t* g0_dst,
+                                             int32x4_t* b0_dst,
+                                             int32x4_t* r1_dst,
+                                             int32x4_t* g1_dst,
+                                             int32x4_t* b1_dst,
+                                             uint16x8_t u,
+                                             uint16x8_t v)
+{
+    int16x8_t d = vreinterpretq_s16(u);
+    int16x8_t e = vreinterpretq_s16(v);
+
+    d = vsubq(d, 128);
+    e = vsubq(e, 128);
+
+    int32x4_t d0 = vmovlbq(d);
+    int32x4_t d1 = vmovltq(d);
+    int32x4_t e0 = vmovlbq(e);
+    int32x4_t e1 = vmovltq(e);
+
+    *r0_dst = vmlaq(vdupq_n_s32(128), e0, 409);
+    *g0_dst = vmlaq(vdupq_n_s32(128), d0, -100);
+    *g0_dst = vmlaq(*g0_dst, e0, -208);
+    *b0_dst = vmlaq(vdupq_n_s32(128), d0, 516);
+
+    *r1_dst = vmlaq(vdupq_n_s32(128), e1, 409);
+    *g1_dst = vmlaq(vdupq_n_s32(128), d1, -100);
+    *g1_dst = vmlaq(*g1_dst, e1, -208);
+    *b1_dst = vmlaq(vdupq_n_s32(128), d1, 516);
+}
+
+/**
+ * A util function for color conversions from YUV formats.
+ * Precalculate Y channel related values for RGB channels (4 pixels)
+ *
+ * @param c_dst output precalculated value
+ * @param y     Y channel vector
+ */
+INLINE void aipl_mve_pre_cnvt_4px_y(int32x4_t* c_dst,
+                                    uint32x4_t y)
+{
+    *c_dst = vreinterpretq_s32(y);
+    *c_dst = vsubq(*c_dst, 16);
+    *c_dst = vmulq(*c_dst, 298);
+}
+
+/**
+ * A util function for color conversions from YUV formats.
+ * Precalculate Y channel related values for RGB channels (8 pixels)
+ *
+ * @param c0_dst output precalculated value [0]
+ * @param c1_dst output precalculated value [1]
+ * @param y      Y channel vector
+ */
+INLINE void aipl_mve_pre_cnvt_8px_y(int32x4_t* c0_dst,
+                                    int32x4_t* c1_dst,
+                                    uint16x8_t y)
+{
+    uint16x8_t c = y;
+    c = vsubq(c, 16);
+
+    *c0_dst = vreinterpretq_s32(vmovlbq(c));
+    *c1_dst = vreinterpretq_s32(vmovltq(c));
+
+    *c0_dst = vmulq(*c0_dst, 298);
+    *c1_dst = vmulq(*c1_dst, 298);
+}
+
+/**
+ * A util function for color conversions from YUV formats.
+ * Precalculate Y channel related values for RGB channels (8 by 2 pixels)
+ *
+ * @param c00_dst output precalculated value [0, 0]
+ * @param c01_dst output precalculated value [0, 1]
+ * @param c10_dst output precalculated value [1, 0]
+ * @param c11_dst output precalculated value [1, 1]
+ * @param y0      Y channel vector row 0
+ * @param y1      Y channel vector row 1
+ */
+INLINE void aipl_mve_pre_cnvt_8x2px_y(int32x4_t* c00_dst,
+                                      int32x4_t* c01_dst,
+                                      int32x4_t* c10_dst,
+                                      int32x4_t* c11_dst,
+                                      uint16x8_t y0,
+                                      uint16x8_t y1)
+{
+    aipl_mve_pre_cnvt_8px_y(c00_dst, c01_dst, y0);
+    aipl_mve_pre_cnvt_8px_y(c10_dst, c11_dst, y1);
+}
+
+/**
+ * Convert YUV to R, G, and B channels using precalculated values (4 pixels)
+ *
+ * @param r_dst     red channels output
+ * @param g_dst     green channels output
+ * @param b_dst     blue channels output
+ * @param c_src     precalculated luminocity portion
+ * @param r_src     precalculated red portion
+ * @param g_src     precalculated green portion
+ * @param b_src     precalculated blue portion
+ */
+INLINE void aipl_mve_cnvt_4px_yuv_to_rgb(int16x8_t* r_dst,
+                                         int16x8_t* g_dst,
+                                         int16x8_t* b_dst,
+                                         int32x4_t c_src,
+                                         int32x4_t r_src,
+                                         int32x4_t g_src,
+                                         int32x4_t b_src)
+{
+    *r_dst = vreinterpretq_s16(vshrq(vaddq(c_src, r_src), 8));
+    *g_dst = vreinterpretq_s16(vshrq(vaddq(c_src, g_src), 8));
+    *b_dst = vreinterpretq_s16(vshrq(vaddq(c_src, b_src), 8));
+}
+
+/**
+ * Convert YUV to R, G, and B channels using precalculated values (8 pixels)
+ *
+ * @param r_dst      red channels output
+ * @param g_dst      green channels output
+ * @param b_dst      blue channels output
+ * @param c0_src     precalculated luminocity portion
+ * @param r0_src     precalculated red portion
+ * @param g0_src     precalculated green portion
+ * @param b0_src     precalculated blue portion
+ * @param c1_src     precalculated luminocity portion
+ * @param r1_src     precalculated red portion
+ * @param g1_src     precalculated green portion
+ * @param b1_src     precalculated blue portion
+ */
+INLINE void aipl_mve_cnvt_8px_yuv_to_rgb(uint16x8_t* r_dst,
+                                         uint16x8_t* g_dst,
+                                         uint16x8_t* b_dst,
+                                         int32x4_t c0_src,
+                                         int32x4_t r0_src,
+                                         int32x4_t g0_src,
+                                         int32x4_t b0_src,
+                                         int32x4_t c1_src,
+                                         int32x4_t r1_src,
+                                         int32x4_t g1_src,
+                                         int32x4_t b1_src)
+{
+    int32x4_t r0 = vshrq(vaddq(c0_src, r0_src), 8);
+    int32x4_t g0 = vshrq(vaddq(c0_src, g0_src), 8);
+    int32x4_t b0 = vshrq(vaddq(c0_src, b0_src), 8);
+
+    int32x4_t r1 = vshrq(vaddq(c1_src, r1_src), 8);
+    int32x4_t g1 = vshrq(vaddq(c1_src, g1_src), 8);
+    int32x4_t b1 = vshrq(vaddq(c1_src, b1_src), 8);
+
+    *r_dst = vqmovuntq(vqmovunbq(vdupq_n_u16(0), r0), r1);
+    *g_dst = vqmovuntq(vqmovunbq(vdupq_n_u16(0), g0), g1);
+    *b_dst = vqmovuntq(vqmovunbq(vdupq_n_u16(0), b0), b1);
+}
+
+/**
+ * Convert YUV to ARGB8888 using precalculated values (4 pixels)
+ *
+ * @param dst       ouput ARGB8888 pixels vector
+ * @param c_src     precalculated luminocity portion
+ * @param r_src     precalculated red portion
+ * @param g_src     precalculated green portion
+ * @param b_src     precalculated blue portion
+ */
+INLINE void aipl_mve_cnvt_4px_yuv_to_argb8888(uint32x4_t* dst,
+                                              int32x4_t c_src,
+                                              int32x4_t r_src,
+                                              int32x4_t g_src,
+                                              int32x4_t b_src)
+{
+    int16x8_t r, g, b;
+    aipl_mve_cnvt_4px_yuv_to_rgb(&r, &g, &b, c_src, r_src, g_src, b_src);
+
+    uint32x4_t ar = vreinterpretq_u32(vqmovunbq(vdupq_n_u8(0xff), r));
+    uint32x4_t gb = vreinterpretq_u32(vqmovuntq(vqmovunbq(vdupq_n_u8(0), b), g));
+
+    *dst = vorrq(vshlq_n(ar, 16), vandq(gb, vdupq_n_u32(0x0000ffff)));
+}
+
+/**
+ * Convert YUV to ARGB4444 using precalculated values (8 pixels)
+ *
+ * @param dst       ouput ARGB4444 pixels vector
+ * @param c0_src    precalculated luminocity portion [0]
+ * @param c1_src    precalculated luminocity portion [1]
+ * @param r_src     precalculated red portion
+ * @param g_src     precalculated green portion
+ * @param b_src     precalculated blue portion
+ */
+INLINE void aipl_mve_cnvt_8px_yuv_to_argb4444(uint16x8_t* dst,
+                                              int32x4_t c0_src,
+                                              int32x4_t c1_src,
+                                              int32x4_t r_src,
+                                              int32x4_t g_src,
+                                              int32x4_t b_src)
+{
+    uint16x8_t r, g, b;
+    aipl_mve_cnvt_8px_yuv_to_rgb(&r, &g, &b, c0_src, r_src, g_src, b_src,
+                                 c1_src, r_src, g_src, b_src);
+
+    *dst = vorrq(vorrq(vdupq_n_u16(0xf000), vandq(vshlq_n(r, 4), vdupq_n_u16(0x0f00))),
+                 vorrq(vandq(g, vdupq_n_u16(0x00f0)), vshrq(b, 4)));
+}
+
+/**
+ * Convert YUV to ARGB4444 using precalculated values (4+4 pixels)
+ *
+ * @param dst       ouput ARGB4444 pixels vector
+ * @param c0_src    precalculated luminocity portion [0]
+ * @param c1_src    precalculated luminocity portion [1]
+ * @param r0_src    precalculated red portion   [0]
+ * @param g0_src    precalculated green portion [0]
+ * @param b0_src    precalculated blue portion  [0]
+ * @param r1_src    precalculated red portion   [1]
+ * @param g1_src    precalculated green portion [1]
+ * @param b1_src    precalculated blue portion  [1]
+ */
+INLINE void aipl_mve_cnvt_44px_yuv_to_argb4444(uint16x8_t* dst,
+                                               int32x4_t c0_src,
+                                               int32x4_t c1_src,
+                                               int32x4_t r0_src,
+                                               int32x4_t g0_src,
+                                               int32x4_t b0_src,
+                                               int32x4_t r1_src,
+                                               int32x4_t g1_src,
+                                               int32x4_t b1_src)
+{
+    uint16x8_t r, g, b;
+    aipl_mve_cnvt_8px_yuv_to_rgb(&r, &g, &b, c0_src, r0_src, g0_src, b0_src,
+                                 c1_src, r1_src, g1_src, b1_src);
+
+    *dst = vorrq(vorrq(vdupq_n_u16(0xf000), vandq(vshlq_n(r, 4), vdupq_n_u16(0x0f00))),
+                 vorrq(vandq(g, vdupq_n_u16(0x00f0)), vshrq(b, 4)));
+}
+
+/**
+ * Convert YUV to ARGB1555 using precalculated values (8 pixels)
+ *
+ * @param dst       output ARGB1555 pixels vector
+ * @param c0_src    precalculated luminocity portion [0]
+ * @param c1_src    precalculated luminocity portion [1]
+ * @param r_src     precalculated red portion
+ * @param g_src     precalculated green portion
+ * @param b_src     precalculated blue portion
+ */
+INLINE void aipl_mve_cnvt_8px_yuv_to_argb1555(uint16x8_t* dst,
+                                              int32x4_t c0_src,
+                                              int32x4_t c1_src,
+                                              int32x4_t r_src,
+                                              int32x4_t g_src,
+                                              int32x4_t b_src)
+{
+    uint16x8_t r, g, b;
+    aipl_mve_cnvt_8px_yuv_to_rgb(&r, &g, &b, c0_src, r_src, g_src, b_src,
+                                 c1_src, r_src, g_src, b_src);
+
+    *dst = vorrq(vorrq(vdupq_n_u16(0x8000), vandq(vshlq_n(r, 7), vdupq_n_u16(0x7c00))),
+                 vorrq(vandq(vshlq_n(g, 2), vdupq_n_u16(0x03e0)), vshrq(b, 3)));
+}
+
+/**
+ * Convert YUV to ARGB1555 using precalculated values (4+4 pixels)
+ *
+ * @param dst       output ARGB1555 pixels vector
+ * @param c0_src    precalculated luminocity portion [0]
+ * @param c1_src    precalculated luminocity portion [1]
+ * @param r0_src    precalculated red portion   [0]
+ * @param g0_src    precalculated green portion [0]
+ * @param b0_src    precalculated blue portion  [0]
+ * @param r1_src    precalculated red portion   [1]
+ * @param g1_src    precalculated green portion [1]
+ * @param b1_src    precalculated blue portion  [1]
+ */
+INLINE void aipl_mve_cnvt_44px_yuv_to_argb1555(uint16x8_t* dst,
+                                               int32x4_t c0_src,
+                                               int32x4_t c1_src,
+                                               int32x4_t r0_src,
+                                               int32x4_t g0_src,
+                                               int32x4_t b0_src,
+                                               int32x4_t r1_src,
+                                               int32x4_t g1_src,
+                                               int32x4_t b1_src)
+{
+    uint16x8_t r, g, b;
+    aipl_mve_cnvt_8px_yuv_to_rgb(&r, &g, &b, c0_src, r0_src, g0_src, b0_src,
+                                 c1_src, r1_src, g1_src, b1_src);
+
+    *dst = vorrq(vorrq(vdupq_n_u16(0x8000), vandq(vshlq_n(r, 7), vdupq_n_u16(0x7c00))),
+                 vorrq(vandq(vshlq_n(g, 2), vdupq_n_u16(0x03e0)), vshrq(b, 3)));
+}
+
+/**
+ * Convert YUV to RGBA8888 using precalculated values (4 pixels)
+ *
+ * @param dst       ouput RGBA8888 pixels vector
+ * @param c_src     precalculated luminocity portion
+ * @param r_src     precalculated red portion
+ * @param g_src     precalculated green portion
+ * @param b_src     precalculated blue portion
+ */
+INLINE void aipl_mve_cnvt_4px_yuv_to_rgba8888(uint32x4_t* dst,
+                                              int32x4_t c_src,
+                                              int32x4_t r_src,
+                                              int32x4_t g_src,
+                                              int32x4_t b_src)
+{
+    int16x8_t r, g, b;
+    aipl_mve_cnvt_4px_yuv_to_rgb(&r, &g, &b, c_src, r_src, g_src, b_src);
+
+    uint32x4_t rg = vreinterpretq_u32(vqmovuntq(vqmovunbq(vdupq_n_u8(0), g), r));
+    uint32x4_t ba = vreinterpretq_u32(vqmovuntq(vdupq_n_u8(0xff), b));
+
+    *dst = vorrq(vshlq_n(rg, 16), vandq(ba, vdupq_n_u32(0x0000ffff)));
+}
+
+/**
+ * Convert YUV to RGBA4444 using precalculated values (8 pixels)
+ *
+ * @param dst       output RGBA4444 pixels vector
+ * @param c0_src    precalculated luminocity portion [0]
+ * @param c1_src    precalculated luminocity portion [1]
+ * @param r_src     precalculated red portion
+ * @param g_src     precalculated green portion
+ * @param b_src     precalculated blue portion
+ */
+INLINE void aipl_mve_cnvt_8px_yuv_to_rgba4444(uint16x8_t* dst,
+                                              int32x4_t c0_src,
+                                              int32x4_t c1_src,
+                                              int32x4_t r_src,
+                                              int32x4_t g_src,
+                                              int32x4_t b_src)
+{
+    uint16x8_t r, g, b;
+    aipl_mve_cnvt_8px_yuv_to_rgb(&r, &g, &b, c0_src, r_src, g_src, b_src,
+                                 c1_src, r_src, g_src, b_src);
+
+    *dst = vorrq(vorrq(vandq(vshlq_n(r, 8), vdupq_n_u16(0xf000)), vandq(vshlq_n(g, 4), vdupq_n_u16(0x0f00))),
+                 vorrq(vandq(b, vdupq_n_u16(0x00f0)), vdupq_n_u16(0x000f)));
+}
+
+/**
+ * Convert YUV to RGBA4444 using precalculated values (4+4 pixels)
+ *
+ * @param dst       output RGBA4444 pixels vector
+ * @param c0_src    precalculated luminocity portion [0]
+ * @param c1_src    precalculated luminocity portion [1]
+ * @param r0_src    precalculated red portion   [0]
+ * @param g0_src    precalculated green portion [0]
+ * @param b0_src    precalculated blue portion  [0]
+ * @param r1_src    precalculated red portion   [1]
+ * @param g1_src    precalculated green portion [1]
+ * @param b1_src    precalculated blue portion  [1]
+ */
+INLINE void aipl_mve_cnvt_44px_yuv_to_rgba4444(uint16x8_t* dst,
+                                               int32x4_t c0_src,
+                                               int32x4_t c1_src,
+                                               int32x4_t r0_src,
+                                               int32x4_t g0_src,
+                                               int32x4_t b0_src,
+                                               int32x4_t r1_src,
+                                               int32x4_t g1_src,
+                                               int32x4_t b1_src)
+{
+    uint16x8_t r, g, b;
+    aipl_mve_cnvt_8px_yuv_to_rgb(&r, &g, &b, c0_src, r0_src, g0_src, b0_src,
+                                 c1_src, r1_src, g1_src, b1_src);
+
+    *dst = vorrq(vorrq(vandq(vshlq_n(r, 8), vdupq_n_u16(0xf000)), vandq(vshlq_n(g, 4), vdupq_n_u16(0x0f00))),
+                 vorrq(vandq(b, vdupq_n_u16(0x00f0)), vdupq_n_u16(0x000f)));
+}
+
+/**
+ * Convert YUV to RGBA5551 using precalculated values (8 pixels)
+ *
+ * @param dst       output RGBA5551 pixels vector
+ * @param c0_src    precalculated luminocity portion [0]
+ * @param c1_src    precalculated luminocity portion [1]
+ * @param r_src     precalculated red portion
+ * @param g_src     precalculated green portion
+ * @param b_src     precalculated blue portion
+ */
+INLINE void aipl_mve_cnvt_8px_yuv_to_rgba5551(uint16x8_t* dst,
+                                              int32x4_t c0_src,
+                                              int32x4_t c1_src,
+                                              int32x4_t r_src,
+                                              int32x4_t g_src,
+                                              int32x4_t b_src)
+{
+    uint16x8_t r, g, b;
+    aipl_mve_cnvt_8px_yuv_to_rgb(&r, &g, &b, c0_src, r_src, g_src, b_src,
+                                 c1_src, r_src, g_src, b_src);
+
+    *dst = vorrq(vorrq(vdupq_n_u16(0x0001), vandq(vshlq_n(r, 8), vdupq_n_u16(0xf800))),
+                 vorrq(vandq(vshlq_n(g, 3), vdupq_n_u16(0x07c0)), vandq(vshrq(b, 2), vdupq_n_u16(0x03e))));
+}
+
+/**
+ * Convert YUV to RGBA5551 using precalculated values (4+4 pixels)
+ *
+ * @param dst       output RGBA5551 pixels vector
+ * @param c0_src    precalculated luminocity portion [0]
+ * @param c1_src    precalculated luminocity portion [1]
+ * @param r0_src    precalculated red portion   [0]
+ * @param g0_src    precalculated green portion [0]
+ * @param b0_src    precalculated blue portion  [0]
+ * @param r1_src    precalculated red portion   [1]
+ * @param g1_src    precalculated green portion [1]
+ * @param b1_src    precalculated blue portion  [1]
+ */
+INLINE void aipl_mve_cnvt_44px_yuv_to_rgba5551(uint16x8_t* dst,
+                                               int32x4_t c0_src,
+                                               int32x4_t c1_src,
+                                               int32x4_t r0_src,
+                                               int32x4_t g0_src,
+                                               int32x4_t b0_src,
+                                               int32x4_t r1_src,
+                                               int32x4_t g1_src,
+                                               int32x4_t b1_src)
+{
+    uint16x8_t r, g, b;
+    aipl_mve_cnvt_8px_yuv_to_rgb(&r, &g, &b, c0_src, r0_src, g0_src, b0_src,
+                                 c1_src, r1_src, g1_src, b1_src);
+
+    *dst = vorrq(vorrq(vdupq_n_u16(0x0001), vandq(vshlq_n(r, 8), vdupq_n_u16(0xf800))),
+                 vorrq(vandq(vshlq_n(g, 3), vdupq_n_u16(0x07c0)), vandq(vshrq(b, 2), vdupq_n_u16(0x03e))));
+}
+
+/**
+ * Convert YUV to RGB565 using precalculated values (8 pixels)
+ *
+ * @param dst       output RGB565 pixels vector
+ * @param c0_src    precalculated luminocity portion [0]
+ * @param c1_src    precalculated luminocity portion [1]
+ * @param r_src     precalculated red portion
+ * @param g_src     precalculated green portion
+ * @param b_src     precalculated blue portion
+ */
+INLINE void aipl_mve_cnvt_8px_yuv_to_rgb565(uint16x8_t* dst,
+                                            int32x4_t c0_src,
+                                            int32x4_t c1_src,
+                                            int32x4_t r_src,
+                                            int32x4_t g_src,
+                                            int32x4_t b_src)
+{
+    uint16x8_t r, g, b;
+    aipl_mve_cnvt_8px_yuv_to_rgb(&r, &g, &b, c0_src, r_src, g_src, b_src,
+                                 c1_src, r_src, g_src, b_src);
+
+    *dst = vorrq(vandq(vshlq_n(r, 8), vdupq_n_u16(0xf800)),
+                 vorrq(vandq(vshlq_n(g, 3), vdupq_n_u16(0x07e0)), vshrq(b, 3)));
+}
+
+/**
+ * Convert YUV to RGB565 using precalculated values (4+4 pixels)
+ *
+ * @param dst       output RGB565 pixels vector
+ * @param c0_src    precalculated luminocity portion [0]
+ * @param c1_src    precalculated luminocity portion [1]
+ * @param r0_src    precalculated red portion   [0]
+ * @param g0_src    precalculated green portion [0]
+ * @param b0_src    precalculated blue portion  [0]
+ * @param r1_src    precalculated red portion   [1]
+ * @param g1_src    precalculated green portion [1]
+ * @param b1_src    precalculated blue portion  [1]
+ */
+INLINE void aipl_mve_cnvt_44px_yuv_to_rgb565(uint16x8_t* dst,
+                                             int32x4_t c0_src,
+                                             int32x4_t c1_src,
+                                             int32x4_t r0_src,
+                                             int32x4_t g0_src,
+                                             int32x4_t b0_src,
+                                             int32x4_t r1_src,
+                                             int32x4_t g1_src,
+                                             int32x4_t b1_src)
+{
+    uint16x8_t r, g, b;
+    aipl_mve_cnvt_8px_yuv_to_rgb(&r, &g, &b, c0_src, r0_src, g0_src, b0_src,
+                                 c1_src, r1_src, g1_src, b1_src);
+
+    *dst = vorrq(vandq(vshlq_n(r, 8), vdupq_n_u16(0xf800)),
+                 vorrq(vandq(vshlq_n(g, 3), vdupq_n_u16(0x07e0)), vshrq(b, 3)));
+}
+
 /**
  * Get 8 even-numbered pixels from 16-pixel ARGB struct
  *
@@ -187,886 +2650,6 @@ INLINE void aipl_mve_convert_2_rgb_x8_to_x16(aipl_mve_rgb_x16_t* dst,
     dst->r = vmovntq(vreinterpretq_u8(src_evn->r), src_odd->r);
     dst->g = vmovntq(vreinterpretq_u8(src_evn->g), src_odd->g);
     dst->b = vmovntq(vreinterpretq_u8(src_evn->b), src_odd->b);
-}
-
-/**
- * Load 8 ARGB8888 pixels with alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_loada_argb8888_8px(aipl_mve_argb_x8_t* dst,
-                                        const uint8_t* src,
-                                        mve_pred16_t pred)
-{
-    dst->a = vldrbq_gather_offset_z(src + 3, AIPL_4_BYTE_OFFSETS_U16, pred);
-    dst->r = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U16, pred);
-    dst->g = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U16, pred);
-    dst->b = vldrbq_gather_offset_z(src, AIPL_4_BYTE_OFFSETS_U16, pred);
-}
-
-/**
- * Load 16 ARGB8888 pixels with alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_loada_argb8888_16px(aipl_mve_argb_x16_t* dst,
-                                         const uint8_t* src,
-                                         mve_pred16_t pred)
-{
-    dst->a = vldrbq_gather_offset_z(src + 3, AIPL_4_BYTE_OFFSETS_U8, pred);
-    dst->r = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U8, pred);
-    dst->g = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U8, pred);
-    dst->b = vldrbq_gather_offset_z(src, AIPL_4_BYTE_OFFSETS_U8, pred);
-}
-
-/**
- * Load 8 ARGB4444 pixels with alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_loada_argb4444_8px(aipl_mve_argb_x8_t* dst,
-                                         const uint8_t* src,
-                                         mve_pred16_t pred)
-{
-    uint16x8_t ar = vldrbq_gather_offset_z(src + 1, AIPL_2_BYTE_OFFSETS_U16, pred);
-    uint16x8_t gb = vldrbq_gather_offset_z(src, AIPL_2_BYTE_OFFSETS_U16, pred);
-
-    dst->a = vorrq(vandq(ar, vdupq_n_u16(0x00f0)), vshrq(ar, 4));
-    dst->r = vmulq(vandq(ar, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
-    dst->g = vorrq(vandq(gb, vdupq_n_u16(0x00f0)), vshrq(gb, 4));
-    dst->b = vmulq(vandq(gb, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
-}
-
-/**
- * Load 16 ARGB4444 pixels with alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_loada_argb4444_16px(aipl_mve_argb_x16_t* dst,
-                                         const uint8_t* src,
-                                         mve_pred16_t pred)
-{
-    uint8x16_t ar = vldrbq_gather_offset_z(src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
-    uint8x16_t gb = vldrbq_gather_offset_z(src, AIPL_2_BYTE_OFFSETS_U8, pred);
-
-    dst->a = vorrq(vandq(ar, vdupq_n_u8(0xf0)), vshrq(ar, 4));
-    dst->r = vmulq(vandq(ar, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
-    dst->g = vorrq(vandq(gb, vdupq_n_u8(0xf0)), vshrq(gb, 4));
-    dst->b = vmulq(vandq(gb, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
-}
-
-/**
- * Load 16 ARGB1555 pixels with alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_loada_argb1555_16px(aipl_mve_argb_x16_t* dst,
-                                         const uint8_t* src,
-                                         mve_pred16_t pred)
-{
-    uint8x16_t upper = vldrbq_gather_offset_z(src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
-    uint8x16_t lower = vldrbq_gather_offset_z(src, AIPL_2_BYTE_OFFSETS_U8, pred);
-
-    dst->a = vmulq(vshrq(upper, 7), vdupq_n_u8(0xff));
-    dst->r = vandq(vshlq_n(upper, 1), vdupq_n_u8(0xf0));
-    dst->g = vorrq(vshlq_n(upper, 6), vshrq(vandq(lower, vdupq_n_u8(0xe0)), 2));
-    dst->b = vshlq_n(lower, 3);
-}
-
-/**
- * Load 8 RGBA8888 pixels with alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_loada_rgba8888_8px(aipl_mve_argb_x8_t* dst,
-                                        const uint8_t* src,
-                                        mve_pred16_t pred)
-{
-    dst->r = vldrbq_gather_offset_z(src + 3, AIPL_4_BYTE_OFFSETS_U16, pred);
-    dst->g = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U16, pred);
-    dst->b = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U16, pred);
-    dst->a = vldrbq_gather_offset_z(src, AIPL_4_BYTE_OFFSETS_U16, pred);
-}
-
-/**
- * Load 16 RGBA8888 pixels with alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_loada_rgba8888_16px(aipl_mve_argb_x16_t* dst,
-                                         const uint8_t* src,
-                                         mve_pred16_t pred)
-{
-    dst->r = vldrbq_gather_offset_z(src + 3, AIPL_4_BYTE_OFFSETS_U8, pred);
-    dst->g = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U8, pred);
-    dst->b = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U8, pred);
-    dst->a = vldrbq_gather_offset_z(src, AIPL_4_BYTE_OFFSETS_U8, pred);
-}
-
-/**
- * Load 8 RGBA4444 pixels with alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_loada_rgba4444_8px(aipl_mve_argb_x8_t* dst,
-                                        const uint8_t* src,
-                                        mve_pred16_t pred)
-{
-    uint16x8_t rg = vldrbq_gather_offset_z(src + 1, AIPL_2_BYTE_OFFSETS_U16, pred);
-    uint16x8_t ba = vldrbq_gather_offset_z(src, AIPL_2_BYTE_OFFSETS_U16, pred);
-
-    dst->r = vorrq(vandq(rg, vdupq_n_u16(0x00f0)), vshrq(rg, 4));
-    dst->g = vmulq(vandq(rg, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
-    dst->b = vorrq(vandq(ba, vdupq_n_u16(0x00f0)), vshrq(ba, 4));
-    dst->a = vmulq(vandq(ba, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
-}
-
-/**
- * Load 16 RGBA4444 pixels with alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_loada_rgba4444_16px(aipl_mve_argb_x16_t* dst,
-                                         const uint8_t* src,
-                                         mve_pred16_t pred)
-{
-    uint8x16_t rg = vldrbq_gather_offset_z(src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
-    uint8x16_t ba = vldrbq_gather_offset_z(src, AIPL_2_BYTE_OFFSETS_U8, pred);
-
-    dst->r = vorrq(vandq(rg, vdupq_n_u8(0xf0)), vshrq(rg, 4));
-    dst->g = vmulq(vandq(rg, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
-    dst->b = vorrq(vandq(ba, vdupq_n_u8(0xf0)), vshrq(ba, 4));
-    dst->a = vmulq(vandq(ba, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
-}
-
-/**
- * Load 16 RGBA5551 pixels with alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_loada_rgba5551_16px(aipl_mve_argb_x16_t* dst,
-                                         const uint8_t* src,
-                                         mve_pred16_t pred)
-{
-    uint8x16_t upper = vldrbq_gather_offset_z(src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
-    uint8x16_t lower = vldrbq_gather_offset_z(src, AIPL_2_BYTE_OFFSETS_U8, pred);
-
-    dst->r = vandq(upper, vdupq_n_u8(0xf8));
-    dst->g = vorrq(vshlq_n(upper, 5), vshrq(vandq(lower, vdupq_n_u8(0xc0)), 3));
-    dst->b = vshlq_n(vandq(lower, vdupq_n_u8(0x3e)), 2);
-    dst->a = vmulq(vandq(lower, vdupq_n_u8(0x01)), vdupq_n_u8(0xff));
-}
-
-/**
- * Load 8 ARGB888 pixels without alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_load_argb8888_8px(aipl_mve_rgb_x8_t* dst,
-                                       const uint8_t* src,
-                                       mve_pred16_t pred)
-{
-    dst->r = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U16, pred);
-    dst->g = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U16, pred);
-    dst->b = vldrbq_gather_offset_z(src, AIPL_4_BYTE_OFFSETS_U16, pred);
-}
-
-/**
- * Load 16 ARGB8888 pixels without alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_load_argb8888_16px(aipl_mve_rgb_x16_t* dst,
-                                        const uint8_t* src,
-                                        mve_pred16_t pred)
-{
-    dst->r = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U8, pred);
-    dst->g = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U8, pred);
-    dst->b = vldrbq_gather_offset_z(src, AIPL_4_BYTE_OFFSETS_U8, pred);
-}
-
-/**
- * Load 8 ARGB8888 pixels without alpha channel
- * and with custom offsets between pixels
- *
- * @param dst       destination struct pointer
- * @param src       first source pixel pointer
- * @param offset    pixel offset
- * @param pred      load predicate
- */
-INLINE void aipl_mve_load_argb8888_offset_8px(aipl_mve_rgb_x8_t* dst,
-                                              const uint8_t* src,
-                                              uint8_t offset,
-                                              mve_pred16_t pred)
-{
-    dst->r = vldrbq_gather_offset_z(src + 2, AIPL_OFFSETS_U16(offset, 4), pred);
-    dst->g = vldrbq_gather_offset_z(src + 1, AIPL_OFFSETS_U16(offset, 4), pred);
-    dst->b = vldrbq_gather_offset_z(src, AIPL_OFFSETS_U16(offset, 4), pred);
-}
-
-/**
- * Load 16 ARGB4444 pixels without alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_load_argb4444_16px(aipl_mve_rgb_x16_t* dst,
-                                        const uint8_t* src,
-                                        mve_pred16_t pred)
-{
-    uint8x16_t ar = vldrbq_gather_offset_z(src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
-    uint8x16_t gb = vldrbq_gather_offset_z(src, AIPL_2_BYTE_OFFSETS_U8, pred);
-
-    dst->r = vmulq(vandq(ar, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
-    dst->g = vorrq(vandq(gb, vdupq_n_u8(0xf0)), vshrq(gb, 4));
-    dst->b = vmulq(vandq(gb, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
-}
-
-/**
- * Load 16 ARGB1555 pixels without alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_load_argb1555_16px(aipl_mve_rgb_x16_t* dst,
-                                        const uint8_t* src,
-                                        mve_pred16_t pred)
-{
-    uint8x16_t upper = vldrbq_gather_offset_z(src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
-    uint8x16_t lower = vldrbq_gather_offset_z(src, AIPL_2_BYTE_OFFSETS_U8, pred);
-
-    dst->r = vandq(vshlq_n(upper, 1), vdupq_n_u8(0xf8));
-    dst->r = vorrq(dst->r, vshrq(dst->r, 5));
-    dst->g = vorrq(vshlq_n(upper, 6), vshrq(vandq(lower, vdupq_n_u8(0xe0)), 2));
-    dst->g = vorrq(dst->g, vshrq(dst->g, 5));
-    dst->b = vshlq_n(lower, 3);
-    dst->b = vorrq(dst->b, vshrq(dst->b, 5));
-}
-
-/**
- * Load 8 RGBA8888 pixels without alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_load_rgba8888_8px(aipl_mve_rgb_x8_t* dst,
-                                       const uint8_t* src,
-                                       mve_pred16_t pred)
-{
-    dst->r = vldrbq_gather_offset_z(src + 3, AIPL_4_BYTE_OFFSETS_U16, pred);
-    dst->g = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U16, pred);
-    dst->b = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U16, pred);
-}
-
-/**
- * Load 16 RGBA8888 pixels without alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_load_rgba8888_16px(aipl_mve_rgb_x16_t* dst,
-                                        const uint8_t* src,
-                                        mve_pred16_t pred)
-{
-    dst->r = vldrbq_gather_offset_z(src + 3, AIPL_4_BYTE_OFFSETS_U8, pred);
-    dst->g = vldrbq_gather_offset_z(src + 2, AIPL_4_BYTE_OFFSETS_U8, pred);
-    dst->b = vldrbq_gather_offset_z(src + 1, AIPL_4_BYTE_OFFSETS_U8, pred);
-}
-
-/**
- * Load 8 RGBA8888 pixels with alpha channel
- * and custom offset between pixels
- *
- * @param dst       destination struct pointer
- * @param src       first source pixel pointer
- * @param offset    pixel offset
- * @param pred      load predicate
- */
-INLINE void aipl_mve_load_rgba8888_offset_8px(aipl_mve_rgb_x8_t* dst,
-                                              const uint8_t* src,
-                                              uint8_t offset,
-                                              mve_pred16_t pred)
-{
-    dst->r = vldrbq_gather_offset_z(src + 3, AIPL_OFFSETS_U16(offset, 4), pred);
-    dst->g = vldrbq_gather_offset_z(src + 2, AIPL_OFFSETS_U16(offset, 4), pred);
-    dst->b = vldrbq_gather_offset_z(src + 1, AIPL_OFFSETS_U16(offset, 4), pred);
-}
-
-/**
- * Load 16 RGBA4444 pixels without alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_load_rgba4444_16px(aipl_mve_rgb_x16_t* dst,
-                                        const uint8_t* src,
-                                        mve_pred16_t pred)
-{
-    uint8x16_t rg = vldrbq_gather_offset_z(src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
-    uint8x16_t ba = vldrbq_gather_offset_z(src, AIPL_2_BYTE_OFFSETS_U8, pred);
-
-    dst->r = vorrq(vandq(rg, vdupq_n_u8(0xf0)), vshrq(rg, 4));
-    dst->g = vmulq(vandq(rg, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
-    dst->b = vorrq(vandq(ba, vdupq_n_u8(0xf0)), vshrq(ba, 4));
-}
-
-/**
- * Load 16 RGBA5551 pixels without alpha channel
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_load_rgba5551_16px(aipl_mve_rgb_x16_t* dst,
-                                        const uint8_t* src,
-                                        mve_pred16_t pred)
-{
-    uint8x16_t upper = vldrbq_gather_offset_z(src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
-    uint8x16_t lower = vldrbq_gather_offset_z(src, AIPL_2_BYTE_OFFSETS_U8, pred);
-
-    dst->r = vandq(upper, vdupq_n_u8(0xf8));
-    dst->r = vorrq(dst->r, vshrq(dst->r, 5));
-    dst->g = vorrq(vshlq_n(upper, 5), vshrq(vandq(lower, vdupq_n_u8(0xc0)), 3));
-    dst->g = vorrq(dst->g, vshrq(dst->g, 5));
-    dst->b = vshlq_n(vandq(lower, vdupq_n_u8(0x3e)), 2);
-    dst->b = vorrq(dst->b, vshrq(dst->b, 5));
-}
-
-/**
- * Load 8 24bit pixels
- *
- * @param dst       destination struct pointer
- * @param src       first source pixel pointer
- * @param pred      load predicate
- * @param r_offset  red channel offset
- * @param g_offset  green channel offset
- * @param b_offset  blue channel offset
- */
-INLINE void aipl_mve_load_24bit_8px(aipl_mve_rgb_x8_t* dst,
-                                    const uint8_t* src,
-                                    mve_pred16_t pred,
-                                    uint8_t r_offset,
-                                    uint8_t g_offset,
-                                    uint8_t b_offset)
-{
-    dst->r = vldrbq_gather_offset_z(src + r_offset, AIPL_3_BYTE_OFFSETS_U16, pred);
-    dst->g = vldrbq_gather_offset_z(src + g_offset, AIPL_3_BYTE_OFFSETS_U16, pred);
-    dst->b = vldrbq_gather_offset_z(src + b_offset, AIPL_3_BYTE_OFFSETS_U16, pred);
-}
-
-/**
- * Load 16 24bit pixels
- *
- * @param dst       destination struct pointer
- * @param src       first source pixel pointer
- * @param pred      load predicate
- * @param r_offset  red channel offset
- * @param g_offset  green channel offset
- * @param b_offset  blue channel offset
- */
-INLINE void aipl_mve_load_24bit_16px(aipl_mve_rgb_x16_t* dst,
-                                     const uint8_t* src,
-                                     mve_pred16_t pred,
-                                     uint8_t r_offset,
-                                     uint8_t g_offset,
-                                     uint8_t b_offset)
-{
-    dst->r = vldrbq_gather_offset_z(src + r_offset, AIPL_3_BYTE_OFFSETS_U8, pred);
-    dst->g = vldrbq_gather_offset_z(src + g_offset, AIPL_3_BYTE_OFFSETS_U8, pred);
-    dst->b = vldrbq_gather_offset_z(src + b_offset, AIPL_3_BYTE_OFFSETS_U8, pred);
-}
-
-/**
- * Load 8 24bit pixels with custom offsets between pixels
- *
- * @param dst       destination struct pointer
- * @param src       first source pixel pointer
- * @param offset    pixel offset
- * @param pred      load predicate
- * @param r_offset  red channel offset
- * @param g_offset  green channel offset
- * @param b_offset  blue channel offset
- */
-INLINE void aipl_mve_load_24bit_offset_8px(aipl_mve_rgb_x8_t* dst,
-                                           const uint8_t* src,
-                                           uint8_t offset,
-                                           mve_pred16_t pred,
-                                           uint8_t r_offset,
-                                           uint8_t g_offset,
-                                           uint8_t b_offset)
-{
-    dst->r = vldrbq_gather_offset_z(src + r_offset, AIPL_OFFSETS_U16(offset, 3), pred);
-    dst->g = vldrbq_gather_offset_z(src + g_offset, AIPL_OFFSETS_U16(offset, 3), pred);
-    dst->b = vldrbq_gather_offset_z(src + b_offset, AIPL_OFFSETS_U16(offset, 3), pred);
-}
-
-/**
- * Load 16 RGB565 pixels
- *
- * @param dst   destination struct pointer
- * @param src   first source pixel pointer
- * @param pred  load predicate
- */
-INLINE void aipl_mve_load_rgb565_16px(aipl_mve_rgb_x16_t* dst,
-                                      const uint8_t* src,
-                                      mve_pred16_t pred)
-{
-    uint8x16_t upper = vldrbq_gather_offset_z(src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
-    uint8x16_t lower = vldrbq_gather_offset_z(src, AIPL_2_BYTE_OFFSETS_U8, pred);
-
-    dst->r = vandq(upper, vdupq_n_u8(0xf8));
-    dst->r = vorrq(dst->r, vshrq(dst->r, 5));
-    dst->g = vorrq(vshlq_n(upper, 5), vshrq(vandq(lower, vdupq_n_u8(0xe0)), 3));
-    dst->g = vorrq(dst->g, vshrq(dst->g, 6));
-    dst->b = vshlq_n(lower, 3);
-    dst->b = vorrq(dst->b, vshrq(dst->b, 5));
-}
-
-/**
- * Store 16 ARGB8888 pixels without alpha channel
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- */
-INLINE void aipl_mve_store_argb8888_16px(uint8_t* dst,
-                                         const aipl_mve_rgb_x16_t* src,
-                                         mve_pred16_t pred)
-{
-    vstrbq_scatter_offset_p(dst + 3, AIPL_4_BYTE_OFFSETS_U8, vdupq_n_u8(0xff), pred);
-    vstrbq_scatter_offset_p(dst + 2, AIPL_4_BYTE_OFFSETS_U8, src->r, pred);
-    vstrbq_scatter_offset_p(dst + 1, AIPL_4_BYTE_OFFSETS_U8, src->g, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_4_BYTE_OFFSETS_U8, src->b, pred);
-}
-
-/**
- * Store 16 ARGB4444 pixels without alpha channel
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- */
-INLINE void aipl_mve_store_argb4444_16px(uint8_t* dst,
-                                         const aipl_mve_rgb_x16_t* src,
-                                         mve_pred16_t pred)
-{
-    uint8x16_t ar = vsriq(vdupq_n_u8(0xf0), src->r, 4);
-    uint8x16_t gb = vsriq(src->g, src->b, 4);
-
-    vstrbq_scatter_offset_p(dst + 1, AIPL_2_BYTE_OFFSETS_U8, ar, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_2_BYTE_OFFSETS_U8, gb, pred);
-}
-
-/**
- * Store 16 ARGB1555 pixels without alpha channel
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- */
-INLINE void aipl_mve_store_argb1555_16px(uint8_t* dst,
-                                         const aipl_mve_rgb_x16_t* src,
-                                         mve_pred16_t pred)
-{
-    uint8x16_t upper = vsriq(vdupq_n_u8(0x80), src->r, 1);
-    upper = vsriq(upper, src->g, 6);
-    uint8x16_t lower = vshlq_n(src->g, 2);
-    lower = vsriq(lower, src->b, 3);
-
-    vstrbq_scatter_offset_p(dst + 1, AIPL_2_BYTE_OFFSETS_U8, upper, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_2_BYTE_OFFSETS_U8, lower, pred);
-}
-
-/**
- * Store 16 RGBA8888 pixels without alpha channel
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- */
-INLINE void aipl_mve_store_rgba8888_16px(uint8_t* dst,
-                                         const aipl_mve_rgb_x16_t* src,
-                                         mve_pred16_t pred)
-{
-    vstrbq_scatter_offset_p(dst + 3, AIPL_4_BYTE_OFFSETS_U8, src->r, pred);
-    vstrbq_scatter_offset_p(dst + 2, AIPL_4_BYTE_OFFSETS_U8, src->g, pred);
-    vstrbq_scatter_offset_p(dst + 1, AIPL_4_BYTE_OFFSETS_U8, src->b, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_4_BYTE_OFFSETS_U8, vdupq_n_u8(0xff), pred);
-}
-
-/**
- * Store 16 RGBA4444 pixels without alpha channel
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- */
-INLINE void aipl_mve_store_rgba4444_16px(uint8_t* dst,
-                                         const aipl_mve_rgb_x16_t* src,
-                                         mve_pred16_t pred)
-{
-    uint8x16_t rg = vsriq(src->r, src->g, 4);
-    uint8x16_t ba = vsriq(src->b, vdupq_n_u8(0xff), 4);
-
-    vstrbq_scatter_offset_p(dst + 1, AIPL_2_BYTE_OFFSETS_U8, rg, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_2_BYTE_OFFSETS_U8, ba, pred);
-}
-
-/**
- * Store 16 RGBA5551 pixels without alpha channel
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- */
-INLINE void aipl_mve_store_rgba5551_16px(uint8_t* dst,
-                                         const aipl_mve_rgb_x16_t* src,
-                                         mve_pred16_t pred)
-{
-    uint8x16_t upper = vsriq(src->r, src->g, 5);
-    uint8x16_t lower = vshlq_n(src->g, 3);
-    lower = vsriq(lower, src->b, 2);
-    lower = vorrq(lower, vdupq_n_u8(0x01));
-
-    vstrbq_scatter_offset_p(dst + 1, AIPL_2_BYTE_OFFSETS_U8, upper, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_2_BYTE_OFFSETS_U8, lower, pred);
-}
-
-/**
- * Store 8 ARGB8888 pixels with alpha channel
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- */
-INLINE void aipl_mve_storea_argb8888_8px(uint8_t* dst,
-                                         const aipl_mve_argb_x8_t* src,
-                                         mve_pred16_t pred)
-{
-    vstrbq_scatter_offset_p(dst + 3, AIPL_4_BYTE_OFFSETS_U16, src->a, pred);
-    vstrbq_scatter_offset_p(dst + 2, AIPL_4_BYTE_OFFSETS_U16, src->r, pred);
-    vstrbq_scatter_offset_p(dst + 1, AIPL_4_BYTE_OFFSETS_U16, src->g, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_4_BYTE_OFFSETS_U16, src->b, pred);
-}
-
-/**
- * Store 16 ARGB8888 pixels with alpha channel
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- */
-INLINE void aipl_mve_storea_argb8888_16px(uint8_t* dst,
-                                          const aipl_mve_argb_x16_t* src,
-                                          mve_pred16_t pred)
-{
-    vstrbq_scatter_offset_p(dst + 3, AIPL_4_BYTE_OFFSETS_U8, src->a, pred);
-    vstrbq_scatter_offset_p(dst + 2, AIPL_4_BYTE_OFFSETS_U8, src->r, pred);
-    vstrbq_scatter_offset_p(dst + 1, AIPL_4_BYTE_OFFSETS_U8, src->g, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_4_BYTE_OFFSETS_U8, src->b, pred);
-}
-
-/**
- * Store 8 ARGB4444 pixels with alpha channel
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- */
-INLINE void aipl_mve_storea_argb4444_8px(uint16_t* dst,
-                                         const aipl_mve_argb_x8_t* src,
-                                         mve_pred16_t pred)
-{
-    uint8x16_t ar = vreinterpretq_u8(src->a);
-    ar = vsriq(ar, vreinterpretq_u8(src->r), 4);
-    uint8x16_t gb = vreinterpretq_u8(src->g);
-    gb = vsriq(gb, vreinterpretq_u8(src->b), 4);
-    uint16x8_t pix = vreinterpretq_u16(vmovntq(gb, vreinterpretq_u16(ar)));
-
-    vst1q_p(dst, pix, pred);
-}
-
-/**
- * Store 16 ARGB4444 pixels with alpha channel
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- */
-INLINE void aipl_mve_storea_argb4444_16px(uint8_t* dst,
-                                          const aipl_mve_argb_x16_t* src,
-                                          mve_pred16_t pred)
-{
-    uint8x16_t ar = vsriq(src->a, src->r, 4);
-    uint8x16_t gb = vsriq(src->g, src->b, 4);
-
-    vstrbq_scatter_offset_p(dst + 1, AIPL_2_BYTE_OFFSETS_U8, ar, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_2_BYTE_OFFSETS_U8, gb, pred);
-}
-
-/**
- * Store 16 ARGB1555 pixels with alpha channel
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- */
-INLINE void aipl_mve_storea_argb1555_16px(uint8_t* dst,
-                                          const aipl_mve_argb_x16_t* src,
-                                          mve_pred16_t pred)
-{
-    uint8x16_t upper = vsriq(src->a, src->r, 1);
-    upper = vsriq(upper, src->g, 6);
-    uint8x16_t lower = vshlq_n(src->g, 2);
-    lower = vsriq(lower, src->b, 3);
-
-    vstrbq_scatter_offset_p(dst + 1, AIPL_2_BYTE_OFFSETS_U8, upper, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_2_BYTE_OFFSETS_U8, lower, pred);
-}
-
-/**
- * Store 8 RGBA8888 pixels with alpha channel
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- */
-INLINE void aipl_mve_storea_rgba8888_8px(uint8_t* dst,
-                                         const aipl_mve_argb_x8_t* src,
-                                         mve_pred16_t pred)
-{
-    vstrbq_scatter_offset_p(dst + 3, AIPL_4_BYTE_OFFSETS_U16, src->r, pred);
-    vstrbq_scatter_offset_p(dst + 2, AIPL_4_BYTE_OFFSETS_U16, src->g, pred);
-    vstrbq_scatter_offset_p(dst + 1, AIPL_4_BYTE_OFFSETS_U16, src->b, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_4_BYTE_OFFSETS_U16, src->a, pred);
-}
-
-/**
- * Store 16 RGBA8888 pixels with alpha channel
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- */
-INLINE void aipl_mve_storea_rgba8888_16px(uint8_t* dst,
-                                          const aipl_mve_argb_x16_t* src,
-                                          mve_pred16_t pred)
-{
-    vstrbq_scatter_offset_p(dst + 3, AIPL_4_BYTE_OFFSETS_U8, src->r, pred);
-    vstrbq_scatter_offset_p(dst + 2, AIPL_4_BYTE_OFFSETS_U8, src->g, pred);
-    vstrbq_scatter_offset_p(dst + 1, AIPL_4_BYTE_OFFSETS_U8, src->b, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_4_BYTE_OFFSETS_U8, src->a, pred);
-}
-
-/**
- * Store 8 RGBA4444 pixels with alpha channel
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- */
-INLINE void aipl_mve_storea_rgba4444_8px(uint16_t* dst,
-                                         const aipl_mve_argb_x8_t* src,
-                                         mve_pred16_t pred)
-{
-    uint8x16_t rg = vreinterpretq_u8(src->r);
-    rg = vsriq(rg, vreinterpretq_u8(src->g), 4);
-    uint8x16_t ba = vreinterpretq_u8(src->b);
-    ba = vsriq(ba, vreinterpretq_u8(src->a), 4);
-    uint16x8_t pix = vreinterpretq_u16(vmovntq(ba, vreinterpretq_u16(rg)));
-
-    vst1q_p(dst, pix, pred);
-}
-
-/**
- * Store 16 RGBA4444 pixels with alpha channel
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- */
-INLINE void aipl_mve_storea_rgba4444_16px(uint8_t* dst,
-                                          const aipl_mve_argb_x16_t* src,
-                                          mve_pred16_t pred)
-{
-    uint8x16_t rg = vsriq(src->r, src->g, 4);
-    uint8x16_t ba = vsriq(src->b, src->a, 4);
-
-    vstrbq_scatter_offset_p(dst + 1, AIPL_2_BYTE_OFFSETS_U8, rg, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_2_BYTE_OFFSETS_U8, ba, pred);
-}
-
-/**
- * Store 16 RGBA5551 pixels with alpha channel
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- */
-INLINE void aipl_mve_storea_rgba5551_16px(uint8_t* dst,
-                                          const aipl_mve_argb_x16_t* src,
-                                          mve_pred16_t pred)
-{
-    uint8x16_t upper = vsriq(src->r, src->g, 5);
-    uint8x16_t lower = vshlq_n(src->g, 3);
-    lower = vsriq(lower, src->b, 2);
-    lower = vsriq(lower, src->a, 7);
-
-    vstrbq_scatter_offset_p(dst + 1, AIPL_2_BYTE_OFFSETS_U8, upper, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_2_BYTE_OFFSETS_U8, lower, pred);
-}
-
-/**
- * Store 16 24bit pixels from RGB struct
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- * @param r_offset  red channel offset
- * @param g_offset  green channel offset
- * @param b_offset  blue channel offset
-
- */
-INLINE void aipl_mve_store_24bit_16px(uint8_t* dst,
-                                      const aipl_mve_rgb_x16_t* src,
-                                      mve_pred16_t pred,
-                                      uint8_t r_offset,
-                                      uint8_t g_offset,
-                                      uint8_t b_offset)
-{
-    vstrbq_scatter_offset_p(dst + r_offset, AIPL_3_BYTE_OFFSETS_U8, src->r, pred);
-    vstrbq_scatter_offset_p(dst + g_offset, AIPL_3_BYTE_OFFSETS_U8, src->g, pred);
-    vstrbq_scatter_offset_p(dst + b_offset, AIPL_3_BYTE_OFFSETS_U8, src->b, pred);
-}
-
-/**
- * Store 16 RGB565 pixels from RGB struct
- *
- * @param dst   first destination pixel pointer
- * @param src   source struct pointer
- * @param pred  store predicate
- */
-INLINE void aipl_mve_store_rgb565_16px(uint8_t* dst,
-                                       const aipl_mve_rgb_x16_t* src,
-                                       mve_pred16_t pred)
-{
-    uint8x16_t upper = vsriq(src->r, src->g, 5);
-    uint8x16_t lower = vshlq_n(src->g, 3);
-    lower = vsriq(lower, src->b, 3);
-
-    vstrbq_scatter_offset_p(dst + 1, AIPL_2_BYTE_OFFSETS_U8, upper, pred);
-    vstrbq_scatter_offset_p(dst, AIPL_2_BYTE_OFFSETS_U8, lower, pred);
-}
-
-/**
- * Calculate Y channel for 8 pixels from ARGB struct
- *
- * @param y     Y channel struct pointer
- * @param pix   pixels struct pointer
- */
-INLINE void aipl_mve_calculate_y_argb_x8(uint16x8_t* y,
-                                         const aipl_mve_argb_x8_t* pix)
-{
-    *y = vmulq(pix->r, 66);
-    *y = vmlaq(*y, pix->g, 129);
-    *y = vmlaq(*y, pix->b, 25);
-
-    *y = vshrq(vaddq(*y, 128), 8);
-    *y = vaddq(*y, 16);
-}
-
-/**
- * Calculate Y channel for 8 pixels from RGB struct
- *
- * @param y     Y channel struct pointer
- * @param pix   pixels struct pointer
- */
-INLINE void aipl_mve_calculate_y_rgb_x8(uint16x8_t* y,
-                                        const aipl_mve_rgb_x8_t* pix)
-{
-    *y = vmulq(pix->r, 66);
-    *y = vmlaq(*y, pix->g, 129);
-    *y = vmlaq(*y, pix->b, 25);
-
-    *y = vshrq(vaddq(*y, 128), 8);
-    *y = vaddq(*y, 16);
-}
-
-/**
- * Calculate U channel for 8 pixels from RGB struct
- *
- * @param u     U channel struct pointer
- * @param pix   pixels struct pointer
- */
-INLINE void aipl_mve_calculate_u_rgb_x8(uint16x8_t* u,
-                                        const aipl_mve_rgb_x8_t* pix)
-{
-    *u = vmulq(pix->r, -38);
-    *u = vmlaq(*u, pix->g, -74);
-    *u = vmlaq(*u, pix->b, 112);
-
-    *u = vshrq(vaddq(*u, 128), 8);
-    *u = vaddq(*u, 128);
-}
-
-/**
- * Calculate V channel for 8 pixels from RGB struct
- *
- * @param v     V channel struct pointer
- * @param pix   pixels struct pointer
- */
-INLINE void aipl_mve_calculate_v_rgb_x8(uint16x8_t* v,
-                                        const aipl_mve_rgb_x8_t* pix)
-{
-    *v = vmulq(pix->r, 112);
-    *v = vmlaq(*v, pix->g, -94);
-    *v = vmlaq(*v, pix->b, -18);
-
-    *v = vshrq(vaddq(*v, 128), 8);
-    *v = vaddq(*v, 128);
-}
-
-/**
- * Convert 16 alpha channel values to RGB pixels
- *
- * @param pix   RGB struct pointer
- * @param alpha Y channel values pointer
- */
-INLINE void aipl_mve_convert_alpha_to_rgb_x16(aipl_mve_rgb_x16_t* pix,
-                                              const uint8x16_t* alpha)
-{
-    pix->r = *alpha;
-    pix->g = *alpha;
-    pix->b = *alpha;
 }
 
 /**

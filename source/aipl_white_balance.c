@@ -131,11 +131,11 @@ aipl_error_t aipl_white_balance_argb8888(const void* input, void* output,
             mve_pred16_t tail_p = vctp16q(cnt);
 
             aipl_mve_argb_x8_t pix;
-            aipl_mve_loada_argb8888_8px(&pix, src, tail_p);
+            aipl_mve_ldr_8px_argb8888(&pix, src, tail_p);
 
             aipl_mve_white_balance_argb_x8(&pix, ar, ag, ab);
 
-            aipl_mve_storea_argb8888_8px(dst, &pix, tail_p);
+            aipl_mve_str_8px_argb8888(dst, pix, tail_p);
 
             src += 32;
             dst += 32;
@@ -192,11 +192,11 @@ aipl_error_t aipl_white_balance_argb4444(const void* input, void* output,
             mve_pred16_t tail_p = vctp16q(cnt);
 
             aipl_mve_argb_x8_t pix;
-            aipl_mve_loada_argb4444_8px(&pix, (uint8_t*)src, tail_p);
+            aipl_mve_ldr_8px_extend_argb4444(&pix, src, tail_p);
 
             aipl_mve_white_balance_argb_x8(&pix, ar, ag, ab);
 
-            aipl_mve_storea_argb4444_8px(dst, &pix, tail_p);
+            aipl_mve_str_8px_extended_argb4444(dst, pix, tail_p);
 
             src += 8;
             dst += 8;
@@ -257,11 +257,11 @@ aipl_error_t aipl_white_balance_argb1555(const void* input, void* output,
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_argb_x16_t pix;
-            aipl_mve_loada_argb1555_16px(&pix, (uint8_t*)src, tail_p);
+            aipl_mve_ldr_16px_argb1555(&pix, src, tail_p);
 
             aipl_mve_white_balance_argb_x16(&pix, ar, ag, ab);
 
-            aipl_mve_storea_argb1555_16px((uint8_t*)dst, &pix, tail_p);
+            aipl_mve_str_16px_argb1555(dst, pix, tail_p);
 
             src += 16;
             dst += 16;
@@ -321,11 +321,11 @@ aipl_error_t aipl_white_balance_rgba8888(const void* input, void* output,
             mve_pred16_t tail_p = vctp16q(cnt);
 
             aipl_mve_argb_x8_t pix;
-            aipl_mve_loada_rgba8888_8px(&pix, src, tail_p);
+            aipl_mve_ldr_8px_rgba8888(&pix, src, tail_p);
 
             aipl_mve_white_balance_argb_x8(&pix, ar, ag, ab);
 
-            aipl_mve_storea_rgba8888_8px(dst, &pix, tail_p);
+            aipl_mve_str_8px_rgba8888(dst, pix, tail_p);
 
             src += 32;
             dst += 32;
@@ -382,11 +382,11 @@ aipl_error_t aipl_white_balance_rgba4444(const void* input, void* output,
             mve_pred16_t tail_p = vctp16q(cnt);
 
             aipl_mve_argb_x8_t pix;
-            aipl_mve_loada_rgba4444_8px(&pix, (uint8_t*)src, tail_p);
+            aipl_mve_ldr_8px_extend_rgba4444(&pix, src, tail_p);
 
             aipl_mve_white_balance_argb_x8(&pix, ar, ag, ab);
 
-            aipl_mve_storea_rgba4444_8px(dst, &pix, tail_p);
+            aipl_mve_str_8px_extended_rgba4444(dst, pix, tail_p);
 
             src += 8;
             dst += 8;
@@ -447,11 +447,11 @@ aipl_error_t aipl_white_balance_rgba5551(const void* input, void* output,
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_argb_x16_t pix;
-            aipl_mve_loada_rgba5551_16px(&pix, (uint8_t*)src, tail_p);
+            aipl_mve_ldr_16px_rgba5551(&pix, src, tail_p);
 
             aipl_mve_white_balance_argb_x16(&pix, ar, ag, ab);
 
-            aipl_mve_storea_rgba5551_16px((uint8_t*)dst, &pix, tail_p);
+            aipl_mve_str_16px_rgba5551(dst, pix, tail_p);
 
             src += 16;
             dst += 16;
@@ -534,11 +534,11 @@ aipl_error_t aipl_white_balance_rgb565(const void* input, void* output,
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_rgb_x16_t pix;
-            aipl_mve_load_rgb565_16px(&pix, (uint8_t*)src, tail_p);
+            aipl_mve_ldr_16px_rgb565(&pix, src, tail_p);
 
             aipl_mve_white_balance_rgb_x16(&pix, ar, ag, ab);
 
-            aipl_mve_store_rgb565_16px((uint8_t*)dst, &pix, tail_p);
+            aipl_mve_str_16px_rgb565(dst, pix, tail_p);
 
             src += 16;
             dst += 16;
@@ -605,13 +605,13 @@ aipl_error_t aipl_white_balance_24bit(const void* input, void* output,
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_rgb_x16_t pix;
-            aipl_mve_load_24bit_16px(&pix, src, tail_p,
-                                     r_offset, g_offset, b_offset);
+            aipl_mve_ldr_16px_rgb(&pix, src, tail_p,
+                                  r_offset, g_offset, b_offset);
 
             aipl_mve_white_balance_rgb_x16(&pix, ar, ag, ab);
 
-            aipl_mve_store_24bit_16px(dst, &pix, tail_p,
-                                      r_offset, g_offset, b_offset);
+            aipl_mve_str_16px_rgb(dst, pix, tail_p,
+                                  r_offset, g_offset, b_offset);
 
             src += 48;
             dst += 48;
