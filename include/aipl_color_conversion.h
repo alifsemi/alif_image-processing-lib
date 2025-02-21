@@ -68,6 +68,330 @@ aipl_error_t aipl_color_convert(const void* input, void* output,
 aipl_error_t aipl_color_convert_img(const aipl_image_t* input,
                                     aipl_image_t* output);
 
+#if AIPL_CONVERT_ALPHA8_I400
+/**
+ * Convert ALPHA8 image to specified format
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @param format        desired color format
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8(const void* input, void* output,
+                                       uint32_t pitch,
+                                       uint32_t width, uint32_t height,
+                                       aipl_color_format_t format);
+
+/**
+ * Convert ALPHA8 image to I400
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_i400(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height);
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_ARGB8888)
+/**
+ * Convert ALPHA8 image to ARGB8888
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_argb8888(const void* input,
+                                                   void* output,
+                                                   uint32_t pitch,
+                                                   uint32_t width,
+                                                   uint32_t height);
+#endif
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_ARGB4444)
+/**
+ * Convert ALPHA8 image to ARGB4444
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_argb4444(const void* input,
+                                                   void* output,
+                                                   uint32_t pitch,
+                                                   uint32_t width,
+                                                   uint32_t height);
+#endif
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_ARGB1555)
+/**
+ * Convert ALPHA8 image to ARGB1555
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_argb1555(const void* input,
+                                                   void* output,
+                                                   uint32_t pitch,
+                                                   uint32_t width,
+                                                   uint32_t height);
+#endif
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_RGBA8888)
+/**
+ * Convert ALPHA8 image to RGBA8888
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_rgba8888(const void* input,
+                                                   void* output,
+                                                   uint32_t pitch,
+                                                   uint32_t width,
+                                                   uint32_t height);
+#endif
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_RGBA4444)
+/**
+ * Convert ALPHA8 image to RGBA4444
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_rgba4444(const void* input,
+                                                   void* output,
+                                                   uint32_t pitch,
+                                                   uint32_t width,
+                                                   uint32_t height);
+#endif
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_RGBA5551)
+/**
+ * Convert ALPHA8 image to RGBA5551
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_rgba5551(const void* input,
+                                                   void* output,
+                                                   uint32_t pitch,
+                                                   uint32_t width,
+                                                   uint32_t height);
+#endif
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_BGR888)
+/**
+ * Convert ALPHA8 image to BGR888
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_bgr888(const void* input,
+                                                 void* output,
+                                                 uint32_t pitch,
+                                                 uint32_t width,
+                                                 uint32_t height);
+#endif
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_RGB888)
+/**
+ * Convert ALPHA8 image to RGB888
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_rgb888(const void* input,
+                                                 void* output,
+                                                 uint32_t pitch,
+                                                 uint32_t width,
+                                                 uint32_t height);
+#endif
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_RGB565)
+/**
+ * Convert ALPHA8 image to RGB565
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_rgb565(const void* input,
+                                                 void* output,
+                                                 uint32_t pitch,
+                                                 uint32_t width,
+                                                 uint32_t height);
+#endif
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_YV12)
+/**
+ * Convert ALPHA8 image to YV12
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_yv12(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height);
+#endif
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_I420)
+/**
+ * Convert ALPHA8 image to I420
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_i420(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height);
+#endif
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_I422)
+/**
+ * Convert ALPHA8 image to I422
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_i422(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height);
+#endif
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_I444)
+/**
+ * Convert ALPHA8 image to I444
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_i444(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height);
+#endif
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_NV12)
+/**
+ * Convert ALPHA8 image to NV12
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_nv12(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height);
+#endif
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_NV21)
+/**
+ * Convert ALPHA8 image to NV21
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_nv21(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height);
+#endif
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_YUY2)
+/**
+ * Convert ALPHA8 image to YUY2
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_yuy2(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height);
+#endif
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_UYVY)
+/**
+ * Convert ALPHA8 image to UYVY
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_alpha8_to_uyvy(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height);
+#endif
+#endif
+
 #if AIPL_CONVERT_ARGB8888
 /**
  * Convert ARGB8888 image to specified format
