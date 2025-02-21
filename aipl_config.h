@@ -42,7 +42,7 @@ extern "C" {
  * The setting only takes effect if D/AVE2D acceleration is turned on
  *
  */
-#define AIPL_OPTIMIZE_CPU_LOAD
+// #define AIPL_OPTIMIZE_CPU_LOAD
 
 /**
  * Enable color format conversions
