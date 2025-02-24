@@ -1,7 +1,18 @@
-/**
- * @file aipl_color_correction.h
+/* Copyright (C) 2022-2024 Alif Semiconductor - All Rights Reserved.
+ * Use, distribution and modification of this code is permitted under the
+ * terms stated in the Alif Semiconductor Software License Agreement
+ *
+ * You should have received a copy of the Alif Semiconductor Software
+ * License Agreement with this file. If not, please write to:
+ * contact@alifsemi.com, or visit: https://alifsemi.com/license
  *
  */
+
+/******************************************************************************
+ * @file    aipl_color_correction.h
+ * @brief   Color correction functions definition
+ *
+******************************************************************************/
 
 #ifndef AIPL_COLOR_CORRECTION_H
 #define AIPL_COLOR_CORRECTION_H

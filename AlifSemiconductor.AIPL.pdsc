@@ -5,14 +5,13 @@
   <description>Alif Semiconductor image processing library that uses D/AVE2D and Helium acceleration</description>
   <url>https://github.com/alifsemi/alif_image-processing-lib/raw/main/</url>
   <supportContact>support@alifsemi.com</supportContact>
-  <!-- optional license file -->
-  <!--
-  <license>
-  </license>
-  -->
+  <license>License.txt</license>
 
   <releases>
-    <release version="1.0.0" tag="v1.0.0" url="https://github.com/alifsemi/alif_image-processing-lib/releases/download/v1.0.0/AlifSemiconductor.AlifImageProcessingLib.1.0.0.pack" date="2024-12-23">
+    <release version="1.0.1" tag="v1.0.1" url="https://github.com/alifsemi/alif_image-processing-lib/releases/download/v1.0.1/AlifSemiconductor.AIPL.1.0.1.pack" date="2025-02-17">
+      Fix the PDSC file schema check failure
+    </release>
+    <release version="1.0.0" tag="v1.0.0" url="https://github.com/alifsemi/alif_image-processing-lib/releases/download/v1.0.0/AlifSemiconductor.AIPL.1.0.0.pack" date="2024-12-23">
       Basic operations:
         * Crop
         * Flip
@@ -115,8 +114,11 @@
       </RTE_Components_h>
     </component>
 
-    <component Cclass="Graphics" Cgroup="Acceleration" Csub="Helium" Cversion="1.0.0">
+    <component Cclass="Graphics" Cgroup="Acceleration" Csub="Helium" Cversion="1.0.1">
       <description>A hardware acceleration from ARM Helium</description>
+      <files>
+        <file category="include"  name="include/"/>
+      </files>
 
       <RTE_Components_h>
 
@@ -192,7 +194,7 @@
           * YUY2
           * UYVY
       </description>
-            <files>
+      <files>
         <!-- include folder / device header file -->
         <file category="include"  name="include/"/>
         <!-- include headers -->

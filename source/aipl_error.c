@@ -1,7 +1,18 @@
-/**
- * @file aipl_error.c
+/* Copyright (C) 2022-2024 Alif Semiconductor - All Rights Reserved.
+ * Use, distribution and modification of this code is permitted under the
+ * terms stated in the Alif Semiconductor Software License Agreement
+ *
+ * You should have received a copy of the Alif Semiconductor Software
+ * License Agreement with this file. If not, please write to:
+ * contact@alifsemi.com, or visit: https://alifsemi.com/license
  *
  */
+
+/******************************************************************************
+ * @file    aipl_error.c
+ * @brief   Error utils implementation
+ *
+******************************************************************************/
 
 /*********************
  *      INCLUDES
@@ -55,6 +66,8 @@ const char* aipl_error_str(aipl_error_t error)
         return "AIPL_ERR_BAYER_INVALID_METHOD";
     case AIPL_ERR_BAYER_INVALID_FILTER:
         return "AIPL_ERR_BAYER_INVALID_FILTER";
+    case AIPL_ERR_NOT_SUPPORTED:
+        return "AIPL_ERR_NOT_SUPPORTED";
 
     default:
         return "AIPL_ERR_UNKNOWN";
