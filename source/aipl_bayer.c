@@ -342,7 +342,7 @@ aipl_error_t aipl_bayer_decoding_nearest_bgr888(
             rgb[-blue] = bayer[bayer_step + 1];
             rgb[0] = bayer[1];
             rgb[blue] = bayer[0];
-            
+
             bayer++;
             rgb += rgb_bytes;
         }
@@ -436,7 +436,7 @@ aipl_error_t aipl_bayer_decoding_nearest_rgb888(
             rgb[-blue] = bayer[0];
             rgb[0] = bayer[1];
             rgb[blue] = bayer[bayer_step + 1];
-            
+
             bayer++;
             rgb += rgb_bytes;
         }
@@ -754,7 +754,7 @@ aipl_error_t aipl_bayer_decoding_simple_bgr888(
             rgb[-blue] = bayer[bayer_step + 1];
             rgb[0] = (bayer[1] + bayer[bayer_step] + 1) >> 1;
             rgb[blue] = bayer[0];
-            
+
             bayer++;
             rgb += rgb_bytes;
         }
@@ -850,7 +850,7 @@ aipl_error_t aipl_bayer_decoding_simple_rgb888(
             rgb[-blue] = bayer[0];
             rgb[0] = (bayer[1] + bayer[bayer_step] + 1) >> 1;
             rgb[blue] = bayer[bayer_step + 1];
-            
+
             bayer++;
             rgb += rgb_bytes;
         }
@@ -1028,11 +1028,11 @@ aipl_error_t aipl_bayer_decoding_linear_rgb565(
             uint8x16_t tmp3 = vrhaddq_x(gb1.val[0], rg1.val[1], p);
             uint8x16_t g0 = vrhaddq_x(tmp2, tmp3, p);
 
-            uint8x16_t b0 = gb0.val[1];            
-            
+            uint8x16_t b0 = gb0.val[1];
+
             uint8x16_t upper;
             uint8x16_t lower;
-                        
+
             lower = vshlq_n(g0, 3);
             if (blue > 0) {
                  lower = vsriq(lower, b0, 3);
@@ -1043,10 +1043,10 @@ aipl_error_t aipl_bayer_decoding_linear_rgb565(
             }
             vstrbq_scatter_offset_p(rgb, inc, lower, p);
             vstrbq_scatter_offset_p(rgb + 1, inc, upper, p);
-                        
+
             uint8x16_t r1 = vrhaddq_x(gr0.val[1], gr1.val[1], p);
             uint8x16_t g1 = gb1.val[0];
-            uint8x16_t b1 = vrhaddq_x(gb0.val[1], gb1.val[1], p);            
+            uint8x16_t b1 = vrhaddq_x(gb0.val[1], gb1.val[1], p);
 
             lower = vshlq_n(g1, 3);
             if (blue > 0) {
@@ -1145,7 +1145,7 @@ aipl_error_t aipl_bayer_decoding_linear_bgr888(
             uint8x16x2_t rg1 = vld2q(bayer + bayer_step*2);
             uint8x16x2_t gr1 = vld2q(bayer + bayer_step*2 + 1);
 
-            uint8x16_t b0 = gb0.val[1];            
+            uint8x16_t b0 = gb0.val[1];
             vstrbq_scatter_offset_p(rgb - blue, inc, b0, p);
 
             uint8x16_t tmp2 = vrhaddq_x(rg0.val[1], gb0.val[0], p);
@@ -1157,8 +1157,8 @@ aipl_error_t aipl_bayer_decoding_linear_bgr888(
             uint8x16_t tmp1 = vrhaddq_x(rg1.val[0], gr1.val[1], p);
             uint8x16_t r0 = vrhaddq_x(tmp0, tmp1, p);
             vstrbq_scatter_offset_p(rgb + blue, inc, r0, p);
-            
-            uint8x16_t b1 = vrhaddq_x(gb0.val[1], gb1.val[1], p);            
+
+            uint8x16_t b1 = vrhaddq_x(gb0.val[1], gb1.val[1], p);
             vstrbq_scatter_offset_p(rgb + rgb_bytes - blue, inc, b1, p);
 
             uint8x16_t g1 = gb1.val[0];
@@ -1166,7 +1166,7 @@ aipl_error_t aipl_bayer_decoding_linear_bgr888(
 
             uint8x16_t r1 = vrhaddq_x(gr0.val[1], gr1.val[1], p);
             vstrbq_scatter_offset_p(rgb + rgb_bytes + blue, inc, r1, p);
-            
+
             bayer += 16 * 2;
             rgb += 16 * 2*rgb_bytes;
             pairs_to_go -= 16;
@@ -1184,7 +1184,7 @@ aipl_error_t aipl_bayer_decoding_linear_bgr888(
             rgb[-blue] = bayer[bayer_step + 1];
             rgb[0] = (uint8_t) t1;
             rgb[blue] = (uint8_t) t0;
-            
+
             bayer++;
             rgb += rgb_bytes;
         }
@@ -1259,18 +1259,18 @@ aipl_error_t aipl_bayer_decoding_linear_rgb888(
             uint8x16_t g0 = vrhaddq_x(tmp2, tmp3, p);
             vstrbq_scatter_offset_p(rgb, inc, g0, p);
 
-            uint8x16_t b0 = gb0.val[1];            
+            uint8x16_t b0 = gb0.val[1];
             vstrbq_scatter_offset_p(rgb + blue, inc, b0, p);
-            
+
             uint8x16_t r1 = vrhaddq_x(gr0.val[1], gr1.val[1], p);
             vstrbq_scatter_offset_p(rgb + rgb_bytes - blue, inc, r1, p);
 
             uint8x16_t g1 = gb1.val[0];
             vstrbq_scatter_offset_p(rgb + rgb_bytes, inc, g1, p);
 
-            uint8x16_t b1 = vrhaddq_x(gb0.val[1], gb1.val[1], p);            
+            uint8x16_t b1 = vrhaddq_x(gb0.val[1], gb1.val[1], p);
             vstrbq_scatter_offset_p(rgb + rgb_bytes + blue, inc, b1, p);
-            
+
             bayer += 16 * 2;
             rgb += 16 * 2*rgb_bytes;
             pairs_to_go -= 16;
@@ -1288,7 +1288,7 @@ aipl_error_t aipl_bayer_decoding_linear_rgb888(
             rgb[-blue] = (uint8_t) t0;
             rgb[0] = (uint8_t) t1;
             rgb[blue] = bayer[bayer_step + 1];
-            
+
             bayer++;
             rgb += rgb_bytes;
         }
@@ -1355,14 +1355,14 @@ aipl_error_t aipl_bayer_decoding_linear_argb8888(
             uint8x16x2_t gr1 = vld2q(bayer + bayer_step*2 + 1);
             uint8x16_t a = vcreateq_u8(0xffffffffffffffff, 0xffffffffffffffff);
 
-            uint8x16_t b0 = gb0.val[1];            
+            uint8x16_t b0 = gb0.val[1];
             vstrbq_scatter_offset_p(rgb - blue, inc, b0, p);
 
             uint8x16_t tmp2 = vrhaddq_x(rg0.val[1], gb0.val[0], p);
             uint8x16_t tmp3 = vrhaddq_x(gb1.val[0], rg1.val[1], p);
             uint8x16_t g0 = vrhaddq_x(tmp2, tmp3, p);
             vstrbq_scatter_offset_p(rgb, inc, g0, p);
-            
+
             uint8x16_t tmp0 = vrhaddq_x(rg0.val[0], gr0.val[1], p);
             uint8x16_t tmp1 = vrhaddq_x(rg1.val[0], gr1.val[1], p);
             uint8x16_t r0 = vrhaddq_x(tmp0, tmp1, p);
@@ -1370,7 +1370,7 @@ aipl_error_t aipl_bayer_decoding_linear_argb8888(
 
             vstrbq_scatter_offset_p(rgb + 2, inc, a, p);
 
-            uint8x16_t b1 = vrhaddq_x(gb0.val[1], gb1.val[1], p);            
+            uint8x16_t b1 = vrhaddq_x(gb0.val[1], gb1.val[1], p);
             vstrbq_scatter_offset_p(rgb + rgb_bytes - blue, inc, b1, p);
 
             uint8x16_t g1 = gb1.val[0];
@@ -1380,7 +1380,7 @@ aipl_error_t aipl_bayer_decoding_linear_argb8888(
             vstrbq_scatter_offset_p(rgb + rgb_bytes + blue, inc, r1, p);
 
             vstrbq_scatter_offset_p(rgb + rgb_bytes + 2, inc, a, p);
-            
+
             bayer += 16 * 2;
             rgb += 16 * 2*rgb_bytes;
             pairs_to_go -= 16;
@@ -1399,7 +1399,7 @@ aipl_error_t aipl_bayer_decoding_linear_argb8888(
             rgb[0] = (uint8_t) t1;
             rgb[blue] = (uint8_t) t0;
             rgb[2] = 0xff;
-            
+
             bayer++;
             rgb += rgb_bytes;
         }

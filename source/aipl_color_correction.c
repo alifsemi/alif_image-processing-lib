@@ -24,9 +24,8 @@
 #include "aipl_config.h"
 #ifdef AIPL_HELIUM_ACCELERATION
 #include "aipl_mve_utils.h"
-#else
-#include "aipl_utils.h"
 #endif
+#include "aipl_utils.h"
 
 /*********************
  *      DEFINES
@@ -131,24 +130,22 @@ aipl_error_t aipl_color_correction_argb8888(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint8_t* src = src_ptr + (i * pitch) * 4;
-        uint8_t* dst = dst_ptr + (i * pitch) * 4;
+        uint8_t* dst = dst_ptr + (i * width) * 4;
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_argb_x16_t pix;
-            aipl_mve_loada_argb8888_16px(&pix, src, tail_p);
+            aipl_mve_ldr_16px_argb8888(&pix, src, tail_p);
 
             aipl_mve_color_correction_argb_x16(&pix, ccm);
 
-            aipl_mve_storea_argb8888_16px(dst, &pix, tail_p);
+            aipl_mve_str_16px_argb8888(dst, pix, tail_p);
 
             src += 64;
             dst += 64;
-            cnt -= 16;
         }
     }
 #else
@@ -158,7 +155,7 @@ aipl_error_t aipl_color_correction_argb8888(const void* input, void* output,
     for (uint32_t i = 0; i < height; ++i)
     {
         const aipl_argb8888_px_t* src = src_ptr + (i * pitch);
-        aipl_argb8888_px_t* dst = dst_ptr + (i * pitch);
+        aipl_argb8888_px_t* dst = dst_ptr + (i * width);
 
         for (uint32_t j = 0; j < width; ++j)
         {
@@ -194,24 +191,22 @@ aipl_error_t aipl_color_correction_argb4444(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint16_t* src = src_ptr + (i * pitch);
-        uint16_t* dst = dst_ptr + (i * pitch);
+        uint16_t* dst = dst_ptr + (i * width);
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_argb_x16_t pix;
-            aipl_mve_loada_argb4444_16px(&pix, (uint8_t*)src, tail_p);
+            aipl_mve_ldr_16px_argb4444(&pix, src, tail_p);
 
             aipl_mve_color_correction_argb_x16(&pix, ccm);
 
-            aipl_mve_storea_argb4444_16px((uint8_t*)dst, &pix, tail_p);
+            aipl_mve_str_16px_extended_argb4444(dst, pix, tail_p);
 
             src += 16;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -221,12 +216,12 @@ aipl_error_t aipl_color_correction_argb4444(const void* input, void* output,
     for (uint32_t i = 0; i < height; ++i)
     {
         const aipl_argb4444_px_t* src = src_ptr + (i * pitch);
-        aipl_argb4444_px_t* dst = dst_ptr + (i * pitch);
+        aipl_argb4444_px_t* dst = dst_ptr + (i * width);
 
         for (uint32_t j = 0; j < width; ++j)
         {
             aipl_argb8888_px_t px;
-            aipl_loada_argb4444_px(&px, src);
+            aipl_cnvt_px_argb4444_to_argb8888(&px, src);
 
             int16_t r = px.r * ccm[0] + px.g * ccm[1] + px.b * ccm[2];
             int16_t g = px.r * ccm[3] + px.g * ccm[4] + px.b * ccm[5];
@@ -236,7 +231,7 @@ aipl_error_t aipl_color_correction_argb4444(const void* input, void* output,
             px.g = aipl_channel_cap(g);
             px.b = aipl_channel_cap(b);
 
-            aipl_packa_argb4444_px(dst, &px);
+            aipl_cnvt_px_argb8888_to_argb4444(dst, &px);
 
             ++src;
             ++dst;
@@ -261,24 +256,22 @@ aipl_error_t aipl_color_correction_argb1555(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint16_t* src = src_ptr + (i * pitch);
-        uint16_t* dst = dst_ptr + (i * pitch);
+        uint16_t* dst = dst_ptr + (i * width);
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_argb_x16_t pix;
-            aipl_mve_loada_argb1555_16px(&pix, (uint8_t*)src, tail_p);
+            aipl_mve_ldr_16px_argb1555(&pix, src, tail_p);
 
             aipl_mve_color_correction_argb_x16(&pix, ccm);
 
-            aipl_mve_storea_argb1555_16px((uint8_t*)dst, &pix, tail_p);
+            aipl_mve_str_16px_argb1555(dst, pix, tail_p);
 
             src += 16;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -288,12 +281,12 @@ aipl_error_t aipl_color_correction_argb1555(const void* input, void* output,
     for (uint32_t i = 0; i < height; ++i)
     {
         const aipl_argb1555_px_t* src = src_ptr + (i * pitch);
-        aipl_argb1555_px_t* dst = dst_ptr + (i * pitch);
+        aipl_argb1555_px_t* dst = dst_ptr + (i * width);
 
         for (uint32_t j = 0; j < width; ++j)
         {
             aipl_argb8888_px_t px;
-            aipl_loada_argb1555_px(&px, src);
+            aipl_cnvt_px_argb1555_to_argb8888(&px, src);
 
             int16_t r = px.r * ccm[0] + px.g * ccm[1] + px.b * ccm[2];
             int16_t g = px.r * ccm[3] + px.g * ccm[4] + px.b * ccm[5];
@@ -303,7 +296,7 @@ aipl_error_t aipl_color_correction_argb1555(const void* input, void* output,
             px.g = aipl_channel_cap(g);
             px.b = aipl_channel_cap(b);
 
-            aipl_packa_argb1555_px(dst, &px);
+            aipl_cnvt_px_argb8888_to_argb1555(dst, &px);
 
             ++src;
             ++dst;
@@ -328,24 +321,22 @@ aipl_error_t aipl_color_correction_rgba8888(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint8_t* src = src_ptr + (i * pitch) * 4;
-        uint8_t* dst = dst_ptr + (i * pitch) * 4;
+        uint8_t* dst = dst_ptr + (i * width) * 4;
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_argb_x16_t pix;
-            aipl_mve_loada_rgba8888_16px(&pix, src, tail_p);
+            aipl_mve_ldr_16px_rgba8888(&pix, src, tail_p);
 
             aipl_mve_color_correction_argb_x16(&pix, ccm);
 
-            aipl_mve_storea_rgba8888_16px(dst, &pix, tail_p);
+            aipl_mve_str_16px_rgba8888(dst, pix, tail_p);
 
             src += 64;
             dst += 64;
-            cnt -= 16;
         }
     }
 #else
@@ -355,7 +346,7 @@ aipl_error_t aipl_color_correction_rgba8888(const void* input, void* output,
     for (uint32_t i = 0; i < height; ++i)
     {
         const aipl_rgba8888_px_t* src = src_ptr + (i * pitch);
-        aipl_rgba8888_px_t* dst = dst_ptr + (i * pitch);
+        aipl_rgba8888_px_t* dst = dst_ptr + (i * width);
 
         for (uint32_t j = 0; j < width; ++j)
         {
@@ -391,24 +382,22 @@ aipl_error_t aipl_color_correction_rgba4444(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint16_t* src = src_ptr + (i * pitch);
-        uint16_t* dst = dst_ptr + (i * pitch);
+        uint16_t* dst = dst_ptr + (i * width);
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_argb_x16_t pix;
-            aipl_mve_loada_rgba4444_16px(&pix, (uint8_t*)src, tail_p);
+            aipl_mve_ldr_16px_rgba4444(&pix, src, tail_p);
 
             aipl_mve_color_correction_argb_x16(&pix, ccm);
 
-            aipl_mve_storea_rgba4444_16px((uint8_t*)dst, &pix, tail_p);
+            aipl_mve_str_16px_rgba4444(dst, pix, tail_p);
 
             src += 16;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -418,12 +407,12 @@ aipl_error_t aipl_color_correction_rgba4444(const void* input, void* output,
     for (uint32_t i = 0; i < height; ++i)
     {
         const aipl_rgba4444_px_t* src = src_ptr + (i * pitch);
-        aipl_rgba4444_px_t* dst = dst_ptr + (i * pitch);
+        aipl_rgba4444_px_t* dst = dst_ptr + (i * width);
 
         for (uint32_t j = 0; j < width; ++j)
         {
             aipl_argb8888_px_t px;
-            aipl_loada_rgba4444_px(&px, src);
+            aipl_cnvt_px_rgba4444_to_argb8888(&px, src);
 
             int16_t r = px.r * ccm[0] + px.g * ccm[1] + px.b * ccm[2];
             int16_t g = px.r * ccm[3] + px.g * ccm[4] + px.b * ccm[5];
@@ -433,7 +422,7 @@ aipl_error_t aipl_color_correction_rgba4444(const void* input, void* output,
             px.g = aipl_channel_cap(g);
             px.b = aipl_channel_cap(b);
 
-            aipl_packa_rgba4444_px(dst, &px);
+            aipl_cnvt_px_argb8888_to_rgba4444(dst, &px);
 
             ++src;
             ++dst;
@@ -458,24 +447,22 @@ aipl_error_t aipl_color_correction_rgba5551(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint16_t* src = src_ptr + (i * pitch);
-        uint16_t* dst = dst_ptr + (i * pitch);
+        uint16_t* dst = dst_ptr + (i * width);
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_argb_x16_t pix;
-            aipl_mve_loada_rgba5551_16px(&pix, (uint8_t*)src, tail_p);
+            aipl_mve_ldr_16px_rgba5551(&pix, src, tail_p);
 
             aipl_mve_color_correction_argb_x16(&pix, ccm);
 
-            aipl_mve_storea_rgba5551_16px((uint8_t*)dst, &pix, tail_p);
+            aipl_mve_str_16px_rgba5551(dst, pix, tail_p);
 
             src += 16;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -485,12 +472,12 @@ aipl_error_t aipl_color_correction_rgba5551(const void* input, void* output,
     for (uint32_t i = 0; i < height; ++i)
     {
         const aipl_rgba5551_px_t* src = src_ptr + (i * pitch);
-        aipl_rgba5551_px_t* dst = dst_ptr + (i * pitch);
+        aipl_rgba5551_px_t* dst = dst_ptr + (i * width);
 
         for (uint32_t j = 0; j < width; ++j)
         {
             aipl_argb8888_px_t px;
-            aipl_loada_rgba5551_px(&px, src);
+            aipl_cnvt_px_rgba5551_to_argb8888(&px, src);
 
             int16_t r = px.r * ccm[0] + px.g * ccm[1] + px.b * ccm[2];
             int16_t g = px.r * ccm[3] + px.g * ccm[4] + px.b * ccm[5];
@@ -500,7 +487,7 @@ aipl_error_t aipl_color_correction_rgba5551(const void* input, void* output,
             px.g = aipl_channel_cap(g);
             px.b = aipl_channel_cap(b);
 
-            aipl_packa_rgba5551_px(dst, &px);
+            aipl_cnvt_px_argb8888_to_rgba5551(dst, &px);
 
             ++src;
             ++dst;
@@ -545,24 +532,22 @@ aipl_error_t aipl_color_correction_rgb565(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint16_t* src = src_ptr + (i * pitch);
-        uint16_t* dst = dst_ptr + (i * pitch);
+        uint16_t* dst = dst_ptr + (i * width);
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_rgb_x16_t pix;
-            aipl_mve_load_rgb565_16px(&pix, (uint8_t*)src, tail_p);
+            aipl_mve_ldr_16px_rgb565(&pix, src, tail_p);
 
             aipl_mve_color_correction_rgb_x16(&pix, ccm);
 
-            aipl_mve_store_rgb565_16px((uint8_t*)dst, &pix, tail_p);
+            aipl_mve_str_16px_rgb565(dst, pix, tail_p);
 
             src += 16;
             dst += 16;
-            cnt -= 16;
         }
     }
 #else
@@ -572,12 +557,12 @@ aipl_error_t aipl_color_correction_rgb565(const void* input, void* output,
     for (uint32_t i = 0; i < height; ++i)
     {
         const aipl_rgb565_px_t* src = src_ptr + (i * pitch);
-        aipl_rgb565_px_t* dst = dst_ptr + (i * pitch);
+        aipl_rgb565_px_t* dst = dst_ptr + (i * width);
 
         for (uint32_t j = 0; j < width; ++j)
         {
             uint8_t px[3];
-            aipl_load_rgb565_px(px, src, 2, 1, 0);
+            aipl_cnvt_px_rgb565_to_24bit(px, src, 2, 1, 0);
 
             int16_t r = px[2] * ccm[0] + px[1] * ccm[1] + px[0] * ccm[2];
             int16_t g = px[2] * ccm[3] + px[1] * ccm[4] + px[0] * ccm[5];
@@ -587,10 +572,10 @@ aipl_error_t aipl_color_correction_rgb565(const void* input, void* output,
             px[1] = aipl_channel_cap(g);
             px[0] = aipl_channel_cap(b);
 
-            aipl_pack_rgb565_px(dst, px, 2, 1, 0);
+            aipl_cnvt_px_24bit_to_rgb565(dst, px, 2, 1, 0);
 
-            src += 3;
-            dst += 3;
+            ++src;
+            ++dst;
         }
     }
 #endif
@@ -618,26 +603,24 @@ aipl_error_t aipl_color_correction_24bit(const void* input, void* output,
 
     for (uint32_t i = 0; i < height; ++i)
     {
-        int32_t cnt = width;
         const uint8_t* src = src_ptr + (i * pitch) * 3;
-        uint8_t* dst = dst_ptr + (i * pitch) * 3;
+        uint8_t* dst = dst_ptr + (i * width) * 3;
 
-        while (cnt > 0)
+        for (int32_t cnt = width; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
             aipl_mve_rgb_x16_t pix;
-            aipl_mve_load_24bit_16px(&pix, src, tail_p,
-                                     r_offset, g_offset, b_offset);
+            aipl_mve_ldr_16px_rgb(&pix, src, tail_p,
+                                  r_offset, g_offset, b_offset);
 
             aipl_mve_color_correction_rgb_x16(&pix, ccm);
 
-            aipl_mve_store_24bit_16px(dst, &pix, tail_p,
-                                      r_offset, g_offset, b_offset);
+            aipl_mve_str_16px_rgb(dst, pix, tail_p,
+                                  r_offset, g_offset, b_offset);
 
             src += 48;
             dst += 48;
-            cnt -= 16;
         }
 }
 #else
@@ -647,7 +630,7 @@ aipl_error_t aipl_color_correction_24bit(const void* input, void* output,
     for (uint32_t i = 0; i < height; ++i)
     {
         const uint8_t* src = src_ptr + i * pitch * 3;
-        uint8_t* dst = dst_ptr + i * pitch * 3;
+        uint8_t* dst = dst_ptr + i * width * 3;
 
         for (uint32_t j = 0; j < width; ++j)
         {
