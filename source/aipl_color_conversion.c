@@ -11307,37 +11307,12 @@ aipl_error_t aipl_color_convert_nv12_to_i444(const void* input,
         uint8_t* u_dst = u_dst_ptr + i * width;
         const uint8_t* v_src = v_src_ptr + i / 2 * pitch;
         uint8_t* v_dst = v_dst_ptr + i * width;
-#ifdef AIPL_HELIUM_ACCELERATION
-        int32_t cnt = width / 2;
 
-        uint32_t j = 0;
-        while (cnt > 0)
-        {
-            mve_pred16_t tail_p = vctp8q(cnt);
-
-            uint8x16_t u = vldrbq_gather_offset_z(u_src, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-
-            vstrbq_scatter_offset_p(u_dst, AIPL_2_BYTE_OFFSETS_U8, u, tail_p);
-            vstrbq_scatter_offset_p(u_dst + 1, AIPL_2_BYTE_OFFSETS_U8, u, tail_p);
-
-            uint8x16_t v = vldrbq_gather_offset_z(v_src, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-
-            vstrbq_scatter_offset_p(v_dst, AIPL_2_BYTE_OFFSETS_U8, v, tail_p);
-            vstrbq_scatter_offset_p(v_dst + 1, AIPL_2_BYTE_OFFSETS_U8, v, tail_p);
-
-            u_src += 32;
-            v_src += 32;
-            u_dst += 32;
-            v_dst += 32;
-            cnt -= 16;
-        }
-#else
         for (uint32_t j = 0; j < width; j += 2)
         {
             u_dst[j] = u_dst[j + 1] = u_src[j];
             v_dst[j] = v_dst[j + 1] = v_src[j];
         }
-#endif
     }
 
     return AIPL_ERR_OK;
@@ -11868,37 +11843,12 @@ aipl_error_t aipl_color_convert_nv21_to_i444(const void* input,
         uint8_t* u_dst = u_dst_ptr + i * width;
         const uint8_t* v_src = v_src_ptr + i / 2 * pitch;
         uint8_t* v_dst = v_dst_ptr + i * width;
-#ifdef AIPL_HELIUM_ACCELERATION
-        int32_t cnt = width / 2;
 
-        uint32_t j = 0;
-        while (cnt > 0)
-        {
-            mve_pred16_t tail_p = vctp8q(cnt);
-
-            uint8x16_t u = vldrbq_gather_offset_z(u_src, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-
-            vstrbq_scatter_offset_p(u_dst, AIPL_2_BYTE_OFFSETS_U8, u, tail_p);
-            vstrbq_scatter_offset_p(u_dst + 1, AIPL_2_BYTE_OFFSETS_U8, u, tail_p);
-
-            uint8x16_t v = vldrbq_gather_offset_z(v_src, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-
-            vstrbq_scatter_offset_p(v_dst, AIPL_2_BYTE_OFFSETS_U8, v, tail_p);
-            vstrbq_scatter_offset_p(v_dst + 1, AIPL_2_BYTE_OFFSETS_U8, v, tail_p);
-
-            u_src += 32;
-            v_src += 32;
-            u_dst += 32;
-            v_dst += 32;
-            cnt -= 16;
-        }
-#else
         for (uint32_t j = 0; j < width; j += 2)
         {
             u_dst[j] = u_dst[j + 1] = u_src[j];
             v_dst[j] = v_dst[j + 1] = v_src[j];
         }
-#endif
     }
 
     return AIPL_ERR_OK;
@@ -20003,34 +19953,6 @@ aipl_error_t aipl_color_convert_yuv_planar_to_packed(const uint8_t* y_src,
         const uint8_t* v_s = v_src + i / 2* pitch / 2;
         uint8_t* v_d = v_dst + i * width * 2;
 
-#ifdef AIPL_HELIUM_ACCELERATION
-        int32_t cnt = width / 2;
-
-        while (cnt > 0)
-        {
-            mve_pred16_t tail_p = vctp8q(cnt);
-
-            uint8x16_t y = vldrbq_gather_offset_z(y_s, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(y_d, AIPL_4_BYTE_OFFSETS_U8, y, tail_p);
-
-            y = vldrbq_gather_offset_z(y_s + 1, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(y_d + 2, AIPL_4_BYTE_OFFSETS_U8, y, tail_p);
-
-            uint8x16_t u = vldrbq_z_u8(u_s, tail_p);
-            vstrbq_scatter_offset_p(u_d, AIPL_4_BYTE_OFFSETS_U8, u, tail_p);
-
-            uint8x16_t v = vldrbq_z_u8(v_s, tail_p);
-            vstrbq_scatter_offset_p(v_d, AIPL_4_BYTE_OFFSETS_U8, v, tail_p);
-
-            y_s += 32;
-            u_s += 16;
-            v_s += 16;
-            y_d += 64;
-            u_d += 64;
-            v_d += 64;
-            cnt -= 16;
-        }
-#else
         for (uint32_t j = 0; j < width / 2; ++j)
         {
             y_d[j * 4] = y_s[j * 2];
@@ -20038,7 +19960,6 @@ aipl_error_t aipl_color_convert_yuv_planar_to_packed(const uint8_t* y_src,
             u_d[j * 4] = u_s[j];
             v_d[j * 4] = v_s[j];
         }
-#endif
     }
 
     return AIPL_ERR_OK;
@@ -20136,35 +20057,12 @@ aipl_error_t aipl_color_convert_yuv_semi_to_semi_planar(const uint8_t* y_src,
             uint8_t* u_d = u_dst + i / 2 * width;
             const uint8_t* v_s = v_src + i / 2 * pitch;
             uint8_t* v_d = v_dst + i / 2 * width;
-#ifdef AIPL_HELIUM_ACCELERATION
-            int32_t cnt = width / 2;
 
-            uint32_t j = 0;
-            while (cnt > 0)
-            {
-                mve_pred16_t tail_p = vctp8q(cnt);
-
-                uint8x16_t u = vldrbq_gather_offset_z(u_s, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-
-                vstrbq_scatter_offset_p(u_d, AIPL_2_BYTE_OFFSETS_U8, u, tail_p);
-
-                uint8x16_t v = vldrbq_gather_offset_z(v_s, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-
-                vstrbq_scatter_offset_p(v_d, AIPL_2_BYTE_OFFSETS_U8, v, tail_p);
-
-                u_s += 32;
-                v_s += 32;
-                u_d += 32;
-                v_d += 32;
-                cnt -= 16;
-            }
-#else
             for (uint32_t j = 0; j < width; j += 2)
             {
                 u_d[j] = u_s[j];
                 v_d[j] = v_s[j];
             }
-#endif
         }
     }
 
@@ -20196,34 +20094,6 @@ aipl_error_t aipl_color_convert_yuv_semi_to_packed(const uint8_t* y_src,
         const uint8_t* v_s = v_src + i / 2 * pitch;
         uint8_t* v_d = v_dst + i * width * 2;
 
-#ifdef AIPL_HELIUM_ACCELERATION
-        int32_t cnt = width / 2;
-
-        while (cnt > 0)
-        {
-            mve_pred16_t tail_p = vctp8q(cnt);
-
-            uint8x16_t y = vldrbq_gather_offset_z(y_s, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(y_d, AIPL_4_BYTE_OFFSETS_U8, y, tail_p);
-
-            y = vldrbq_gather_offset_z(y_s + 1, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(y_d + 2, AIPL_4_BYTE_OFFSETS_U8, y, tail_p);
-
-            uint8x16_t u = vldrbq_gather_offset_z(u_s, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(u_d, AIPL_4_BYTE_OFFSETS_U8, u, tail_p);
-
-            uint8x16_t v = vldrbq_gather_offset_z(v_s, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(v_d, AIPL_4_BYTE_OFFSETS_U8, v, tail_p);
-
-            y_s += 32;
-            u_s += 32;
-            v_s += 32;
-            y_d += 64;
-            u_d += 64;
-            v_d += 64;
-            cnt -= 16;
-        }
-#else
         for (uint32_t j = 0; j < width / 2; ++j)
         {
             y_d[j * 4] = y_s[j * 2];
@@ -20231,7 +20101,6 @@ aipl_error_t aipl_color_convert_yuv_semi_to_packed(const uint8_t* y_src,
             u_d[j * 4] = u_s[j * 2];
             v_d[j * 4] = v_s[j * 2];
         }
-#endif
     }
 
     return AIPL_ERR_OK;
@@ -20426,33 +20295,6 @@ aipl_error_t aipl_color_convert_yuv_packed_to_packed(const uint8_t* y_src,
         const uint8_t* v_s = v_src + i * pitch * 2;
         uint8_t* v_d = v_dst + i * width * 2;
 
-#ifdef AIPL_HELIUM_ACCELERATION
-        int32_t cnt = width / 2;
-        while (cnt > 0)
-        {
-            mve_pred16_t tail_p = vctp8q(cnt);
-
-            uint8x16_t y = vldrbq_gather_offset_z(y_s, AIPL_4_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(y_d, AIPL_4_BYTE_OFFSETS_U8, y, tail_p);
-
-            y = vldrbq_gather_offset_z(y_s + 2, AIPL_4_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(y_d + 2, AIPL_4_BYTE_OFFSETS_U8, y, tail_p);
-
-            uint8x16_t u = vldrbq_gather_offset_z(u_s, AIPL_4_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(u_d, AIPL_4_BYTE_OFFSETS_U8, u, tail_p);
-
-            uint8x16_t v = vldrbq_gather_offset_z(v_s, AIPL_4_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(v_d, AIPL_4_BYTE_OFFSETS_U8, v, tail_p);
-
-            y_s += 64;
-            u_s += 64;
-            v_s += 64;
-            y_d += 64;
-            u_d += 64;
-            v_d += 64;
-            cnt -= 16;
-        }
-#else
         for (uint32_t j = 0; j < width * 2; j += 4)
         {
             y_d[j] = y_s[j];
@@ -20460,7 +20302,6 @@ aipl_error_t aipl_color_convert_yuv_packed_to_packed(const uint8_t* y_src,
             u_d[j] = u_s[j];
             v_d[j] = v_s[j];
         }
-#endif
     }
 
     return AIPL_ERR_OK;
