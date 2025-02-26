@@ -1031,7 +1031,18 @@ aipl_error_t aipl_color_convert_alpha8(const void* input, void* output,
                                        uint32_t width, uint32_t height,
                                        aipl_color_format_t format)
 {
-    return aipl_color_convert_i400(input, output, pitch, width, height, format);
+    switch (format)
+    {
+        case AIPL_COLOR_ALPHA8:
+            return AIPL_ERR_FORMAT_MISMATCH;
+
+        case AIPL_COLOR_I400:
+            return aipl_color_convert_alpha8_to_i400(input, output, pitch,
+                                                     width, height);
+
+        default:
+            return aipl_color_convert_i400(input, output, pitch, width, height, format);
+    }
 }
 
 aipl_error_t aipl_color_convert_alpha8_to_i400(const void* input,
