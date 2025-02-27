@@ -163,6 +163,28 @@ static aipl_error_t aipl_rotate_sw(const uint8_t* restrict input,
     {
         for (y = 0; y < height; ++y)
         {
+#ifdef AIPL_HELIUM_ACCELERATION
+            const uint8_t* input_offset = input + y * width * rgbBytes;
+            uint8_t* output_offset = output + (height - y - 1) * rgbBytes;
+
+            for (x = 0; x < width; x += 8)
+            {
+                mve_pred16_t tail_p = vctp16q(width - x);
+
+                uint16x8_t off_i = vidupq_n_u16(0, 1);
+                off_i = vmulq(off_i, rgbBytes);
+
+                uint16x8_t off_o = vidupq_n_u16(0, 1);
+                off_o = vmulq(off_o, height * rgbBytes);
+
+                for (int i = 0; i < rgbBytes; ++i)
+                {
+                    uint16x8_t channel = vldrbq_gather_offset_z(input_offset + x * rgbBytes + i, off_i, tail_p);
+
+                    vstrbq_scatter_offset_p(output_offset + x * height * rgbBytes + i, off_o, channel, tail_p);
+                }
+            }
+#else
             for (x = 0; x < width; ++x)
             {
                 int input_offset = (y * width + x) * rgbBytes;
@@ -170,12 +192,35 @@ static aipl_error_t aipl_rotate_sw(const uint8_t* restrict input,
                 for (j = 0; j < rgbBytes; j++)
                     output[output_offset++] = input[input_offset++];
             }
+#endif
         }
     }
     else if (rotation == AIPL_ROTATE_180)
     {
         for (y = 0; y < height; ++y)
         {
+#ifdef AIPL_HELIUM_ACCELERATION
+            const uint8_t* input_offset = input + y * width * rgbBytes;
+            uint8_t* output_offset = output + (height - y - 1) * width * rgbBytes;
+
+            for (x = 0; x < width; x += 8)
+            {
+                mve_pred16_t tail_p = vctp16q(width - x);
+
+                uint16x8_t off_i = vidupq_n_u16(0, 1);
+                off_i = vmulq(off_i, rgbBytes);
+
+                uint16x8_t off_o = vcreateq_u16(0x0004000500060007, 0x0000000100020003);
+                off_o = vmulq(off_o, rgbBytes);
+
+                for (int i = 0; i < rgbBytes; ++i)
+                {
+                    uint16x8_t channel = vldrbq_gather_offset_z(input_offset + x * rgbBytes + i, off_i, tail_p);
+
+                    vstrbq_scatter_offset_p(output_offset + (width - x - 8) * rgbBytes + i, off_o, channel, tail_p);
+                }
+            }
+#else
             for (x = 0; x < width; ++x)
             {
                 int input_offset = (y * width + x) * rgbBytes;
@@ -183,12 +228,35 @@ static aipl_error_t aipl_rotate_sw(const uint8_t* restrict input,
                 for (j = 0; j < rgbBytes; j++)
                     output[output_offset++] = input[input_offset++];
             }
+#endif
         }
     }
     else if (rotation == AIPL_ROTATE_270)
     {
         for (y = 0; y < height; ++y)
         {
+#ifdef AIPL_HELIUM_ACCELERATION
+            const uint8_t* input_offset = input + y * width * rgbBytes;
+            uint8_t* output_offset = output + y * rgbBytes;
+
+            for (x = 0; x < width; x += 8)
+            {
+                mve_pred16_t tail_p = vctp16q(width - x);
+
+                uint16x8_t off_i = vidupq_n_u16(0, 1);
+                off_i = vmulq(off_i, rgbBytes);
+
+                uint16x8_t off_o = vcreateq_u16(0x0004000500060007, 0x0000000100020003);
+                off_o = vmulq(off_o, height * rgbBytes);
+
+                for (int i = 0; i < rgbBytes; ++i)
+                {
+                    uint16x8_t channel = vldrbq_gather_offset_z(input_offset + x * rgbBytes + i, off_i, tail_p);
+
+                    vstrbq_scatter_offset_p(output_offset + (width - x - 8) * height * rgbBytes + i, off_o, channel, tail_p);
+                }
+            }
+#else
             for (x = 0; x < width; ++x)
             {
                 int input_offset = (y * width + x) * rgbBytes;
@@ -196,6 +264,7 @@ static aipl_error_t aipl_rotate_sw(const uint8_t* restrict input,
                 for (j = 0; j < rgbBytes; j++)
                     output[output_offset++] = input[input_offset++];
             }
+#endif
         }
     }
     else
