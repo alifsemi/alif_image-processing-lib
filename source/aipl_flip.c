@@ -157,10 +157,46 @@ static aipl_error_t aipl_flip_sw(const uint8_t* restrict input,
     const int rgbBytes = aipl_color_format_depth(format)/8;
     int x, y, j;
 
-    if (flip_horizontal || flip_vertical)
+    if (flip_horizontal && flip_vertical)
     {
+
         for (y = 0; y < height / 2; ++y)
         {
+#ifdef AIPL_HELIUM_ACCELERATION
+            int top_left = y * width * rgbBytes;
+            int top_right = (y * width + (width - 16)) * rgbBytes;
+            int bottom_left = ((height - 1 - y) * width) * rgbBytes;
+            int bottom_right = ((height - 1 - y) * width + (width - 16)) * rgbBytes;
+
+            for (x = 0; x < width / 2; x += 16)
+            {
+                mve_pred16_t tail_p = vctp16q(width / 2 - x);
+
+                uint8x16_t frw_off = vidupq_n_u8(0, 1);
+                frw_off = vmulq(frw_off, rgbBytes);
+
+                uint8x16_t rvr_off = vcreateq_u8(0x08090a0b0c0d0e0f, 0x0001020304050607);
+                rvr_off = vmulq(rvr_off, rgbBytes);
+
+                for (j = 0; j < rgbBytes; j++)
+                {
+                    uint8x16_t i_top_left = vldrbq_gather_offset_z(&input[top_left] + j, frw_off, tail_p);
+                    uint8x16_t i_top_right = vldrbq_gather_offset_z(&input[top_right] + j, rvr_off, tail_p);
+                    uint8x16_t i_bottom_left = vldrbq_gather_offset_z(&input[bottom_left] + j, frw_off, tail_p);
+                    uint8x16_t i_bottom_right = vldrbq_gather_offset_z(&input[bottom_right] + j, rvr_off, tail_p);
+
+                    vstrbq_scatter_offset_p(&output[top_left] + j, frw_off, i_bottom_right, tail_p);
+                    vstrbq_scatter_offset_p(&output[top_right] + j, rvr_off, i_bottom_left, tail_p);
+                    vstrbq_scatter_offset_p(&output[bottom_left] + j, frw_off, i_top_right, tail_p);
+                    vstrbq_scatter_offset_p(&output[bottom_right] + j, rvr_off, i_top_left, tail_p);
+                }
+
+                top_left += 16 * rgbBytes;
+                bottom_left += 16 * rgbBytes;
+                top_right -= 16 * rgbBytes;
+                bottom_right -= 16 * rgbBytes;
+            }
+#else
             for (x = 0; x < width / 2; ++x)
             {
                 int top_left = (y * width + x) * rgbBytes;
@@ -176,12 +212,40 @@ static aipl_error_t aipl_flip_sw(const uint8_t* restrict input,
                     output[bottom_left++] = input[top_right++];
                 }
             }
+#endif
         }
     }
     else if (flip_horizontal)
     {
         for (y = 0; y < height; ++y)
         {
+#ifdef AIPL_HELIUM_ACCELERATION
+            int left = y * width * rgbBytes;
+            int right = (y * width + (width - 16)) * rgbBytes;
+
+            for (x = 0; x < width / 2; x += 16)
+            {
+                mve_pred16_t tail_p = vctp16q(width / 2 - x);
+
+                uint8x16_t frw_off = vidupq_n_u8(0, 1);
+                frw_off = vmulq(frw_off, rgbBytes);
+
+                uint8x16_t rvr_off = vcreateq_u8(0x08090a0b0c0d0e0f, 0x0001020304050607);
+                rvr_off = vmulq(rvr_off, rgbBytes);
+
+                for (j = 0; j < rgbBytes; j++)
+                {
+                    uint8x16_t i_left = vldrbq_gather_offset_z(&input[left] + j, frw_off, tail_p);
+                    uint8x16_t i_right = vldrbq_gather_offset_z(&input[right] + j, rvr_off, tail_p);
+
+                    vstrbq_scatter_offset_p(&output[left] + j, frw_off, i_right, tail_p);
+                    vstrbq_scatter_offset_p(&output[right] + j, rvr_off, i_left, tail_p);
+                }
+
+                left += 16 * rgbBytes;
+                right -= 16 * rgbBytes;
+            }
+#else
             for (x = 0; x < width / 2; ++x)
             {
                 int left = (y * width + x) * rgbBytes;
@@ -193,6 +257,7 @@ static aipl_error_t aipl_flip_sw(const uint8_t* restrict input,
                     output[right++] = input[left++];
                 }
             }
+#endif
         }
     }
     else if (flip_vertical)
