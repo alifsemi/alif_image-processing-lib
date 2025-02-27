@@ -315,8 +315,8 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
     D2_CHECK_ERR(d2_settexturemode(handle, interpolate ? d2_tm_filter : 0));
     D2_CHECK_ERR(d2_setfillmode(handle, d2_fm_texture));
 
-    uint32_t new_width = scale ? output_width : width; 
-    uint32_t new_height = scale ? output_height : height; 
+    uint32_t new_width = scale ? output_width : width;
+    uint32_t new_height = scale ? output_height : height;
 
     /* Texture points and mapping parameters */
     point_t p[4];
@@ -336,7 +336,7 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
         p[3].x = x;                     p[3].y = y + new_height - 1;
 
         /* Set texture mapping parameters */
-        dxu = D2_FIX16(1);      dxv = 0;                        
+        dxu = D2_FIX16(1);      dxv = 0;
         dyu = 0;                dyv = D2_FIX16(1);
     }
     if (rotation == 90) {
@@ -478,6 +478,27 @@ aipl_error_t aipl_dave2d_error_convert(d2_s32 error)
 d2_u32 aipl_dave2d_get_last_converted_error(void)
 {
     return last_converted_error;
+}
+
+bool aipl_dave2d_color_convert_suitable(aipl_color_format_t input_format,
+                                        aipl_color_format_t output_format)
+{
+    if(aipl_dave2d_format_supported(input_format)
+       && aipl_dave2d_format_supported(output_format)
+       && output_format != AIPL_COLOR_ARGB1555
+       && output_format != AIPL_COLOR_RGBA5551
+       && output_format != AIPL_COLOR_ALPHA8)
+    {
+#ifdef AIPL_OPTIMIZE_CPU_LOAD
+        return true;
+#else
+        return output_format != AIPL_COLOR_ARGB4444
+               && output_format != AIPL_COLOR_RGBA4444
+               && output_format != AIPL_COLOR_RGB565;
+#endif
+    }
+
+    return false;
 }
 
 /**********************

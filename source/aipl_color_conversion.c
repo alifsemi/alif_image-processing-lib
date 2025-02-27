@@ -889,12 +889,7 @@ aipl_error_t aipl_color_convert(const void* input, void* output,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-    /* TODO: figure out what's wrong with ARGB1555, RGBA5551 and ALPHA8 */
-    if (aipl_dave2d_format_supported(input_format)
-        && aipl_dave2d_format_supported(output_format)
-        && output_format != AIPL_COLOR_ARGB1555
-        && output_format != AIPL_COLOR_RGBA5551
-        && output_format != AIPL_COLOR_ALPHA8)
+    if (aipl_dave2d_color_convert_suitable(input_format, output_format))
     {
         d2_s32 ret =
             aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
@@ -910,8 +905,8 @@ aipl_error_t aipl_color_convert(const void* input, void* output,
         /* Alpha color formats */
 #if AIPL_CONVERT_ALPHA8_I400
         case AIPL_COLOR_ALPHA8:
-            return aipl_color_convert_i400(input, output, pitch,
-                                           width, height, output_format);
+            return aipl_color_convert_alpha8(input, output, pitch,
+                                             width, height, output_format);
 #endif
 
         /* RGB color formats */
@@ -1029,6 +1024,223 @@ aipl_error_t aipl_color_convert_img(const aipl_image_t* input,
                               input->width, input->height,
                               input->format, output->format);
 }
+
+#if AIPL_CONVERT_ALPHA8_I400
+aipl_error_t aipl_color_convert_alpha8(const void* input, void* output,
+                                       uint32_t pitch,
+                                       uint32_t width, uint32_t height,
+                                       aipl_color_format_t format)
+{
+    switch (format)
+    {
+        case AIPL_COLOR_ALPHA8:
+            return AIPL_ERR_FORMAT_MISMATCH;
+
+        case AIPL_COLOR_I400:
+            return aipl_color_convert_alpha8_to_i400(input, output, pitch,
+                                                     width, height);
+
+        default:
+            return aipl_color_convert_i400(input, output, pitch, width, height, format);
+    }
+}
+
+aipl_error_t aipl_color_convert_alpha8_to_i400(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height)
+{
+    return aipl_color_convert_i400_to_alpha8(input, output, pitch, width, height);
+}
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_ARGB8888)
+aipl_error_t aipl_color_convert_alpha8_to_argb8888(const void* input,
+                                                   void* output,
+                                                   uint32_t pitch,
+                                                   uint32_t width,
+                                                   uint32_t height)
+{
+    return aipl_color_convert_i400_to_argb8888(input, output, pitch, width, height);
+}
+#endif
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_ARGB4444)
+aipl_error_t aipl_color_convert_alpha8_to_argb4444(const void* input,
+                                                   void* output,
+                                                   uint32_t pitch,
+                                                   uint32_t width,
+                                                   uint32_t height)
+{
+    return aipl_color_convert_i400_to_argb4444(input, output, pitch, width, height);
+}
+#endif
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_ARGB1555)
+aipl_error_t aipl_color_convert_alpha8_to_argb1555(const void* input,
+                                                   void* output,
+                                                   uint32_t pitch,
+                                                   uint32_t width,
+                                                   uint32_t height)
+{
+    return aipl_color_convert_i400_to_argb1555(input, output, pitch, width, height);
+}
+#endif
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_RGBA8888)
+aipl_error_t aipl_color_convert_alpha8_to_rgba8888(const void* input,
+                                                   void* output,
+                                                   uint32_t pitch,
+                                                   uint32_t width,
+                                                   uint32_t height)
+{
+    return aipl_color_convert_i400_to_rgba8888(input, output, pitch, width, height);
+}
+#endif
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_RGBA4444)
+aipl_error_t aipl_color_convert_alpha8_to_rgba4444(const void* input,
+                                                   void* output,
+                                                   uint32_t pitch,
+                                                   uint32_t width,
+                                                   uint32_t height)
+{
+    return aipl_color_convert_i400_to_rgba4444(input, output, pitch, width, height);
+}
+#endif
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_RGBA5551)
+aipl_error_t aipl_color_convert_alpha8_to_rgba5551(const void* input,
+                                                   void* output,
+                                                   uint32_t pitch,
+                                                   uint32_t width,
+                                                   uint32_t height)
+{
+    return aipl_color_convert_i400_to_rgba5551(input, output, pitch, width, height);
+}
+#endif
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_BGR888)
+aipl_error_t aipl_color_convert_alpha8_to_bgr888(const void* input,
+                                                 void* output,
+                                                 uint32_t pitch,
+                                                 uint32_t width,
+                                                 uint32_t height)
+{
+    return aipl_color_convert_i400_to_bgr888(input, output, pitch, width, height);
+}
+#endif
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_RGB888)
+aipl_error_t aipl_color_convert_alpha8_to_rgb888(const void* input,
+                                                 void* output,
+                                                 uint32_t pitch,
+                                                 uint32_t width,
+                                                 uint32_t height)
+{
+    return aipl_color_convert_i400_to_rgb888(input, output, pitch, width, height);
+}
+#endif
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_RGB565)
+aipl_error_t aipl_color_convert_alpha8_to_rgb565(const void* input,
+                                                 void* output,
+                                                 uint32_t pitch,
+                                                 uint32_t width,
+                                                 uint32_t height)
+{
+    return aipl_color_convert_i400_to_rgb565(input, output, pitch, width, height);
+}
+#endif
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_YV12)
+aipl_error_t aipl_color_convert_alpha8_to_yv12(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height)
+{
+    return aipl_color_convert_i400_to_yv12(input, output, pitch, width, height);
+}
+#endif
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_I420)
+aipl_error_t aipl_color_convert_alpha8_to_i420(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height)
+{
+    return aipl_color_convert_i400_to_i420(input, output, pitch, width, height);
+}
+#endif
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_I422)
+aipl_error_t aipl_color_convert_alpha8_to_i422(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height)
+{
+    return aipl_color_convert_i400_to_i422(input, output, pitch, width, height);
+}
+#endif
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_I444)
+aipl_error_t aipl_color_convert_alpha8_to_i444(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height)
+{
+    return aipl_color_convert_i400_to_i444(input, output, pitch, width, height);
+}
+#endif
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_NV12)
+aipl_error_t aipl_color_convert_alpha8_to_nv12(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height)
+{
+    return aipl_color_convert_i400_to_nv12(input, output, pitch, width, height);
+}
+#endif
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_NV21)
+aipl_error_t aipl_color_convert_alpha8_to_nv21(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height)
+{
+    return aipl_color_convert_i400_to_nv21(input, output, pitch, width, height);
+}
+#endif
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_YUY2)
+aipl_error_t aipl_color_convert_alpha8_to_yuy2(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height)
+{
+    return aipl_color_convert_i400_to_yuy2(input, output, pitch, width, height);
+}
+#endif
+
+#if (AIPL_CONVERT_ALPHA8_I400 & TO_UYVY)
+aipl_error_t aipl_color_convert_alpha8_to_uyvy(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height)
+{
+    return aipl_color_convert_i400_to_uyvy(input, output, pitch, width, height);
+}
+#endif
+#endif
 
 #if AIPL_CONVERT_ARGB8888
 aipl_error_t aipl_color_convert_argb8888(const void* input, void* output,
@@ -1231,7 +1443,7 @@ aipl_error_t aipl_color_convert_argb8888_to_argb4444(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_argb8888, d2_mode_argb4444);
 
@@ -1371,7 +1583,7 @@ aipl_error_t aipl_color_convert_argb8888_to_rgba4444(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_argb8888, d2_mode_rgba4444);
 
@@ -1473,7 +1685,7 @@ aipl_error_t aipl_color_convert_argb8888_to_rgb565(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_argb8888, d2_mode_rgb565);
 
@@ -2113,7 +2325,7 @@ aipl_error_t aipl_color_convert_argb4444_to_rgba4444(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_argb4444, d2_mode_rgba4444);
 
@@ -2242,7 +2454,7 @@ aipl_error_t aipl_color_convert_argb4444_to_rgb565(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_argb4444, d2_mode_rgb565);
 
@@ -2809,12 +3021,12 @@ aipl_error_t aipl_color_convert_argb1555_to_argb4444(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-// #ifdef AIPL_DAVE2D_ACCELERATION
-//     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
-//                                                 d2_mode_argb1555, d2_mode_argb4444);
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
+    d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
+                                                d2_mode_argb1555, d2_mode_argb4444);
 
-//     return aipl_dave2d_error_convert(ret);
-// #else
+    return aipl_dave2d_error_convert(ret);
+#else
     const aipl_argb1555_px_t* src_ptr = input;
     aipl_argb4444_px_t* dst_ptr = output;
 
@@ -2833,7 +3045,7 @@ aipl_error_t aipl_color_convert_argb1555_to_argb4444(const void* input,
     }
 
     return AIPL_ERR_OK;
-// #endif
+#endif
 }
 #endif
 
@@ -2885,7 +3097,7 @@ aipl_error_t aipl_color_convert_argb1555_to_rgba4444(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_argb1555, d2_mode_rgba4444);
 
@@ -2987,7 +3199,7 @@ aipl_error_t aipl_color_convert_argb1555_to_rgb565(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_argb1555, d2_mode_rgb565);
 
@@ -3575,7 +3787,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_argb4444(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_rgba8888, d2_mode_argb4444);
 
@@ -3651,7 +3863,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_rgba4444(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_rgba8888, d2_mode_rgba4444);
 
@@ -3753,7 +3965,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_rgb565(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_rgba8888, d2_mode_rgb565);
 
@@ -4354,7 +4566,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_argb4444(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_rgba4444, d2_mode_rgba8888);
 
@@ -4521,7 +4733,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_rgb565(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_rgba4444, d2_mode_rgb565);
 
@@ -5121,7 +5333,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_argb4444(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_rgba5551, d2_mode_rgba8888);
 
@@ -5197,7 +5409,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_rgba4444(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_rgba5551, d2_mode_rgba4444);
 
@@ -5261,7 +5473,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_rgb565(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_rgba5551, d2_mode_rgb565);
 
@@ -6793,7 +7005,7 @@ aipl_error_t aipl_color_convert_rgb565_to_argb4444(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_rgb565, d2_mode_rgba8888);
 
@@ -6869,7 +7081,7 @@ aipl_error_t aipl_color_convert_rgb565_to_rgba4444(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_rgb565, d2_mode_rgba4444);
 
@@ -11095,37 +11307,12 @@ aipl_error_t aipl_color_convert_nv12_to_i444(const void* input,
         uint8_t* u_dst = u_dst_ptr + i * width;
         const uint8_t* v_src = v_src_ptr + i / 2 * pitch;
         uint8_t* v_dst = v_dst_ptr + i * width;
-#ifdef AIPL_HELIUM_ACCELERATION
-        int32_t cnt = width / 2;
 
-        uint32_t j = 0;
-        while (cnt > 0)
-        {
-            mve_pred16_t tail_p = vctp8q(cnt);
-
-            uint8x16_t u = vldrbq_gather_offset_z(u_src, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-
-            vstrbq_scatter_offset_p(u_dst, AIPL_2_BYTE_OFFSETS_U8, u, tail_p);
-            vstrbq_scatter_offset_p(u_dst + 1, AIPL_2_BYTE_OFFSETS_U8, u, tail_p);
-
-            uint8x16_t v = vldrbq_gather_offset_z(v_src, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-
-            vstrbq_scatter_offset_p(v_dst, AIPL_2_BYTE_OFFSETS_U8, v, tail_p);
-            vstrbq_scatter_offset_p(v_dst + 1, AIPL_2_BYTE_OFFSETS_U8, v, tail_p);
-
-            u_src += 32;
-            v_src += 32;
-            u_dst += 32;
-            v_dst += 32;
-            cnt -= 16;
-        }
-#else
         for (uint32_t j = 0; j < width; j += 2)
         {
             u_dst[j] = u_dst[j + 1] = u_src[j];
             v_dst[j] = v_dst[j + 1] = v_src[j];
         }
-#endif
     }
 
     return AIPL_ERR_OK;
@@ -11656,37 +11843,12 @@ aipl_error_t aipl_color_convert_nv21_to_i444(const void* input,
         uint8_t* u_dst = u_dst_ptr + i * width;
         const uint8_t* v_src = v_src_ptr + i / 2 * pitch;
         uint8_t* v_dst = v_dst_ptr + i * width;
-#ifdef AIPL_HELIUM_ACCELERATION
-        int32_t cnt = width / 2;
 
-        uint32_t j = 0;
-        while (cnt > 0)
-        {
-            mve_pred16_t tail_p = vctp8q(cnt);
-
-            uint8x16_t u = vldrbq_gather_offset_z(u_src, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-
-            vstrbq_scatter_offset_p(u_dst, AIPL_2_BYTE_OFFSETS_U8, u, tail_p);
-            vstrbq_scatter_offset_p(u_dst + 1, AIPL_2_BYTE_OFFSETS_U8, u, tail_p);
-
-            uint8x16_t v = vldrbq_gather_offset_z(v_src, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-
-            vstrbq_scatter_offset_p(v_dst, AIPL_2_BYTE_OFFSETS_U8, v, tail_p);
-            vstrbq_scatter_offset_p(v_dst + 1, AIPL_2_BYTE_OFFSETS_U8, v, tail_p);
-
-            u_src += 32;
-            v_src += 32;
-            u_dst += 32;
-            v_dst += 32;
-            cnt -= 16;
-        }
-#else
         for (uint32_t j = 0; j < width; j += 2)
         {
             u_dst[j] = u_dst[j + 1] = u_src[j];
             v_dst[j] = v_dst[j + 1] = v_src[j];
         }
-#endif
     }
 
     return AIPL_ERR_OK;
@@ -13088,6 +13250,12 @@ aipl_error_t aipl_color_convert_i400_to_argb8888(const void* input,
 
     const uint8_t* y_ptr = input;
 
+#ifdef AIPL_DAVE2D_ACCELERATION
+    d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
+                                                d2_mode_alpha8, d2_mode_argb8888);
+
+    return aipl_dave2d_error_convert(ret);
+#else
 #ifdef AIPL_HELIUM_ACCELERATION
     uint32_t* dst_ptr = output;
 
@@ -13130,6 +13298,7 @@ aipl_error_t aipl_color_convert_i400_to_argb8888(const void* input,
 #endif
 
     return AIPL_ERR_OK;
+#endif
 }
 #endif
 
@@ -13145,6 +13314,12 @@ aipl_error_t aipl_color_convert_i400_to_argb4444(const void* input,
 
     const uint8_t* y_ptr = input;
 
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
+    d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
+                                                d2_mode_alpha8, d2_mode_argb4444);
+
+    return aipl_dave2d_error_convert(ret);
+#else
 #ifdef AIPL_HELIUM_ACCELERATION
     uint16_t* dst_ptr = output;
 
@@ -13187,6 +13362,7 @@ aipl_error_t aipl_color_convert_i400_to_argb4444(const void* input,
 #endif
 
     return AIPL_ERR_OK;
+#endif
 }
 #endif
 
@@ -13202,6 +13378,12 @@ aipl_error_t aipl_color_convert_i400_to_argb1555(const void* input,
 
     const uint8_t* y_ptr = input;
 
+// #ifdef AIPL_DAVE2D_ACCELERATION
+//     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
+//                                                 d2_mode_alpha8, d2_mode_argb1555);
+
+//     return aipl_dave2d_error_convert(ret);
+// #else
 #ifdef AIPL_HELIUM_ACCELERATION
     uint16_t* dst_ptr = output;
 
@@ -13244,6 +13426,7 @@ aipl_error_t aipl_color_convert_i400_to_argb1555(const void* input,
 #endif
 
     return AIPL_ERR_OK;
+// #endif
 }
 #endif
 
@@ -13259,6 +13442,12 @@ aipl_error_t aipl_color_convert_i400_to_rgba8888(const void* input,
 
     const uint8_t* y_ptr = input;
 
+#ifdef AIPL_DAVE2D_ACCELERATION
+    d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
+                                                d2_mode_alpha8, d2_mode_rgba8888);
+
+    return aipl_dave2d_error_convert(ret);
+#else
 #ifdef AIPL_HELIUM_ACCELERATION
     uint32_t* dst_ptr = output;
 
@@ -13301,6 +13490,7 @@ aipl_error_t aipl_color_convert_i400_to_rgba8888(const void* input,
 #endif
 
     return AIPL_ERR_OK;
+#endif
 }
 #endif
 
@@ -13316,6 +13506,12 @@ aipl_error_t aipl_color_convert_i400_to_rgba4444(const void* input,
 
     const uint8_t* y_ptr = input;
 
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
+    d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
+                                                d2_mode_alpha8, d2_mode_rgba4444);
+
+    return aipl_dave2d_error_convert(ret);
+#else
 #ifdef AIPL_HELIUM_ACCELERATION
     uint16_t* dst_ptr = output;
 
@@ -13358,6 +13554,7 @@ aipl_error_t aipl_color_convert_i400_to_rgba4444(const void* input,
 #endif
 
     return AIPL_ERR_OK;
+#endif
 }
 #endif
 
@@ -13373,6 +13570,12 @@ aipl_error_t aipl_color_convert_i400_to_rgba5551(const void* input,
 
     const uint8_t* y_ptr = input;
 
+// #ifdef AIPL_DAVE2D_ACCELERATION
+//     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
+//                                                 d2_mode_alpha8, d2_mode_rgba5551);
+
+//     return aipl_dave2d_error_convert(ret);
+// #else
 #ifdef AIPL_HELIUM_ACCELERATION
     uint16_t* dst_ptr = output;
 
@@ -13415,6 +13618,7 @@ aipl_error_t aipl_color_convert_i400_to_rgba5551(const void* input,
 #endif
 
     return AIPL_ERR_OK;
+// #endif
 }
 #endif
 
@@ -13456,6 +13660,12 @@ aipl_error_t aipl_color_convert_i400_to_rgb565(const void* input,
 
     const uint8_t* y_ptr = input;
 
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
+    d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
+                                                d2_mode_alpha8, d2_mode_rgb565);
+
+    return aipl_dave2d_error_convert(ret);
+#else
 #ifdef AIPL_HELIUM_ACCELERATION
     uint16_t* dst_ptr = output;
 
@@ -13498,7 +13708,7 @@ aipl_error_t aipl_color_convert_i400_to_rgb565(const void* input,
 #endif
 
     return AIPL_ERR_OK;
-
+#endif
 }
 #endif
 
@@ -19743,34 +19953,6 @@ aipl_error_t aipl_color_convert_yuv_planar_to_packed(const uint8_t* y_src,
         const uint8_t* v_s = v_src + i / 2* pitch / 2;
         uint8_t* v_d = v_dst + i * width * 2;
 
-#ifdef AIPL_HELIUM_ACCELERATION
-        int32_t cnt = width / 2;
-
-        while (cnt > 0)
-        {
-            mve_pred16_t tail_p = vctp8q(cnt);
-
-            uint8x16_t y = vldrbq_gather_offset_z(y_s, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(y_d, AIPL_4_BYTE_OFFSETS_U8, y, tail_p);
-
-            y = vldrbq_gather_offset_z(y_s + 1, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(y_d + 2, AIPL_4_BYTE_OFFSETS_U8, y, tail_p);
-
-            uint8x16_t u = vldrbq_z_u8(u_s, tail_p);
-            vstrbq_scatter_offset_p(u_d, AIPL_4_BYTE_OFFSETS_U8, u, tail_p);
-
-            uint8x16_t v = vldrbq_z_u8(v_s, tail_p);
-            vstrbq_scatter_offset_p(v_d, AIPL_4_BYTE_OFFSETS_U8, v, tail_p);
-
-            y_s += 32;
-            u_s += 16;
-            v_s += 16;
-            y_d += 64;
-            u_d += 64;
-            v_d += 64;
-            cnt -= 16;
-        }
-#else
         for (uint32_t j = 0; j < width / 2; ++j)
         {
             y_d[j * 4] = y_s[j * 2];
@@ -19778,7 +19960,6 @@ aipl_error_t aipl_color_convert_yuv_planar_to_packed(const uint8_t* y_src,
             u_d[j * 4] = u_s[j];
             v_d[j * 4] = v_s[j];
         }
-#endif
     }
 
     return AIPL_ERR_OK;
@@ -19876,35 +20057,12 @@ aipl_error_t aipl_color_convert_yuv_semi_to_semi_planar(const uint8_t* y_src,
             uint8_t* u_d = u_dst + i / 2 * width;
             const uint8_t* v_s = v_src + i / 2 * pitch;
             uint8_t* v_d = v_dst + i / 2 * width;
-#ifdef AIPL_HELIUM_ACCELERATION
-            int32_t cnt = width / 2;
 
-            uint32_t j = 0;
-            while (cnt > 0)
-            {
-                mve_pred16_t tail_p = vctp8q(cnt);
-
-                uint8x16_t u = vldrbq_gather_offset_z(u_s, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-
-                vstrbq_scatter_offset_p(u_d, AIPL_2_BYTE_OFFSETS_U8, u, tail_p);
-
-                uint8x16_t v = vldrbq_gather_offset_z(v_s, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-
-                vstrbq_scatter_offset_p(v_d, AIPL_2_BYTE_OFFSETS_U8, v, tail_p);
-
-                u_s += 32;
-                v_s += 32;
-                u_d += 32;
-                v_d += 32;
-                cnt -= 16;
-            }
-#else
             for (uint32_t j = 0; j < width; j += 2)
             {
                 u_d[j] = u_s[j];
                 v_d[j] = v_s[j];
             }
-#endif
         }
     }
 
@@ -19936,34 +20094,6 @@ aipl_error_t aipl_color_convert_yuv_semi_to_packed(const uint8_t* y_src,
         const uint8_t* v_s = v_src + i / 2 * pitch;
         uint8_t* v_d = v_dst + i * width * 2;
 
-#ifdef AIPL_HELIUM_ACCELERATION
-        int32_t cnt = width / 2;
-
-        while (cnt > 0)
-        {
-            mve_pred16_t tail_p = vctp8q(cnt);
-
-            uint8x16_t y = vldrbq_gather_offset_z(y_s, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(y_d, AIPL_4_BYTE_OFFSETS_U8, y, tail_p);
-
-            y = vldrbq_gather_offset_z(y_s + 1, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(y_d + 2, AIPL_4_BYTE_OFFSETS_U8, y, tail_p);
-
-            uint8x16_t u = vldrbq_gather_offset_z(u_s, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(u_d, AIPL_4_BYTE_OFFSETS_U8, u, tail_p);
-
-            uint8x16_t v = vldrbq_gather_offset_z(v_s, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(v_d, AIPL_4_BYTE_OFFSETS_U8, v, tail_p);
-
-            y_s += 32;
-            u_s += 32;
-            v_s += 32;
-            y_d += 64;
-            u_d += 64;
-            v_d += 64;
-            cnt -= 16;
-        }
-#else
         for (uint32_t j = 0; j < width / 2; ++j)
         {
             y_d[j * 4] = y_s[j * 2];
@@ -19971,7 +20101,6 @@ aipl_error_t aipl_color_convert_yuv_semi_to_packed(const uint8_t* y_src,
             u_d[j * 4] = u_s[j * 2];
             v_d[j * 4] = v_s[j * 2];
         }
-#endif
     }
 
     return AIPL_ERR_OK;
@@ -20166,33 +20295,6 @@ aipl_error_t aipl_color_convert_yuv_packed_to_packed(const uint8_t* y_src,
         const uint8_t* v_s = v_src + i * pitch * 2;
         uint8_t* v_d = v_dst + i * width * 2;
 
-#ifdef AIPL_HELIUM_ACCELERATION
-        int32_t cnt = width / 2;
-        while (cnt > 0)
-        {
-            mve_pred16_t tail_p = vctp8q(cnt);
-
-            uint8x16_t y = vldrbq_gather_offset_z(y_s, AIPL_4_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(y_d, AIPL_4_BYTE_OFFSETS_U8, y, tail_p);
-
-            y = vldrbq_gather_offset_z(y_s + 2, AIPL_4_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(y_d + 2, AIPL_4_BYTE_OFFSETS_U8, y, tail_p);
-
-            uint8x16_t u = vldrbq_gather_offset_z(u_s, AIPL_4_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(u_d, AIPL_4_BYTE_OFFSETS_U8, u, tail_p);
-
-            uint8x16_t v = vldrbq_gather_offset_z(v_s, AIPL_4_BYTE_OFFSETS_U8, tail_p);
-            vstrbq_scatter_offset_p(v_d, AIPL_4_BYTE_OFFSETS_U8, v, tail_p);
-
-            y_s += 64;
-            u_s += 64;
-            v_s += 64;
-            y_d += 64;
-            u_d += 64;
-            v_d += 64;
-            cnt -= 16;
-        }
-#else
         for (uint32_t j = 0; j < width * 2; j += 4)
         {
             y_d[j] = y_s[j];
@@ -20200,7 +20302,6 @@ aipl_error_t aipl_color_convert_yuv_packed_to_packed(const uint8_t* y_src,
             u_d[j] = u_s[j];
             v_d[j] = v_s[j];
         }
-#endif
     }
 
     return AIPL_ERR_OK;

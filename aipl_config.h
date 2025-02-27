@@ -23,7 +23,7 @@ extern "C" {
  *  1 - the allocation and free functions should be
  *      provided by the user
  */
-#define AIPL_CUSTOM_VIDEO_ALLOC  1
+#define AIPL_CUSTOM_VIDEO_ALLOC     1
 
 /**
  * Custom D/AVE2D initialization function
@@ -33,7 +33,16 @@ extern "C" {
  *  1 - use user-defined initialization function;
  *      user must also provide aipl_dave2d_handle()
  */
-#define AIPL_CUSTOM_DAVE2D_INIT 0
+#define AIPL_CUSTOM_DAVE2D_INIT     0
+
+/**
+ * Set the library to always choose D/AVE2D implementation
+ * over others even if it's slower in order to reduce CPU load
+ *
+ * The setting only takes effect if D/AVE2D acceleration is turned on
+ *
+ */
+// #define AIPL_OPTIMIZE_CPU_LOAD
 
 /**
  * Enable color format conversions
@@ -61,7 +70,7 @@ extern "C" {
 #define TO_UYVY         BIT(17)
 #define TO_ALL          (TO_ALPHA8_I400 | TO_ARGB8888 | TO_ARGB4444\
                          | TO_ARGB1555 | TO_RGBA8888 | TO_RGBA4444\
-                         | TO_RGBA5551 | TO_BGR888 | TO_RGB565\
+                         | TO_RGBA5551 | TO_BGR888 | TO_RGB888 | TO_RGB565\
                          | TO_YV12 | TO_I420 | TO_I422 | TO_I444\
                          | TO_NV12 | TO_NV21 | TO_YUY2 | TO_UYVY)
 

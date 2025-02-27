@@ -76,7 +76,7 @@ aipl_error_t aipl_crop(const void* input, void* output,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-#ifdef AIPL_DAVE2D_ACCELERATION
+#if (defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD))
     if (aipl_dave2d_format_supported(format)
         && format != AIPL_COLOR_ARGB1555
         && format != AIPL_COLOR_RGBA5551

@@ -159,6 +159,16 @@ aipl_error_t aipl_dave2d_error_convert(d2_s32 error);
  */
 d2_u32 aipl_dave2d_get_last_converted_error(void);
 
+/**
+ * Determine if the color format conversion shuld be performed on D/AVE2D
+ *
+ * @param input_format  input color format
+ * @param output_format output color format
+ * @return true if D/AVE2D is suitable
+ */
+bool aipl_dave2d_color_convert_suitable(aipl_color_format_t input_format,
+                                        aipl_color_format_t output_format);
+
 /**********************
  *      MACROS
  **********************/
