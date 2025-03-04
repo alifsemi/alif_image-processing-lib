@@ -503,7 +503,8 @@ aipl_error_t aipl_color_convert_rgb565_to_yuv_packed(const void* input,
                                                      uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_YV12 & TO_ALPHA8_I400 | AIPL_CONVERT_I420 & TO_ALPHA8_I400\
-     | AIPL_CONVERT_NV12 & TO_ALPHA8_I400 | AIPL_CONVERT_NV21 & TO_ALPHA8_I400)
+     | AIPL_CONVERT_NV12 & TO_ALPHA8_I400 | AIPL_CONVERT_NV21 & TO_ALPHA8_I400\
+     | AIPL_CONVERT_I422 & TO_ALPHA8_I400 | AIPL_CONVERT_I444 & TO_ALPHA8_I400)
 aipl_error_t aipl_color_convert_yuv_planar_to_alpha8(const void* input,
                                                      void* output,
                                                      uint32_t pitch,
@@ -10640,35 +10641,12 @@ aipl_error_t aipl_color_convert_i444_to_nv21(const void* input,
             uint8_t* u_dst = u_dst_ptr + i / 2 * width;
             const uint8_t* v_src = v_src_ptr + i * pitch;
             uint8_t* v_dst = v_dst_ptr + i / 2 * width;
-#ifdef AIPL_HELIUM_ACCELERATION
-            int32_t cnt = width;
 
-            uint32_t j = 0;
-            while (cnt > 0)
-            {
-                mve_pred16_t tail_p = vctp8q(cnt);
-
-                uint8x16_t u = vldrbq_gather_offset_z(u_src, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-
-                vstrbq_scatter_offset_p(u_dst, AIPL_2_BYTE_OFFSETS_U8, u, tail_p);
-
-                uint8x16_t v = vldrbq_gather_offset_z(v_src, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-
-                vstrbq_scatter_offset_p(v_dst, AIPL_2_BYTE_OFFSETS_U8, v, tail_p);
-
-                u_src += 32;
-                v_src += 32;
-                u_dst += 32;
-                v_dst += 32;
-                cnt -= 32;
-            }
-#else
             for (uint32_t j = 0; j < width; j += 2)
             {
                 u_dst[j] = u_src[j];
                 v_dst[j] = v_src[j];
             }
-#endif
         }
     }
 
@@ -10709,35 +10687,12 @@ aipl_error_t aipl_color_convert_i444_to_nv12(const void* input,
             uint8_t* u_dst = u_dst_ptr + i / 2 * width;
             const uint8_t* v_src = v_src_ptr + i * pitch;
             uint8_t* v_dst = v_dst_ptr + i / 2 * width;
-#ifdef AIPL_HELIUM_ACCELERATION
-            int32_t cnt = width;
 
-            uint32_t j = 0;
-            while (cnt > 0)
-            {
-                mve_pred16_t tail_p = vctp8q(cnt);
-
-                uint8x16_t u = vldrbq_gather_offset_z(u_src, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-
-                vstrbq_scatter_offset_p(u_dst, AIPL_2_BYTE_OFFSETS_U8, u, tail_p);
-
-                uint8x16_t v = vldrbq_gather_offset_z(v_src, AIPL_2_BYTE_OFFSETS_U8, tail_p);
-
-                vstrbq_scatter_offset_p(v_dst, AIPL_2_BYTE_OFFSETS_U8, v, tail_p);
-
-                u_src += 32;
-                v_src += 32;
-                u_dst += 32;
-                v_dst += 32;
-                cnt -= 32;
-            }
-#else
             for (uint32_t j = 0; j < width; j += 2)
             {
                 u_dst[j] = u_src[j];
                 v_dst[j] = v_src[j];
             }
-#endif
         }
     }
 
@@ -17643,7 +17598,8 @@ aipl_error_t aipl_color_convert_rgb565_to_yuv_packed(const void* input,
 #endif
 
 #if (AIPL_CONVERT_YV12 & TO_ALPHA8_I400 | AIPL_CONVERT_I420 & TO_ALPHA8_I400\
-     | AIPL_CONVERT_NV12 & TO_ALPHA8_I400 | AIPL_CONVERT_NV21 & TO_ALPHA8_I400)
+     | AIPL_CONVERT_NV12 & TO_ALPHA8_I400 | AIPL_CONVERT_NV21 & TO_ALPHA8_I400\
+     | AIPL_CONVERT_I422 & TO_ALPHA8_I400 | AIPL_CONVERT_I444 & TO_ALPHA8_I400)
 aipl_error_t aipl_color_convert_yuv_planar_to_alpha8(const void* input,
                                                      void* output,
                                                      uint32_t pitch,
