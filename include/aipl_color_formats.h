@@ -10,7 +10,7 @@
 
 /******************************************************************************
  * @file    aipl_color_formats.h
- * @brief   Color formats type and utils definition
+ * @brief   Color formats type and utils definitions
  *
 ******************************************************************************/
 

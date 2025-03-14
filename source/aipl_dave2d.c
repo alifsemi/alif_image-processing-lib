@@ -10,7 +10,7 @@
 
 /******************************************************************************
  * @file    aipl_dave2d.c
- * @brief   D/AVE2D related functions implementation
+ * @brief   D/AVE2D related function implementations
  *
 ******************************************************************************/
 
@@ -480,14 +480,19 @@ d2_u32 aipl_dave2d_get_last_converted_error(void)
     return last_converted_error;
 }
 
+bool aipl_dave2d_check_output_format(aipl_color_format_t format)
+{
+    return aipl_dave2d_format_supported(format)
+           && format != AIPL_COLOR_ARGB1555
+           && format != AIPL_COLOR_RGBA5551
+           && format != AIPL_COLOR_ALPHA8;
+}
+
 bool aipl_dave2d_color_convert_suitable(aipl_color_format_t input_format,
                                         aipl_color_format_t output_format)
 {
     if(aipl_dave2d_format_supported(input_format)
-       && aipl_dave2d_format_supported(output_format)
-       && output_format != AIPL_COLOR_ARGB1555
-       && output_format != AIPL_COLOR_RGBA5551
-       && output_format != AIPL_COLOR_ALPHA8)
+       && aipl_dave2d_check_output_format(output_format))
     {
 #ifdef AIPL_OPTIMIZE_CPU_LOAD
         return true;

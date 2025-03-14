@@ -10,7 +10,7 @@
 
 /******************************************************************************
  * @file    aipl_cache.h
- * @brief   CPU cache management functions definition
+ * @brief   CPU cache management function definitions
  *
 ******************************************************************************/
 

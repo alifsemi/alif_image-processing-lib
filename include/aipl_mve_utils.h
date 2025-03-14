@@ -2923,7 +2923,7 @@ INLINE void aipl_mve_lut_transform_rgb_x16(aipl_mve_rgb_x16_t* pix,
  *      MACROS
  **********************/
 
-#endif /*AIPL_USE_MVE*/
+#endif /*AIPL_HELIUM_ACCELERATION*/
 
 #ifdef __cplusplus
 } /*extern "C"*/

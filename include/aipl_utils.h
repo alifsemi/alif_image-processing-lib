@@ -10,7 +10,7 @@
 
 /******************************************************************************
  * @file    aipl_utils.h
- * @brief   Utility types and functions
+ * @brief   Utility types and function definitions
  *
 ******************************************************************************/
 

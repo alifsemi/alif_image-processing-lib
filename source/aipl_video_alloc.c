@@ -10,7 +10,7 @@
 
 /******************************************************************************
  * @file    aipl_video_alloc.c
- * @brief   Video memory allocation functions default implementation
+ * @brief   Video memory allocation functions default implementations
  *
 ******************************************************************************/
 
