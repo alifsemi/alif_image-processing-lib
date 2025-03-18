@@ -10,7 +10,7 @@
 
 /******************************************************************************
  * @file    aipl_color_formats.c
- * @brief   Color formats utils implementation
+ * @brief   Color formats utils implementations
  *
 ******************************************************************************/
 

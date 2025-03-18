@@ -10,7 +10,7 @@
 
 /******************************************************************************
  * @file    aipl_dave2d.h
- * @brief   D/AVE2D related functions definition
+ * @brief   D/AVE2D related function definitions
  *
 ******************************************************************************/
 
@@ -158,6 +158,14 @@ aipl_error_t aipl_dave2d_error_convert(d2_s32 error);
  * @return D/AVE2D driver error code
  */
 d2_u32 aipl_dave2d_get_last_converted_error(void);
+
+/**
+ * Check if D/AVE2D produces valid result with specified output format
+ *
+ * @param format output color format
+ * @return true if D/AVE2D produces valid result
+ */
+bool aipl_dave2d_check_output_format(aipl_color_format_t format);
 
 /**
  * Determine if the color format conversion shuld be performed on D/AVE2D

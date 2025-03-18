@@ -114,20 +114,7 @@
       </RTE_Components_h>
     </component>
 
-    <component Cclass="Graphics" Cgroup="Acceleration" Csub="Helium" Cversion="1.0.1">
-      <description>A hardware acceleration from ARM Helium</description>
-      <files>
-        <file category="include"  name="include/"/>
-      </files>
-
-      <RTE_Components_h>
-
-/*! \brief enable Helium */
-#define AIPL_HELIUM_ACCELERATION
-      </RTE_Components_h>
-    </component>
-
-    <component Cclass="Graphics" Cgroup="AIPL" Csub="Basic" Cversion="1.0.0" condition="AIPL-Essential">
+    <component Cclass="Graphics" Cgroup="AIPL" Csub="Basic" Cversion="1.1.0" condition="AIPL-Essential">
       <description>
         Alif Image Processing Library basic functions:
           * Crop
@@ -138,20 +125,45 @@
       <files>
         <!-- include folder / device header file -->
         <file category="include"  name="include/"/>
+        <file category="include"  name="include/dave2d/"/>
+        <file category="include"  name="include/default/"/>
+        <file category="include"  name="include/helium/"/>
         <!-- include headers -->
         <file category="header"   name="include/aipl_crop.h"/>
+        <file category="header"   name="include/dave2d/aipl_crop_dave2d.h"/>
+        <file category="header"   name="include/default/aipl_crop_default.h"/>
         <file category="header"   name="include/aipl_flip.h"/>
+        <file category="header"   name="include/dave2d/aipl_flip_dave2d.h"/>
+        <file category="header"   name="include/default/aipl_flip_default.h"/>
+        <file category="header"   name="include/helium/aipl_flip_helium.h"/>
         <file category="header"   name="include/aipl_resize.h"/>
+        <file category="header"   name="include/dave2d/aipl_resize_dave2d.h"/>
+        <file category="header"   name="include/default/aipl_resize_default.h"/>
+        <file category="header"   name="include/helium/aipl_resize_helium.h"/>
         <file category="header"   name="include/aipl_rotate.h"/>
+        <file category="header"   name="include/dave2d/aipl_rotate_dave2d.h"/>
+        <file category="header"   name="include/default/aipl_rotate_default.h"/>
+        <file category="header"   name="include/helium/aipl_rotate_helium.h"/>
         <!-- source files -->
         <file category="sourceC"  name="source/aipl_crop.c"/>
+        <file category="sourceC"  name="source/dave2d/aipl_crop_dave2d.c"/>
+        <file category="sourceC"  name="source/default/aipl_crop_default.c"/>
         <file category="sourceC"  name="source/aipl_flip.c"/>
+        <file category="sourceC"  name="source/dave2d/aipl_flip_dave2d.c"/>
+        <file category="sourceC"  name="source/default/aipl_flip_default.c"/>
+        <file category="sourceC"  name="source/helium/aipl_flip_helium.c"/>
         <file category="sourceC"  name="source/aipl_resize.c"/>
+        <file category="sourceC"  name="source/dave2d/aipl_resize_dave2d.c"/>
+        <file category="sourceC"  name="source/default/aipl_resize_default.c"/>
+        <file category="sourceC"  name="source/helium/aipl_resize_helium.c"/>
         <file category="sourceC"  name="source/aipl_rotate.c"/>
+        <file category="sourceC"  name="source/dave2d/aipl_rotate_dave2d.c"/>
+        <file category="sourceC"  name="source/default/aipl_rotate_default.c"/>
+        <file category="sourceC"  name="source/helium/aipl_rotate_helium.c"/>
       </files>
     </component>
 
-    <component Cclass="Graphics" Cgroup="AIPL" Csub="Color correction" Cversion="1.0.0" condition="AIPL-Essential">
+    <component Cclass="Graphics" Cgroup="AIPL" Csub="Color correction" Cversion="1.1.0" condition="AIPL-Essential">
       <description>
         Alif Image Processing Library color correction functions:
           * Color correction (using a matrix)
@@ -161,18 +173,32 @@
       <files>
         <!-- include folder / device header file -->
         <file category="include"  name="include/"/>
+        <file category="include"  name="include/helium/"/>
+        <file category="include"  name="include/default/"/>
         <!-- include headers -->
         <file category="header"   name="include/aipl_color_correction.h"/>
+        <file category="header"   name="include/default/aipl_color_correction_default.h"/>
+        <file category="header"   name="include/helium/aipl_color_correction_helium.h"/>
         <file category="header"   name="include/aipl_white_balance.h"/>
+        <file category="header"   name="include/default/aipl_white_balance_default.h"/>
+        <file category="header"   name="include/helium/aipl_white_balance_helium.h"/>
         <file category="header"   name="include/aipl_lut_transform.h"/>
+        <file category="header"   name="include/default/aipl_lut_transform_default.h"/>
+        <file category="header"   name="include/helium/aipl_lut_transform_helium.h"/>
         <!-- source files -->
         <file category="sourceC"  name="source/aipl_color_correction.c"/>
+        <file category="sourceC"  name="source/default/aipl_color_correction_default.c"/>
+        <file category="sourceC"  name="source/helium/aipl_color_correction_helium.c"/>
         <file category="sourceC"  name="source/aipl_white_balance.c"/>
+        <file category="sourceC"  name="source/default/aipl_white_balance_default.c"/>
+        <file category="sourceC"  name="source/helium/aipl_white_balance_helium.c"/>
         <file category="sourceC"  name="source/aipl_lut_transform.c"/>
+        <file category="sourceC"  name="source/default/aipl_lut_transform_default.c"/>
+        <file category="sourceC"  name="source/helium/aipl_lut_transform_helium.c"/>
       </files>
     </component>
 
-    <component Cclass="Graphics" Cgroup="AIPL" Csub="Color conversion" Cversion="1.0.0" condition="AIPL-Essential">
+    <component Cclass="Graphics" Cgroup="AIPL" Csub="Color conversion" Cversion="1.1.0" condition="AIPL-Essential">
       <description>
         Alif Image Processing Library color conversions between the following formats:
           * ALPHA8
@@ -183,6 +209,7 @@
           * RGBA4444
           * RGBA5551
           * BGR888
+          * RGB888
           * RGB565
           * YV12
           * I420
@@ -197,10 +224,19 @@
       <files>
         <!-- include folder / device header file -->
         <file category="include"  name="include/"/>
+        <file category="include"  name="include/dave2d/"/>
+        <file category="include"  name="include/helium/"/>
+        <file category="include"  name="include/default/"/>
         <!-- include headers -->
         <file category="header"   name="include/aipl_color_conversion.h"/>
+        <file category="header"   name="include/dave2d/aipl_color_conversion_dave2d.h"/>
+        <file category="header"   name="include/helium/aipl_color_conversion_helium.h"/>
+        <file category="header"   name="include/default/aipl_color_conversion_default.h"/>
         <!-- source files -->
         <file category="sourceC"  name="source/aipl_color_conversion.c"/>
+        <file category="sourceC"  name="source/dave2d/aipl_color_conversion_dave2d.c"/>
+        <file category="sourceC"  name="source/helium/aipl_color_conversion_helium.c"/>
+        <file category="sourceC"  name="source/default/aipl_color_conversion_default.c"/>
       </files>
     </component>
 

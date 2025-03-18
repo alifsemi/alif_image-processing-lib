@@ -10,7 +10,7 @@
 
 /******************************************************************************
  * @file    aipl_error.h
- * @brief   Error type and utils definition
+ * @brief   Error type and utils definitions
  *
 ******************************************************************************/
 

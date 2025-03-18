@@ -10,7 +10,7 @@
 
 /******************************************************************************
  * @file    aipl_video_alloc.h
- * @brief   Video memory allocation functions definition
+ * @brief   Video memory allocation function definitions
  *
 ******************************************************************************/
 

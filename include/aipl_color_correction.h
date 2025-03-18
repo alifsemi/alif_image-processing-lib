@@ -10,7 +10,7 @@
 
 /******************************************************************************
  * @file    aipl_color_correction.h
- * @brief   Color correction functions definition
+ * @brief   Color correction function definitions
  *
 ******************************************************************************/
 

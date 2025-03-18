@@ -75,10 +75,25 @@ extern "C" {
                          | TO_NV12 | TO_NV21 | TO_YUY2 | TO_UYVY)
 
 /**
+ * Enable Helium acceleration
+ */
+#define AIPL_HELIUM_ACCELERATION
+
+/**
+ * Include every default function implementation even if it's suboptimal
+ */
+// #define AIPL_INCLUDE_ALL_DEFAULT
+
+/**
+ * Include every Helium function implementation even if it's suboptimal
+ */
+// #define AIPL_INCLUDE_ALL_HELIUM
+
+/**
  * Set conversion from each color format using
- * the convstants above
+ * the constants above
  *
- * To complete disable color conversion the marco should
+ * To completely disable color conversion the marco should
  * be defined as 0
  */
 #define AIPL_CONVERT_ALPHA8_I400    TO_ARGB8888

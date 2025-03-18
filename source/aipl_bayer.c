@@ -10,7 +10,7 @@
 
 /******************************************************************************
  * @file    aipl_bayer.c
- * @brief   Bayer pattern decoding functions
+ * @brief   Bayer pattern decoding function implementations
  *
 ******************************************************************************/
 

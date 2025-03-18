@@ -10,7 +10,7 @@
 
 /******************************************************************************
  * @file    aipl_image.h
- * @brief   Image type and utils definition
+ * @brief   Image type and utils definitions
  *
 ******************************************************************************/
 

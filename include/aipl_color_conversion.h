@@ -10,7 +10,7 @@
 
 /******************************************************************************
  * @file    aipl_color_conversion.h
- * @brief   Color conversion functions definition
+ * @brief   Color conversion function definitions
  *
 ******************************************************************************/
 

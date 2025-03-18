@@ -10,7 +10,7 @@
 
 /******************************************************************************
  * @file    aipl_bayer.h
- * @brief   Bayer pattern decoding functions
+ * @brief   Bayer pattern decoding function definitions
  *
  * Based on libdc1394 implementation:
  * https://sourceforge.net/projects/libdc1394/

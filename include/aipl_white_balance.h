@@ -10,7 +10,7 @@
 
 /******************************************************************************
  * @file    aipl_white_balance.h
- * @brief   White balance functions definition
+ * @brief   White balance function definitions
  *
 ******************************************************************************/
 

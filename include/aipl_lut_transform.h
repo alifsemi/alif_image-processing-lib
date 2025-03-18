@@ -10,7 +10,7 @@
 
 /******************************************************************************
  * @file    aipl_lut_transform.h
- * @brief   LUT transformation functions definition
+ * @brief   LUT transformation function definitions
  *
 ******************************************************************************/
 
