@@ -8,6 +8,12 @@
   <license>License.txt</license>
 
   <releases>
+    <release version="1.1.0" tag="v1.1.0" url="https://github.com/alifsemi/alif_image-processing-lib/releases/download/v1.1.0/AlifSemiconductor.AIPL.1.1.0.pack" date="2025-03-18">
+      * Optimize color conversions functions
+      * Restructure the library to allow users to directly choose implementations
+        by suffixing the call with _dave2d, _helium or _default.
+      * Introduce additional configuration options
+    </release>
     <release version="1.0.1" tag="v1.0.1" url="https://github.com/alifsemi/alif_image-processing-lib/releases/download/v1.0.1/AlifSemiconductor.AIPL.1.0.1.pack" date="2025-02-17">
       Fix the PDSC file schema check failure
     </release>
