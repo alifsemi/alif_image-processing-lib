@@ -37,12 +37,12 @@ extern "C" {
  * @param N number of pixels
  * @param S pixel size
  */
-#define AIPL_OFFSETS_U8(N, S)   (vmulq_n_u8(vidupq_n_u8(0, N), S))
+#define AIPL_OFFSETS_U8(N, S)   (vmulq_n_u8(vidupq_n_u8(0, S), N))
 
-#define AIPL_8_BYTE_OFFSETS_U8  AIPL_OFFSETS_U8(1, 8)
-#define AIPL_4_BYTE_OFFSETS_U8  AIPL_OFFSETS_U8(1, 4)
-#define AIPL_3_BYTE_OFFSETS_U8  AIPL_OFFSETS_U8(1, 3)
-#define AIPL_2_BYTE_OFFSETS_U8  AIPL_OFFSETS_U8(1, 2)
+#define AIPL_8_BYTE_OFFSETS_U8  (vidupq_n_u8(0, 8))
+#define AIPL_4_BYTE_OFFSETS_U8  (vidupq_n_u8(0, 4))
+#define AIPL_3_BYTE_OFFSETS_U8  (AIPL_OFFSETS_U8(3, 1))
+#define AIPL_2_BYTE_OFFSETS_U8  (vidupq_n_u8(0, 2))
 
 /**
  * Create 8 offset values
@@ -50,12 +50,12 @@ extern "C" {
  * @param N number of pixels
  * @param S pixel size
  */
-#define AIPL_OFFSETS_U16(N, S)  (vmulq_n_u16(vidupq_n_u16(0, N), S))
+#define AIPL_OFFSETS_U16(N, S)  (vmulq_n_u16(vidupq_n_u16(0, S), N))
 
-#define AIPL_8_BYTE_OFFSETS_U16 AIPL_OFFSETS_U16(1, 8)
-#define AIPL_4_BYTE_OFFSETS_U16 AIPL_OFFSETS_U16(1, 4)
-#define AIPL_3_BYTE_OFFSETS_U16 AIPL_OFFSETS_U16(1, 3)
-#define AIPL_2_BYTE_OFFSETS_U16 AIPL_OFFSETS_U16(1, 2)
+#define AIPL_8_BYTE_OFFSETS_U16 (vidupq_n_u16(0, 8))
+#define AIPL_4_BYTE_OFFSETS_U16 (vidupq_n_u16(0, 4))
+#define AIPL_3_BYTE_OFFSETS_U16 (AIPL_OFFSETS_U16(3, 1))
+#define AIPL_2_BYTE_OFFSETS_U16 (vidupq_n_u16(0, 2))
 
 /**
  * Create 4 offset values
@@ -63,12 +63,12 @@ extern "C" {
  * @param N number of pixels
  * @param S pixel size
  */
-#define AIPL_OFFSETS_U32(N, S) (vmulq_n_u32(vidupq_n_u32(0, N), S))
+#define AIPL_OFFSETS_U32(N, S) (vmulq_n_u32(vidupq_n_u32(0, S), N))
 
-#define AIPL_8_BYTE_OFFSETS_U32 AIPL_OFFSETS_U32(1, 8)
-#define AIPL_4_BYTE_OFFSETS_U32 AIPL_OFFSETS_U32(1, 4)
-#define AIPL_3_BYTE_OFFSETS_U32 AIPL_OFFSETS_U32(1, 3)
-#define AIPL_2_BYTE_OFFSETS_U32 AIPL_OFFSETS_U32(1, 2)
+#define AIPL_8_BYTE_OFFSETS_U32 (vidupq_n_u32(0, 8))
+#define AIPL_4_BYTE_OFFSETS_U32 (vidupq_n_u32(0, 4))
+#define AIPL_3_BYTE_OFFSETS_U32 (AIPL_OFFSETS_U32(3, 1))
+#define AIPL_2_BYTE_OFFSETS_U32 (vidupq_n_u32(0, 2))
 
 #define INLINE inline __attribute__((always_inline))
 
@@ -1783,9 +1783,10 @@ INLINE void aipl_mve_ldr_8px_offset_rgb(aipl_mve_rgb_x8_t* dst,
                                         uint8_t g_offset,
                                         uint8_t b_offset)
 {
-    dst->r = vldrbq_gather_offset_z(src + r_offset, AIPL_OFFSETS_U16(offset, 3), pred);
-    dst->g = vldrbq_gather_offset_z(src + g_offset, AIPL_OFFSETS_U16(offset, 3), pred);
-    dst->b = vldrbq_gather_offset_z(src + b_offset, AIPL_OFFSETS_U16(offset, 3), pred);
+    offset *= 3;
+    dst->r = vldrbq_gather_offset_z(src + r_offset, AIPL_OFFSETS_U16(offset, 1), pred);
+    dst->g = vldrbq_gather_offset_z(src + g_offset, AIPL_OFFSETS_U16(offset, 1), pred);
+    dst->b = vldrbq_gather_offset_z(src + b_offset, AIPL_OFFSETS_U16(offset, 1), pred);
 }
 
 /**
