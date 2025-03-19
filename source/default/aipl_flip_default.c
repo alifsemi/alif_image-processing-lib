@@ -17,7 +17,7 @@
 /*********************
  *      INCLUDES
  *********************/
-#include <memory.h>
+#include <string.h>
 #include "aipl_flip_default.h"
 #include <RTE_Device.h>
 #include <stddef.h>
