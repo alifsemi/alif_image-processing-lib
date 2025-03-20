@@ -270,7 +270,7 @@ static aipl_error_t aipl_resize_sw_argb1555(const void* input, void* output,
 
         for (x = 0; x < output_width; x += 8)
         {
-            uint32x4_t offsets = vidupq_u32(0, 2);
+            uint32x4_t offsets = vidupq_u32((uint32_t)0, 2);
             offsets = vmulq(offsets, src_x_frac);
             uint32x4_t tx0 = vaddq(vdupq_n_u32(src_x_accum), offsets);
             uint32x4_t tx1 = vaddq(vdupq_n_u32((src_x_accum + src_x_frac)), offsets);
@@ -369,7 +369,7 @@ static aipl_error_t aipl_resize_sw_rgba5551(const void* input, void* output,
 
         for (x = 0; x < output_width; x += 8)
         {
-            uint32x4_t offsets = vidupq_u32(0, 2);
+            uint32x4_t offsets = vidupq_u32((uint32_t)0, 2);
             offsets = vmulq(offsets, src_x_frac);
             uint32x4_t tx0 = vaddq(vdupq_n_u32(src_x_accum), offsets);
             uint32x4_t tx1 = vaddq(vdupq_n_u32((src_x_accum + src_x_frac)), offsets);
