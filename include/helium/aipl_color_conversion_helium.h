@@ -332,6 +332,42 @@ aipl_error_t aipl_color_convert_argb8888_to_alpha8_helium(const void* input,
                                                           uint32_t height);
 
 #endif
+#if (AIPL_CONVERT_ARGB8888 & TO_ARGB4444)
+/**
+ * Convert ARGB8888 image to ARGB4444
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_argb8888_to_argb4444_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
+#if (AIPL_CONVERT_ARGB8888 & TO_ARGB1555)
+/**
+ * Convert ARGB8888 image to ARGB1555
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_argb8888_to_argb1555_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
 #if (AIPL_CONVERT_ARGB8888 & TO_RGBA8888)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_HELIUM))
 /**
@@ -346,6 +382,42 @@ aipl_error_t aipl_color_convert_argb8888_to_alpha8_helium(const void* input,
  * @return error code
  */
 aipl_error_t aipl_color_convert_argb8888_to_rgba8888_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
+#if (AIPL_CONVERT_ARGB8888 & TO_RGBA4444)
+/**
+ * Convert ARGB8888 image to RGBA4444
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_argb8888_to_rgba4444_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
+#if (AIPL_CONVERT_ARGB8888 & TO_RGBA5551)
+/**
+ * Convert ARGB8888 image to RGBA5551
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_argb8888_to_rgba5551_helium(const void* input,
                                                             void* output,
                                                             uint32_t pitch,
                                                             uint32_t width,
@@ -382,6 +454,24 @@ aipl_error_t aipl_color_convert_argb8888_to_bgr888_helium(const void* input,
  * @return error code
  */
 aipl_error_t aipl_color_convert_argb8888_to_rgb888_helium(const void* input,
+                                                          void* output,
+                                                          uint32_t pitch,
+                                                          uint32_t width,
+                                                          uint32_t height);
+#endif
+#if (AIPL_CONVERT_ARGB8888 & TO_RGB565)
+/**
+ * Convert ARGB8888 image to RGB565
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_argb8888_to_rgb565_helium(const void* input,
                                                           void* output,
                                                           uint32_t pitch,
                                                           uint32_t width,
@@ -586,6 +676,42 @@ aipl_error_t aipl_color_convert_argb4444_to_alpha8_helium(const void* input,
                                                           uint32_t pitch,
                                                           uint32_t width,
                                                           uint32_t height);
+#endif
+#if (AIPL_CONVERT_ARGB4444 & TO_ARGB8888)
+/**
+ * Convert ARGB4444 image to ARGB8888
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_argb4444_to_argb8888_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
+#if (AIPL_CONVERT_ARGB4444 & TO_RGBA8888)
+/**
+ * Convert ARGB4444 image to RGBA8888
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_argb4444_to_rgba8888_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
 #endif
 #if (AIPL_CONVERT_ARGB4444 & TO_RGBA4444)\
      && (!(defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD)) || defined(AIPL_INCLUDE_ALL_HELIUM))
@@ -841,6 +967,42 @@ aipl_error_t aipl_color_convert_argb1555_to_alpha8_helium(const void* input,
                                                           uint32_t pitch,
                                                           uint32_t width,
                                                           uint32_t height);
+#endif
+#if (AIPL_CONVERT_ARGB1555 & TO_ARGB8888)
+/**
+ * Convert ARGB1555 image to ARGB8888
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_argb1555_to_argb8888_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
+#if (AIPL_CONVERT_ARGB1555 & TO_RGBA8888)
+/**
+ * Convert ARGB1555 image to RGBA8888
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_argb1555_to_rgba8888_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
 #endif
 #if (AIPL_CONVERT_ARGB1555 & TO_BGR888)
 /**
@@ -1098,6 +1260,78 @@ aipl_error_t aipl_color_convert_rgba8888_to_argb8888_helium(const void* input,
                                                             uint32_t width,
                                                             uint32_t height);
 #endif
+#if (AIPL_CONVERT_RGBA8888 & TO_ARGB4444)
+/**
+ * Convert RGBA8888 image to ARGB4444
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgba8888_to_argb4444_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGBA8888 & TO_ARGB1555)
+/**
+ * Convert RGBA8888 image to ARGB1555
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgba8888_to_argb1555_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGBA8888 & TO_RGBA4444)
+/**
+ * Convert RGBA8888 image to RGBA4444
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgba8888_to_rgba4444_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGBA8888 & TO_RGBA5551)
+/**
+ * Convert RGBA8888 image to RGBA5551
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgba8888_to_rgba5551_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
 #if (AIPL_CONVERT_RGBA8888 & TO_BGR888)
 /**
  * Convert RGBA8888 image to BGR888
@@ -1129,6 +1363,24 @@ aipl_error_t aipl_color_convert_rgba8888_to_bgr888_helium(const void* input,
  * @return error code
  */
 aipl_error_t aipl_color_convert_rgba8888_to_rgb888_helium(const void* input,
+                                                          void* output,
+                                                          uint32_t pitch,
+                                                          uint32_t width,
+                                                          uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGBA8888 & TO_RGB565)
+/**
+ * Convert RGBA8888 image to RGB565
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgba8888_to_rgb565_helium(const void* input,
                                                           void* output,
                                                           uint32_t pitch,
                                                           uint32_t width,
@@ -1334,6 +1586,24 @@ aipl_error_t aipl_color_convert_rgba4444_to_alpha8_helium(const void* input,
                                                           uint32_t width,
                                                           uint32_t height);
 #endif
+#if (AIPL_CONVERT_RGBA4444 & TO_ARGB8888)
+/**
+ * Convert RGBA4444 image to ARGB8888
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgba4444_to_argb8888_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
 #if (AIPL_CONVERT_RGBA4444 & TO_ARGB4444)\
      && (!(defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD)) || defined(AIPL_INCLUDE_ALL_HELIUM))
 /**
@@ -1348,6 +1618,60 @@ aipl_error_t aipl_color_convert_rgba4444_to_alpha8_helium(const void* input,
  * @return error code
  */
 aipl_error_t aipl_color_convert_rgba4444_to_argb4444_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGBA4444 & TO_ARGB1555)
+/**
+ * Convert RGBA4444 image to ARGB1555
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgba4444_to_argb1555_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGBA4444 & TO_RGBA8888)
+/**
+ * Convert RGBA4444 image to RGBA8888
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgba4444_to_rgba8888_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGBA4444 & TO_RGBA5551)
+/**
+ * Convert RGBA4444 image to RGBA5551
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgba4444_to_rgba5551_helium(const void* input,
                                                             void* output,
                                                             uint32_t pitch,
                                                             uint32_t width,
@@ -1589,6 +1913,96 @@ aipl_error_t aipl_color_convert_rgba5551_to_alpha8_helium(const void* input,
                                                           uint32_t pitch,
                                                           uint32_t width,
                                                           uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGBA5551 & TO_ARGB8888)
+/**
+ * Convert RGBA5551 image to ARGB8888
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgba5551_to_argb8888_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGBA5551 & TO_ARGB4444)
+/**
+ * Convert RGBA5551 image to ARGB4444
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgba5551_to_argb4444_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGBA5551 & TO_ARGB1555)
+/**
+ * Convert RGBA5551 image to ARGB1555
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgba5551_to_argb1555_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGBA5551 & TO_RGBA8888)
+/**
+ * Convert RGBA5551 image to RGBA8888
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgba5551_to_rgba8888_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGBA5551 & TO_RGBA4444)
+/**
+ * Convert RGBA5551 image to RGBA4444
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgba5551_to_rgba4444_helium(const void* input,
+                                                            void* output,
+                                                            uint32_t pitch,
+                                                            uint32_t width,
+                                                            uint32_t height);
 #endif
 #if (AIPL_CONVERT_RGBA5551 & TO_BGR888)
 /**
@@ -2513,6 +2927,114 @@ aipl_error_t aipl_color_convert_rgb565_to_alpha8_helium(const void* input,
                                                         uint32_t pitch,
                                                         uint32_t width,
                                                         uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGB565 & TO_ARGB8888)
+/**
+ * Convert RGB565 image to ARGB8888
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgb565_to_argb8888_helium(const void* input,
+                                                          void* output,
+                                                          uint32_t pitch,
+                                                          uint32_t width,
+                                                          uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGB565 & TO_ARGB4444)
+/**
+ * Convert RGB565 image to ARGB4444
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgb565_to_argb4444_helium(const void* input,
+                                                          void* output,
+                                                          uint32_t pitch,
+                                                          uint32_t width,
+                                                          uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGB565 & TO_ARGB1555)
+/**
+ * Convert RGB565 image to ARGB1555
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgb565_to_argb1555_helium(const void* input,
+                                                          void* output,
+                                                          uint32_t pitch,
+                                                          uint32_t width,
+                                                          uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGB565 & TO_RGBA8888)
+/**
+ * Convert RGB565 image to RGBA8888
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgb565_to_rgba8888_helium(const void* input,
+                                                          void* output,
+                                                          uint32_t pitch,
+                                                          uint32_t width,
+                                                          uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGB565 & TO_RGBA4444)
+/**
+ * Convert RGB565 image to RGBA4444
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgb565_to_rgba4444_helium(const void* input,
+                                                          void* output,
+                                                          uint32_t pitch,
+                                                          uint32_t width,
+                                                          uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGB565 & TO_RGBA5551)
+/**
+ * Convert RGB565 image to RGBA5551
+ * using Helium vector acceleration
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgb565_to_rgba5551_helium(const void* input,
+                                                          void* output,
+                                                          uint32_t pitch,
+                                                          uint32_t width,
+                                                          uint32_t height);
 #endif
 #if (AIPL_CONVERT_RGB565 & TO_BGR888)
 /**

@@ -753,9 +753,15 @@ aipl_error_t aipl_color_convert_argb8888_to_argb4444(const void* input,
                                                           pitch,
                                                           width, height);
 #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_argb8888_to_argb4444_helium(input, output,
+                                                          pitch,
+                                                          width, height);
+#else
     return aipl_color_convert_argb8888_to_argb4444_default(input, output,
                                                            pitch,
                                                            width, height);
+#endif
 #endif
 }
 #endif
@@ -772,9 +778,15 @@ aipl_error_t aipl_color_convert_argb8888_to_argb1555(const void* input,
 //                                                           pitch,
 //                                                           width, height);
 // #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_argb8888_to_argb1555_helium(input, output,
+                                                          pitch,
+                                                          width, height);
+#else
     return aipl_color_convert_argb8888_to_argb1555_default(input, output,
                                                            pitch,
                                                            width, height);
+#endif
 // #endif
 }
 #endif
@@ -816,9 +828,15 @@ aipl_error_t aipl_color_convert_argb8888_to_rgba4444(const void* input,
                                                           pitch,
                                                           width, height);
 #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_argb8888_to_rgba4444_helium(input, output,
+                                                          pitch,
+                                                          width, height);
+#else
     return aipl_color_convert_argb8888_to_rgba4444_default(input, output,
                                                            pitch,
                                                            width, height);
+#endif
 #endif
 }
 #endif
@@ -835,9 +853,15 @@ aipl_error_t aipl_color_convert_argb8888_to_rgba5551(const void* input,
 //                                                           pitch,
 //                                                           width, height);
 // #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_argb8888_to_rgba5551_helium(input, output,
+                                                          pitch,
+                                                          width, height);
+#else
     return aipl_color_convert_argb8888_to_rgba5551_default(input, output,
                                                            pitch,
                                                            width, height);
+#endif
 // #endif
 }
 #endif
@@ -892,9 +916,15 @@ aipl_error_t aipl_color_convert_argb8888_to_rgb565(const void* input,
                                                         pitch,
                                                         width, height);
 #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_argb8888_to_rgb565_helium(input, output,
+                                                        pitch,
+                                                        width, height);
+#else
     return aipl_color_convert_argb8888_to_rgb565_default(input, output,
                                                          pitch,
                                                          width, height);
+#endif
 #endif
 }
 #endif
@@ -1250,9 +1280,15 @@ aipl_error_t aipl_color_convert_argb4444_to_argb8888(const void* input,
                                                           pitch,
                                                           width, height);
 #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_argb4444_to_argb8888_helium(input, output,
+                                                          pitch,
+                                                          width, height);
+#else
     return aipl_color_convert_argb4444_to_argb8888_default(input, output,
                                                            pitch,
                                                            width, height);
+#endif
 #endif
 }
 #endif
@@ -1288,9 +1324,15 @@ aipl_error_t aipl_color_convert_argb4444_to_rgba8888(const void* input,
                                                           pitch,
                                                           width, height);
 #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_argb4444_to_rgba8888_helium(input, output,
+                                                          pitch,
+                                                          width, height);
+#else
     return aipl_color_convert_argb4444_to_rgba8888_default(input, output,
                                                            pitch,
                                                            width, height);
+#endif
 #endif
 }
 #endif
@@ -1747,9 +1789,15 @@ aipl_error_t aipl_color_convert_argb1555_to_argb8888(const void* input,
                                                           pitch,
                                                           width, height);
 #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_argb1555_to_argb8888_helium(input, output,
+                                                          pitch,
+                                                          width, height);
+#else
     return aipl_color_convert_argb1555_to_argb8888_default(input, output,
                                                            pitch,
                                                            width, height);
+#endif
 #endif
 }
 #endif
@@ -1785,9 +1833,15 @@ aipl_error_t aipl_color_convert_argb1555_to_rgba8888(const void* input,
                                                           pitch,
                                                           width, height);
 #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_argb1555_to_rgba8888_helium(input, output,
+                                                          pitch,
+                                                          width, height);
+#else
     return aipl_color_convert_argb1555_to_rgba8888_default(input, output,
                                                            pitch,
                                                            width, height);
+#endif
 #endif
 }
 #endif
@@ -2263,9 +2317,15 @@ aipl_error_t aipl_color_convert_rgba8888_to_argb4444(const void* input,
                                                           pitch,
                                                           width, height);
 #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_rgba8888_to_argb4444_helium(input, output,
+                                                          pitch,
+                                                          width, height);
+#else
     return aipl_color_convert_rgba8888_to_argb4444_default(input, output,
                                                            pitch,
                                                            width, height);
+#endif
 #endif
 }
 #endif
@@ -2282,9 +2342,15 @@ aipl_error_t aipl_color_convert_rgba8888_to_argb1555(const void* input,
 //                                                           pitch,
 //                                                           width, height);
 // #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_rgba8888_to_argb1555_helium(input, output,
+                                                          pitch,
+                                                          width, height);
+#else
     return aipl_color_convert_rgba8888_to_argb1555_default(input, output,
                                                            pitch,
                                                            width, height);
+#endif
 // #endif
 }
 #endif
@@ -2301,9 +2367,15 @@ aipl_error_t aipl_color_convert_rgba8888_to_rgba4444(const void* input,
                                                           pitch,
                                                           width, height);
 #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_rgba8888_to_rgba4444_helium(input, output,
+                                                          pitch,
+                                                          width, height);
+#else
     return aipl_color_convert_rgba8888_to_rgba4444_default(input, output,
                                                            pitch,
                                                            width, height);
+#endif
 #endif
 }
 #endif
@@ -2320,9 +2392,15 @@ aipl_error_t aipl_color_convert_rgba8888_to_rgba5551(const void* input,
 //                                                           pitch,
 //                                                           width, height);
 // #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_rgba8888_to_rgba5551_helium(input, output,
+                                                          pitch,
+                                                          width, height);
+#else
     return aipl_color_convert_rgba8888_to_rgba5551_default(input, output,
                                                            pitch,
                                                            width, height);
+#endif
 // #endif
 }
 #endif
@@ -2377,9 +2455,15 @@ aipl_error_t aipl_color_convert_rgba8888_to_rgb565(const void* input,
                                                         pitch,
                                                         width, height);
 #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_rgba8888_to_rgb565_helium(input, output,
+                                                        pitch,
+                                                        width, height);
+#else
     return aipl_color_convert_rgba8888_to_rgb565_default(input, output,
                                                          pitch,
                                                          width, height);
+#endif
 #endif
 }
 #endif
@@ -2735,9 +2819,15 @@ aipl_error_t aipl_color_convert_rgba4444_to_argb8888(const void* input,
                                                           pitch,
                                                           width, height);
 #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_rgba4444_to_argb8888_helium(input, output,
+                                                          pitch,
+                                                          width, height);
+#else
     return aipl_color_convert_rgba4444_to_argb8888_default(input, output,
                                                            pitch,
                                                            width, height);
+#endif
 #endif
 }
 #endif
@@ -2798,9 +2888,15 @@ aipl_error_t aipl_color_convert_rgba4444_to_rgba8888(const void* input,
                                                           pitch,
                                                           width, height);
 #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_rgba4444_to_rgba8888_helium(input, output,
+                                                          pitch,
+                                                          width, height);
+#else
     return aipl_color_convert_rgba4444_to_rgba8888_default(input, output,
                                                            pitch,
                                                            width, height);
+#endif
 #endif
 }
 #endif
@@ -3232,9 +3328,15 @@ aipl_error_t aipl_color_convert_rgba5551_to_argb8888(const void* input,
                                                           pitch,
                                                           width, height);
 #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_rgba5551_to_argb8888_helium(input, output,
+                                                          pitch,
+                                                          width, height);
+#else
     return aipl_color_convert_rgba5551_to_argb8888_default(input, output,
                                                            pitch,
                                                            width, height);
+#endif
 #endif
 }
 #endif
@@ -3289,9 +3391,15 @@ aipl_error_t aipl_color_convert_rgba5551_to_rgba8888(const void* input,
                                                           pitch,
                                                           width, height);
 #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_rgba5551_to_rgba8888_helium(input, output,
+                                                          pitch,
+                                                          width, height);
+#else
     return aipl_color_convert_rgba5551_to_rgba8888_default(input, output,
                                                            pitch,
                                                            width, height);
+#endif
 #endif
 }
 #endif
@@ -4663,9 +4771,15 @@ aipl_error_t aipl_color_convert_rgb565_to_argb8888(const void* input,
                                                         pitch,
                                                         width, height);
 #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_rgb565_to_argb8888_helium(input, output,
+                                                        pitch,
+                                                        width, height);
+#else
     return aipl_color_convert_rgb565_to_argb8888_default(input, output,
                                                          pitch,
                                                          width, height);
+#endif
 #endif
 }
 #endif
@@ -4720,9 +4834,15 @@ aipl_error_t aipl_color_convert_rgb565_to_rgba8888(const void* input,
                                                         pitch,
                                                         width, height);
 #else
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_rgb565_to_rgba8888_helium(input, output,
+                                                        pitch,
+                                                        width, height);
+#else
     return aipl_color_convert_rgb565_to_rgba8888_default(input, output,
                                                          pitch,
                                                          width, height);
+#endif
 #endif
 }
 #endif
