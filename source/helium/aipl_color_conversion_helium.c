@@ -1596,20 +1596,32 @@ aipl_error_t aipl_color_convert_argb8888_to_i422_helium(const void* input,
         const uint8_t* src = src_ptr + i * pitch * 4;
         uint8_t* y_dst = y_ptr + i * width;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 8)
+        int32_t cnt = width;
+        for (; cnt >= 16; cnt -= 16)
         {
-            mve_pred16_t tail_p = vctp16q(cnt);
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_xrgb8888_uncut(&pix, src);
 
-            aipl_mve_rgb_x8_t pix;
-            aipl_mve_ldr_8px_xrgb8888(&pix, src, tail_p);
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
 
-            uint16x8_t y;
-            aipl_mve_cnvt_8px_xrgb8888_to_yuv_y(&y, pix);
+            vstrbq(y_dst, y);
+
+            src += 64;
+            y_dst += 16;
+        }
+
+        if (cnt > 0)
+        {
+            mve_pred16_t tail_p = vctp8q(cnt);
+
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_xrgb8888(&pix, src, tail_p);
+
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
 
             vstrbq_p(y_dst, y, tail_p);
-
-            src += 32;
-            y_dst += 8;
         }
 
         src = src_ptr + i * pitch * 4;
@@ -1667,30 +1679,50 @@ aipl_error_t aipl_color_convert_argb8888_to_i444_helium(const void* input,
         uint8_t* v_dst = v_ptr + i * width;
         uint8_t* u_dst = u_ptr + i * width;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 8)
+        int32_t cnt = width;
+        for (; cnt >16; cnt -= 16)
         {
-            mve_pred16_t tail_p = vctp16q(cnt);
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_xrgb8888_uncut(&pix, src);
 
-            aipl_mve_rgb_x8_t pix;
-            aipl_mve_ldr_8px_xrgb8888(&pix, src, tail_p);
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
 
-            uint16x8_t y;
-            aipl_mve_cnvt_8px_xrgb8888_to_yuv_y(&y, pix);
+            uint8x16_t u;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_u(&u, pix);
 
-            uint16x8_t u;
-            aipl_mve_cnvt_8px_xrgb8888_to_yuv_u(&u, pix);
+            uint8x16_t v;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_v(&v, pix);
 
-            uint16x8_t v;
-            aipl_mve_cnvt_8px_xrgb8888_to_yuv_v(&v, pix);
+            vstrbq(y_dst, y);
+            vstrbq(u_dst, u);
+            vstrbq(v_dst, v);
+
+            src += 64;
+            y_dst += 16;
+            u_dst += 16;
+            v_dst += 16;
+        }
+
+        if (cnt > 0)
+        {
+            mve_pred16_t tail_p = vctp8q(cnt);
+
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_xrgb8888(&pix, src, tail_p);
+
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
+
+            uint8x16_t u;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_u(&u, pix);
+
+            uint8x16_t v;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_v(&v, pix);
 
             vstrbq_p(y_dst, y, tail_p);
             vstrbq_p(u_dst, u, tail_p);
             vstrbq_p(v_dst, v, tail_p);
-
-            src += 32;
-            y_dst += 8;
-            u_dst += 8;
-            v_dst += 8;
         }
     }
 
@@ -3342,22 +3374,35 @@ aipl_error_t aipl_color_convert_rgba8888_to_i422_helium(const void* input,
         const uint8_t* src = src_ptr + i * pitch * 4;
         uint8_t* y_dst = y_ptr + i * width;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 8)
+        int32_t cnt = width;
+        for (; cnt >= 16; cnt -= 16)
         {
-            mve_pred16_t tail_p = vctp16q(cnt);
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_rgbx8888_uncut(&pix, src);
 
-            aipl_mve_rgb_x8_t pix;
-            aipl_mve_ldr_8px_rgbx8888(&pix, src, tail_p);
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
 
-            uint16x8_t y;
-            aipl_mve_cnvt_8px_rgbx8888_to_yuv_y(&y, pix);
+            vstrbq(y_dst, y);
 
-            vstrbq_p(y_dst, y, tail_p);
-
-            src += 32;
-            y_dst += 8;
+            src += 64;
+            y_dst += 16;
         }
 
+        if (cnt > 0)
+        {
+            mve_pred16_t tail_p = vctp8q(cnt);
+
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_rgbx8888(&pix, src, tail_p);
+
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
+
+            vstrbq_p(y_dst, y, tail_p);
+        }
+
+        src = src_ptr + i * pitch * 4;
         uint8_t* u_dst = u_ptr + i * width / 2;
         uint8_t* v_dst = v_ptr + i * width / 2;
 
@@ -3412,30 +3457,50 @@ aipl_error_t aipl_color_convert_rgba8888_to_i444_helium(const void* input,
         uint8_t* v_dst = v_ptr + i * width;
         uint8_t* u_dst = u_ptr + i * width;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 8)
+        int32_t cnt = width;
+        for (; cnt >16; cnt -= 16)
         {
-            mve_pred16_t tail_p = vctp16q(cnt);
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_rgbx8888_uncut(&pix, src);
 
-            aipl_mve_rgb_x8_t pix;
-            aipl_mve_ldr_8px_rgbx8888(&pix, src, tail_p);
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
 
-            uint16x8_t y;
-            aipl_mve_cnvt_8px_rgbx8888_to_yuv_y(&y, pix);
+            uint8x16_t u;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_u(&u, pix);
 
-            uint16x8_t u;
-            aipl_mve_cnvt_8px_rgbx8888_to_yuv_u(&u, pix);
+            uint8x16_t v;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_v(&v, pix);
 
-            uint16x8_t v;
-            aipl_mve_cnvt_8px_rgbx8888_to_yuv_v(&v, pix);
+            vstrbq(y_dst, y);
+            vstrbq(u_dst, u);
+            vstrbq(v_dst, v);
+
+            src += 64;
+            y_dst += 16;
+            u_dst += 16;
+            v_dst += 16;
+        }
+
+        if (cnt > 0)
+        {
+            mve_pred16_t tail_p = vctp8q(cnt);
+
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_rgbx8888(&pix, src, tail_p);
+
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
+
+            uint8x16_t u;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_u(&u, pix);
+
+            uint8x16_t v;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_v(&v, pix);
 
             vstrbq_p(y_dst, y, tail_p);
             vstrbq_p(u_dst, u, tail_p);
             vstrbq_p(v_dst, v, tail_p);
-
-            src += 32;
-            y_dst += 8;
-            u_dst += 8;
-            v_dst += 8;
         }
     }
 
@@ -11425,20 +11490,32 @@ aipl_error_t aipl_color_convert_argb8888_to_yuv_planar_helium(const void* input,
         const uint8_t* src = src_ptr + i * pitch * 4;
         uint8_t* y_dst = y_ptr + i * width;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 8)
+        int32_t cnt = width;
+        for (; cnt >= 16; cnt -= 16)
         {
-            mve_pred16_t tail_p = vctp16q(cnt);
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_xrgb8888_uncut(&pix, src);
 
-            aipl_mve_rgb_x8_t pix;
-            aipl_mve_ldr_8px_xrgb8888(&pix, src, tail_p);
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
 
-            uint16x8_t y;
-            aipl_mve_cnvt_8px_xrgb8888_to_yuv_y(&y, pix);
+            vstrbq(y_dst, y);
+
+            src += 64;
+            y_dst += 16;
+        }
+
+        if (cnt > 0)
+        {
+            mve_pred16_t tail_p = vctp8q(cnt);
+
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_xrgb8888(&pix, src, tail_p);
+
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
 
             vstrbq_p(y_dst, y, tail_p);
-
-            src += 32;
-            y_dst += 8;
         }
     }
 
@@ -11493,20 +11570,32 @@ aipl_error_t aipl_color_convert_argb8888_to_yuv_semi_planar_helium(const void* i
         const uint8_t* src = src_ptr + i * pitch * 4;
         uint8_t* y_dst = y_ptr + i * width;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 8)
+        int32_t cnt = width;
+        for (; cnt >= 16; cnt -= 16)
         {
-            mve_pred16_t tail_p = vctp16q(cnt);
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_xrgb8888_uncut(&pix, src);
 
-            aipl_mve_rgb_x8_t pix;
-            aipl_mve_ldr_8px_xrgb8888(&pix, src, tail_p);
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
 
-            uint16x8_t y;
-            aipl_mve_cnvt_8px_xrgb8888_to_yuv_y(&y, pix);
+            vstrbq(y_dst, y);
+
+            src += 64;
+            y_dst += 16;
+        }
+
+        if (cnt > 0)
+        {
+            mve_pred16_t tail_p = vctp8q(cnt);
+
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_xrgb8888(&pix, src, tail_p);
+
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
 
             vstrbq_p(y_dst, y, tail_p);
-
-            src += 32;
-            y_dst += 8;
         }
     }
 
@@ -11561,20 +11650,32 @@ aipl_error_t aipl_color_convert_argb8888_to_yuv_packed_helium(const void* input,
         const uint8_t* src = src_ptr + i * pitch * 4;
         uint8_t* y_dst = y_ptr + i * width * 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 8)
+        int32_t cnt = width;
+        for (; cnt >= 16; cnt -= 16)
         {
-            mve_pred16_t tail_p = vctp16q(cnt);
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_xrgb8888_uncut(&pix, src);
 
-            aipl_mve_rgb_x8_t pix;
-            aipl_mve_ldr_8px_xrgb8888(&pix, src, tail_p);
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
 
-            uint16x8_t y;
-            aipl_mve_cnvt_8px_xrgb8888_to_yuv_y(&y, pix);
+            vstrbq_scatter_offset(y_dst, AIPL_2_BYTE_OFFSETS_U8, y);
 
-            vstrbq_scatter_offset_p(y_dst, AIPL_2_BYTE_OFFSETS_U16, y, tail_p);
+            src += 64;
+            y_dst += 32;
+        }
 
-            src += 32;
-            y_dst += 16;
+        if (cnt > 0)
+        {
+            mve_pred16_t tail_p = vctp8q(cnt);
+
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_xrgb8888(&pix, src, tail_p);
+
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
+
+            vstrbq_scatter_offset_p(y_dst, AIPL_2_BYTE_OFFSETS_U8, y, tail_p);
         }
 
         src = src_ptr + i * pitch * 4;
@@ -12014,20 +12115,32 @@ aipl_error_t aipl_color_convert_rgba8888_to_yuv_planar_helium(const void* input,
         const uint8_t* src = src_ptr + i * pitch * 4;
         uint8_t* y_dst = y_ptr + i * width;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 8)
+        int32_t cnt = width;
+        for (; cnt >= 16; cnt -= 16)
         {
-            mve_pred16_t tail_p = vctp16q(cnt);
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_rgbx8888_uncut(&pix, src);
 
-            aipl_mve_rgb_x8_t pix;
-            aipl_mve_ldr_8px_rgbx8888(&pix, src, tail_p);
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
 
-            uint16x8_t y;
-            aipl_mve_cnvt_8px_rgbx8888_to_yuv_y(&y, pix);
+            vstrbq(y_dst, y);
+
+            src += 64;
+            y_dst += 16;
+        }
+
+        if (cnt > 0)
+        {
+            mve_pred16_t tail_p = vctp8q(cnt);
+
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_rgbx8888(&pix, src, tail_p);
+
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
 
             vstrbq_p(y_dst, y, tail_p);
-
-            src += 32;
-            y_dst += 8;
         }
     }
 
@@ -12082,20 +12195,32 @@ aipl_error_t aipl_color_convert_rgba8888_to_yuv_semi_planar_helium(const void* i
         const uint8_t* src = src_ptr + i * pitch * 4;
         uint8_t* y_dst = y_ptr + i * width;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 8)
+        int32_t cnt = width;
+        for (; cnt >= 16; cnt -= 16)
         {
-            mve_pred16_t tail_p = vctp16q(cnt);
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_rgbx8888_uncut(&pix, src);
 
-            aipl_mve_rgb_x8_t pix;
-            aipl_mve_ldr_8px_rgbx8888(&pix, src, tail_p);
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
 
-            uint16x8_t y;
-            aipl_mve_cnvt_8px_rgbx8888_to_yuv_y(&y, pix);
+            vstrbq(y_dst, y);
+
+            src += 64;
+            y_dst += 16;
+        }
+
+        if (cnt > 0)
+        {
+            mve_pred16_t tail_p = vctp8q(cnt);
+
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_rgbx8888(&pix, src, tail_p);
+
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
 
             vstrbq_p(y_dst, y, tail_p);
-
-            src += 32;
-            y_dst += 8;
         }
     }
 
@@ -12150,22 +12275,35 @@ aipl_error_t aipl_color_convert_rgba8888_to_yuv_packed_helium(const void* input,
         const uint8_t* src = src_ptr + i * pitch * 4;
         uint8_t* y_dst = y_ptr + i * width * 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 8)
+        int32_t cnt = width;
+        for (; cnt >= 16; cnt -= 16)
         {
-            mve_pred16_t tail_p = vctp16q(cnt);
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_rgbx8888_uncut(&pix, src);
 
-            aipl_mve_rgb_x8_t pix;
-            aipl_mve_ldr_8px_rgbx8888(&pix, src, tail_p);
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
 
-            uint16x8_t y;
-            aipl_mve_cnvt_8px_rgbx8888_to_yuv_y(&y, pix);
+            vstrbq_scatter_offset(y_dst, AIPL_2_BYTE_OFFSETS_U8, y);
 
-            vstrbq_scatter_offset_p(y_dst, AIPL_2_BYTE_OFFSETS_U16, y, tail_p);
-
-            src += 32;
-            y_dst += 16;
+            src += 64;
+            y_dst += 32;
         }
 
+        if (cnt > 0)
+        {
+            mve_pred16_t tail_p = vctp8q(cnt);
+
+            aipl_mve_rgb_x16_t pix;
+            aipl_mve_ldr_16px_rgbx8888(&pix, src, tail_p);
+
+            uint8x16_t y;
+            aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(&y, pix);
+
+            vstrbq_scatter_offset_p(y_dst, AIPL_2_BYTE_OFFSETS_U8, y, tail_p);
+        }
+
+        src = src_ptr + i * pitch * 4;
         uint8_t* u_dst = u_ptr + i * width * 2;
         uint8_t* v_dst = v_ptr + i * width * 2;
 
