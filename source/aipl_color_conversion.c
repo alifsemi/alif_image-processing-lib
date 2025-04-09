@@ -4771,15 +4771,9 @@ aipl_error_t aipl_color_convert_rgb565_to_argb8888(const void* input,
                                                         pitch,
                                                         width, height);
 #else
-#ifdef AIPL_HELIUM_ACCELERATION
-    return aipl_color_convert_rgb565_to_argb8888_helium(input, output,
-                                                        pitch,
-                                                        width, height);
-#else
     return aipl_color_convert_rgb565_to_argb8888_default(input, output,
                                                          pitch,
                                                          width, height);
-#endif
 #endif
 }
 #endif
@@ -4834,15 +4828,9 @@ aipl_error_t aipl_color_convert_rgb565_to_rgba8888(const void* input,
                                                         pitch,
                                                         width, height);
 #else
-#ifdef AIPL_HELIUM_ACCELERATION
-    return aipl_color_convert_rgb565_to_rgba8888_helium(input, output,
-                                                        pitch,
-                                                        width, height);
-#else
     return aipl_color_convert_rgb565_to_rgba8888_default(input, output,
                                                          pitch,
                                                          width, height);
-#endif
 #endif
 }
 #endif
