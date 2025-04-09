@@ -11536,7 +11536,11 @@ aipl_error_t aipl_color_convert_i400_default(const void* input, void* output,
             return AIPL_ERR_UNSUPPORTED_FORMAT;
     }
 }
+#endif
 
+#if (AIPL_CONVERT_ALPHA8_I400 || AIPL_CONVERT_I420 || AIPL_CONVERT_YV12\
+     || AIPL_CONVERT_I422 || AIPL_CONVERT_I444\
+     || AIPL_CONVERT_NV12 || AIPL_CONVERT_NV21)
 aipl_error_t aipl_color_convert_i400_to_alpha8_default(const void* input,
                                                        void* output,
                                                        uint32_t pitch,
@@ -11559,7 +11563,9 @@ aipl_error_t aipl_color_convert_i400_to_alpha8_default(const void* input,
 
     return AIPL_ERR_OK;
 }
+#endif
 
+#if (AIPL_CONVERT_ALPHA8_I400)
 #if (AIPL_CONVERT_ALPHA8_I400 & TO_ARGB8888)\
      && (!defined(AIPL_HELIUM_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
 aipl_error_t aipl_color_convert_i400_to_argb8888_default(const void* input,

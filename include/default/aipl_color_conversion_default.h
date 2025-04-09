@@ -6554,7 +6554,10 @@ aipl_error_t aipl_color_convert_i400_default(const void* input, void* output,
                                              uint32_t pitch,
                                              uint32_t width, uint32_t height,
                                              aipl_color_format_t format);
-
+#endif
+#if (AIPL_CONVERT_ALPHA8_I400 || AIPL_CONVERT_I420 || AIPL_CONVERT_YV12\
+     || AIPL_CONVERT_I422 || AIPL_CONVERT_I444\
+     || AIPL_CONVERT_NV12 || AIPL_CONVERT_NV21)
 /**
  * Convert I400 image to ALPHA8
  * using default implementation with compiler imposed optimization
@@ -6571,7 +6574,8 @@ aipl_error_t aipl_color_convert_i400_to_alpha8_default(const void* input,
                                                        uint32_t pitch,
                                                        uint32_t width,
                                                        uint32_t height);
-
+#endif
+#if AIPL_CONVERT_ALPHA8_I400
 #if (AIPL_CONVERT_ALPHA8_I400 & TO_ARGB8888)\
      && (!defined(AIPL_HELIUM_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
 /**
