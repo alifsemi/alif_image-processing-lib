@@ -1298,33 +1298,33 @@ aipl_error_t aipl_color_convert_argb8888_default(const void* input, void* output
                                                                    pitch,
                                                                    width, height);
 #endif
-#if (AIPL_CONVERT_ARGB8888 & TO_ARGB4444)\
+#if (AIPL_CONVERT_ARGB8888 & TO_ARGB4444) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!(defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD)) || defined(AIPL_INCLUDE_ALL_DEFAULT))
         case AIPL_COLOR_ARGB4444:
             return aipl_color_convert_argb8888_to_argb4444_default(input, output,
                                                                    pitch,
                                                                    width, height);
 #endif
-#if (AIPL_CONVERT_ARGB8888 & TO_ARGB1555)
+#if (AIPL_CONVERT_ARGB8888 & TO_ARGB1555) && !defined(AIPL_HELIUM_ACCELERATION)
         case AIPL_COLOR_ARGB1555:
             return aipl_color_convert_argb8888_to_argb1555_default(input, output,
                                                                    pitch,
                                                                    width, height);
 #endif
-#if (AIPL_CONVERT_ARGB8888 & TO_RGBA4444)\
+#if (AIPL_CONVERT_ARGB8888 & TO_RGBA4444) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!(defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD)) || defined(AIPL_INCLUDE_ALL_DEFAULT))
         case AIPL_COLOR_RGBA4444:
             return aipl_color_convert_argb8888_to_rgba4444_default(input, output,
                                                                    pitch,
                                                                    width, height);
 #endif
-#if (AIPL_CONVERT_ARGB8888 & TO_RGBA5551)
+#if (AIPL_CONVERT_ARGB8888 & TO_RGBA5551) && !defined(AIPL_HELIUM_ACCELERATION)
         case AIPL_COLOR_RGBA5551:
             return aipl_color_convert_argb8888_to_rgba5551_default(input, output,
                                                                    pitch,
                                                                    width, height);
 #endif
-#if (AIPL_CONVERT_ARGB8888 & TO_RGB565)\
+#if (AIPL_CONVERT_ARGB8888 & TO_RGB565) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
         case AIPL_COLOR_RGB565:
             return aipl_color_convert_argb8888_to_rgb565_default(input, output,
@@ -1446,7 +1446,7 @@ aipl_error_t aipl_color_convert_argb8888_to_alpha8_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_ARGB8888 & TO_ARGB4444)\
+#if (AIPL_CONVERT_ARGB8888 & TO_ARGB4444) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!(defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD)) || defined(AIPL_INCLUDE_ALL_DEFAULT))
 aipl_error_t aipl_color_convert_argb8888_to_argb4444_default(const void* input,
                                                              void* output,
@@ -1478,7 +1478,7 @@ aipl_error_t aipl_color_convert_argb8888_to_argb4444_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_ARGB8888 & TO_ARGB1555)
+#if (AIPL_CONVERT_ARGB8888 & TO_ARGB1555) && !defined(AIPL_HELIUM_ACCELERATION)
 aipl_error_t aipl_color_convert_argb8888_to_argb1555_default(const void* input,
                                                              void* output,
                                                              uint32_t pitch,
@@ -1541,7 +1541,7 @@ aipl_error_t aipl_color_convert_argb8888_to_rgba8888_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_ARGB8888 & TO_RGBA4444)\
+#if (AIPL_CONVERT_ARGB8888 & TO_RGBA4444) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!(defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD)) || defined(AIPL_INCLUDE_ALL_DEFAULT))
 aipl_error_t aipl_color_convert_argb8888_to_rgba4444_default(const void* input,
                                                              void* output,
@@ -1573,7 +1573,7 @@ aipl_error_t aipl_color_convert_argb8888_to_rgba4444_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_ARGB8888 & TO_RGBA5551)
+#if (AIPL_CONVERT_ARGB8888 & TO_RGBA5551) && !defined(AIPL_HELIUM_ACCELERATION)
 aipl_error_t aipl_color_convert_argb8888_to_rgba5551_default(const void* input,
                                                              void* output,
                                                              uint32_t pitch,
@@ -1632,7 +1632,7 @@ aipl_error_t aipl_color_convert_argb8888_to_rgb888_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_ARGB8888 & TO_RGB565)\
+#if (AIPL_CONVERT_ARGB8888 & TO_RGB565) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
 aipl_error_t aipl_color_convert_argb8888_to_rgb565_default(const void* input,
                                                            void* output,
@@ -1896,14 +1896,14 @@ aipl_error_t aipl_color_convert_argb4444_default(const void* input, void* output
                                                                  width, height);
 #endif
         /* RGB color formats */
-#if (AIPL_CONVERT_ARGB4444 & TO_ARGB8888)\
+#if (AIPL_CONVERT_ARGB4444 & TO_ARGB8888) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
         case AIPL_COLOR_ARGB8888:
             return aipl_color_convert_argb4444_to_argb8888_default(input, output,
                                                                    pitch,
                                                                    width, height);
 #endif
-#if (AIPL_CONVERT_ARGB4444 & TO_RGBA8888)\
+#if (AIPL_CONVERT_ARGB4444 & TO_RGBA8888) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
         case AIPL_COLOR_RGBA8888:
             return aipl_color_convert_argb4444_to_rgba8888_default(input, output,
@@ -2054,7 +2054,7 @@ aipl_error_t aipl_color_convert_argb4444_to_alpha8_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_ARGB4444 & TO_ARGB8888)\
+#if (AIPL_CONVERT_ARGB4444 & TO_ARGB8888) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
 aipl_error_t aipl_color_convert_argb4444_to_argb8888_default(const void* input,
                                                              void* output,
@@ -2117,7 +2117,7 @@ aipl_error_t aipl_color_convert_argb4444_to_argb1555_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_ARGB4444 & TO_RGBA8888)\
+#if (AIPL_CONVERT_ARGB4444 & TO_RGBA8888) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
 aipl_error_t aipl_color_convert_argb4444_to_rgba8888_default(const void* input,
                                                              void* output,
@@ -2507,14 +2507,14 @@ aipl_error_t aipl_color_convert_argb1555_default(const void* input, void* output
                                                                  width, height);
 #endif
         /* RGB color formats */
-#if (AIPL_CONVERT_ARGB1555 & TO_ARGB8888)\
+#if (AIPL_CONVERT_ARGB1555 & TO_ARGB8888) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
         case AIPL_COLOR_ARGB8888:
             return aipl_color_convert_argb1555_to_argb8888_default(input, output,
                                                                    pitch,
                                                                    width, height);
 #endif
-#if (AIPL_CONVERT_ARGB1555 & TO_RGBA8888)\
+#if (AIPL_CONVERT_ARGB1555 & TO_RGBA8888) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
         case AIPL_COLOR_RGBA8888:
             return aipl_color_convert_argb1555_to_rgba8888_default(input, output,
@@ -2666,7 +2666,7 @@ aipl_error_t aipl_color_convert_argb1555_to_alpha8_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_ARGB1555 & TO_ARGB8888)\
+#if (AIPL_CONVERT_ARGB1555 & TO_ARGB8888) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
 aipl_error_t aipl_color_convert_argb1555_to_argb8888_default(const void* input,
                                                              void* output,
@@ -2730,7 +2730,7 @@ aipl_error_t aipl_color_convert_argb1555_to_argb4444_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_ARGB1555 & TO_RGBA8888)\
+#if (AIPL_CONVERT_ARGB1555 & TO_RGBA8888) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
 aipl_error_t aipl_color_convert_argb1555_to_rgba8888_default(const void* input,
                                                              void* output,
@@ -3129,33 +3129,33 @@ aipl_error_t aipl_color_convert_rgba8888_default(const void* input, void* output
 #endif
         case AIPL_COLOR_RGBA8888:
             return AIPL_ERR_FORMAT_MISMATCH;
-#if (AIPL_CONVERT_RGBA8888 & TO_ARGB4444)\
+#if (AIPL_CONVERT_RGBA8888 & TO_ARGB4444) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!(defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD)) || defined(AIPL_INCLUDE_ALL_DEFAULT))
         case AIPL_COLOR_ARGB4444:
             return aipl_color_convert_rgba8888_to_argb4444_default(input, output,
                                                                    pitch,
                                                                    width, height);
 #endif
-#if (AIPL_CONVERT_RGBA8888 & TO_ARGB1555)
+#if (AIPL_CONVERT_RGBA8888 & TO_ARGB1555) && !defined(AIPL_HELIUM_ACCELERATION)
         case AIPL_COLOR_ARGB1555:
             return aipl_color_convert_rgba8888_to_argb1555_default(input, output,
                                                                    pitch,
                                                                    width, height);
 #endif
-#if (AIPL_CONVERT_RGBA8888 & TO_RGBA4444)\
+#if (AIPL_CONVERT_RGBA8888 & TO_RGBA4444) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!(defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD)) || defined(AIPL_INCLUDE_ALL_DEFAULT))
         case AIPL_COLOR_RGBA4444:
             return aipl_color_convert_rgba8888_to_rgba4444_default(input, output,
                                                                    pitch,
                                                                    width, height);
 #endif
-#if (AIPL_CONVERT_RGBA8888 & TO_RGBA5551)
+#if (AIPL_CONVERT_RGBA8888 & TO_RGBA5551) && !defined(AIPL_HELIUM_ACCELERATION)
         case AIPL_COLOR_RGBA5551:
             return aipl_color_convert_rgba8888_to_rgba5551_default(input, output,
                                                                    pitch,
                                                                    width, height);
 #endif
-#if (AIPL_CONVERT_RGBA8888 & TO_RGB565)\
+#if (AIPL_CONVERT_RGBA8888 & TO_RGB565) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
         case AIPL_COLOR_RGB565:
             return aipl_color_convert_rgba8888_to_rgb565_default(input, output,
@@ -3310,7 +3310,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_argb8888_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_RGBA8888 & TO_ARGB4444)\
+#if (AIPL_CONVERT_RGBA8888 & TO_ARGB4444) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!(defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD)) || defined(AIPL_INCLUDE_ALL_DEFAULT))
 aipl_error_t aipl_color_convert_rgba8888_to_argb4444_default(const void* input,
                                                              void* output,
@@ -3342,7 +3342,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_argb4444_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_RGBA8888 & TO_ARGB1555)
+#if (AIPL_CONVERT_RGBA8888 & TO_ARGB1555) && !defined(AIPL_HELIUM_ACCELERATION)
 aipl_error_t aipl_color_convert_rgba8888_to_argb1555_default(const void* input,
                                                              void* output,
                                                              uint32_t pitch,
@@ -3373,7 +3373,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_argb1555_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_RGBA8888 & TO_RGBA4444)\
+#if (AIPL_CONVERT_RGBA8888 & TO_RGBA4444) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!(defined(AIPL_DAVE2D_ACCELERATION) && defined(AIPL_OPTIMIZE_CPU_LOAD)) || defined(AIPL_INCLUDE_ALL_DEFAULT))
 aipl_error_t aipl_color_convert_rgba8888_to_rgba4444_default(const void* input,
                                                              void* output,
@@ -3405,7 +3405,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_rgba4444_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_RGBA8888 & TO_RGBA5551)
+#if (AIPL_CONVERT_RGBA8888 & TO_RGBA5551) && !defined(AIPL_HELIUM_ACCELERATION)
 aipl_error_t aipl_color_convert_rgba8888_to_rgba5551_default(const void* input,
                                                              void* output,
                                                              uint32_t pitch,
@@ -3464,7 +3464,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_rgb888_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_RGBA8888 & TO_RGB565)\
+#if (AIPL_CONVERT_RGBA8888 & TO_RGB565) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
 aipl_error_t aipl_color_convert_rgba8888_to_rgb565_default(const void* input,
                                                            void* output,
@@ -3728,14 +3728,14 @@ aipl_error_t aipl_color_convert_rgba4444_default(const void* input, void* output
                                                                  width, height);
 #endif
         /* RGB color formats */
-#if (AIPL_CONVERT_RGBA4444 & TO_ARGB8888)\
+#if (AIPL_CONVERT_RGBA4444 & TO_ARGB8888) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
         case AIPL_COLOR_ARGB8888:
             return aipl_color_convert_rgba4444_to_argb8888_default(input, output,
                                                                    pitch,
                                                                    width, height);
 #endif
-#if (AIPL_CONVERT_RGBA4444 & TO_RGBA8888)\
+#if (AIPL_CONVERT_RGBA4444 & TO_RGBA8888) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
         case AIPL_COLOR_RGBA8888:
             return aipl_color_convert_rgba4444_to_rgba8888_default(input, output,
@@ -3886,7 +3886,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_alpha8_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_RGBA4444 & TO_ARGB8888)\
+#if (AIPL_CONVERT_RGBA4444 & TO_ARGB8888) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
 aipl_error_t aipl_color_convert_rgba4444_to_argb8888_default(const void* input,
                                                              void* output,
@@ -3981,7 +3981,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_argb4444_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_RGBA4444 & TO_RGBA8888)\
+#if (AIPL_CONVERT_RGBA4444 & TO_RGBA8888) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
 aipl_error_t aipl_color_convert_rgba4444_to_rgba8888_default(const void* input,
                                                              void* output,
@@ -4339,14 +4339,14 @@ aipl_error_t aipl_color_convert_rgba5551_default(const void* input, void* output
                                                                  width, height);
 #endif
         /* RGB color formats */
-#if (AIPL_CONVERT_RGBA5551 & TO_ARGB8888)\
+#if (AIPL_CONVERT_RGBA5551 & TO_ARGB8888) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
         case AIPL_COLOR_ARGB8888:
             return aipl_color_convert_rgba5551_to_argb8888_default(input, output,
                                                                    pitch,
                                                                    width, height);
 #endif
-#if (AIPL_CONVERT_RGBA5551 & TO_RGBA8888)\
+#if (AIPL_CONVERT_RGBA5551 & TO_RGBA8888) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
         case AIPL_COLOR_RGBA8888:
             return aipl_color_convert_rgba5551_to_rgba8888_default(input, output,
@@ -4498,7 +4498,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_alpha8_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_RGBA5551 & TO_ARGB8888)\
+#if (AIPL_CONVERT_RGBA5551 & TO_ARGB8888) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
 aipl_error_t aipl_color_convert_rgba5551_to_argb8888_default(const void* input,
                                                              void* output,
@@ -4593,7 +4593,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_argb4444_default(const void* input,
 }
 #endif
 
-#if (AIPL_CONVERT_RGBA5551 & TO_RGBA8888)\
+#if (AIPL_CONVERT_RGBA5551 & TO_RGBA8888) && !defined(AIPL_HELIUM_ACCELERATION)\
      && (!defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
 aipl_error_t aipl_color_convert_rgba5551_to_rgba8888_default(const void* input,
                                                              void* output,
@@ -11536,7 +11536,11 @@ aipl_error_t aipl_color_convert_i400_default(const void* input, void* output,
             return AIPL_ERR_UNSUPPORTED_FORMAT;
     }
 }
+#endif
 
+#if (AIPL_CONVERT_ALPHA8_I400 || AIPL_CONVERT_I420 || AIPL_CONVERT_YV12\
+     || AIPL_CONVERT_I422 || AIPL_CONVERT_I444\
+     || AIPL_CONVERT_NV12 || AIPL_CONVERT_NV21)
 aipl_error_t aipl_color_convert_i400_to_alpha8_default(const void* input,
                                                        void* output,
                                                        uint32_t pitch,
@@ -11559,7 +11563,9 @@ aipl_error_t aipl_color_convert_i400_to_alpha8_default(const void* input,
 
     return AIPL_ERR_OK;
 }
+#endif
 
+#if (AIPL_CONVERT_ALPHA8_I400)
 #if (AIPL_CONVERT_ALPHA8_I400 & TO_ARGB8888)\
      && (!defined(AIPL_HELIUM_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
 aipl_error_t aipl_color_convert_i400_to_argb8888_default(const void* input,
