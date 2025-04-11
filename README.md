@@ -45,4 +45,4 @@ This CMSIS pack requires some packs to be installed and added to the project:
 2. Set `CMSIS_PACK_ROOT` environment variables to cmsis-packs installation directory.
 3. Run `./gen_pack.sh` script
 4. Install generated CMSIS pack by following command:
-`cpackget add ./output/AlifSemiconductor.AIPL.1.1.0.pack`
+`cpackget add ./output/AlifSemiconductor.AIPL.1.1.1.pack`

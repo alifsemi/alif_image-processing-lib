@@ -8,6 +8,9 @@
   <license>License.txt</license>
 
   <releases>
+    <release version="1.1.1" tag="v1.1.1" url="https://github.com/alifsemi/alif_image-processing-lib/releases/download/v1.1.1/AlifSemiconductor.AIPL.1.1.1.pack" date="2025-04-11">
+        Optimize Helium accelerated implementations
+    </release>
     <release version="1.1.0" tag="v1.1.0" url="https://github.com/alifsemi/alif_image-processing-lib/releases/download/v1.1.0/AlifSemiconductor.AIPL.1.1.0.pack" date="2025-03-18">
       * Optimize color conversions functions
       * Restructure the library to allow users to directly choose implementations
@@ -120,7 +123,7 @@
       </RTE_Components_h>
     </component>
 
-    <component Cclass="Graphics" Cgroup="AIPL" Csub="Basic" Cversion="1.1.0" condition="AIPL-Essential">
+    <component Cclass="Graphics" Cgroup="AIPL" Csub="Basic" Cversion="1.1.1" condition="AIPL-Essential">
       <description>
         Alif Image Processing Library basic functions:
           * Crop
@@ -169,7 +172,7 @@
       </files>
     </component>
 
-    <component Cclass="Graphics" Cgroup="AIPL" Csub="Color correction" Cversion="1.1.0" condition="AIPL-Essential">
+    <component Cclass="Graphics" Cgroup="AIPL" Csub="Color correction" Cversion="1.1.1" condition="AIPL-Essential">
       <description>
         Alif Image Processing Library color correction functions:
           * Color correction (using a matrix)
