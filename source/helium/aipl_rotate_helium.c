@@ -61,24 +61,24 @@
         return AIPL_ERR_UNSUPPORTED_FORMAT;
 
     const int rgbBytes = aipl_color_format_depth(format)/8;
-    int x, y, j;
+    int x, y;
 
     if (rotation == AIPL_ROTATE_90)
     {
         for (y = 0; y < height; ++y)
         {
-            const uint8_t* input_offset = input + y * width * rgbBytes;
-            uint8_t* output_offset = output + (height - y - 1) * rgbBytes;
+            const uint8_t* input_offset = (uint8_t*)input + y * pitch * rgbBytes;
+            uint8_t* output_offset = (uint8_t*)output + (height - y - 1) * rgbBytes;
 
             for (x = 0; x < width; x += 8)
             {
                 mve_pred16_t tail_p = vctp16q(width - x);
 
                 uint16x8_t off_i = vidupq_n_u16(0, 1);
-                off_i = vmulq(off_i, rgbBytes);
+                off_i = vmulq_n_u16(off_i, rgbBytes);
 
                 uint16x8_t off_o = vidupq_n_u16(0, 1);
-                off_o = vmulq(off_o, height * rgbBytes);
+                off_o = vmulq_n_u16(off_o, height * rgbBytes);
 
                 for (int i = 0; i < rgbBytes; ++i)
                 {
@@ -93,15 +93,15 @@
     {
         for (y = 0; y < height; ++y)
         {
-            const uint8_t* input_offset = input + y * width * rgbBytes;
-            uint8_t* output_offset = output + (height - y - 1) * width * rgbBytes;
+            const uint8_t* input_offset = (uint8_t*)input + y * pitch * rgbBytes;
+            uint8_t* output_offset = (uint8_t*)output + (height - y - 1) * width * rgbBytes;
 
             for (x = 0; x < width; x += 8)
             {
                 mve_pred16_t tail_p = vctp16q(width - x);
 
                 uint16x8_t off_i = vidupq_n_u16(0, 1);
-                off_i = vmulq(off_i, rgbBytes);
+                off_i = vmulq_n_u16(off_i, rgbBytes);
 
                 uint16x8_t off_o = vcreateq_u16(0x0004000500060007, 0x0000000100020003);
                 off_o = vmulq(off_o, rgbBytes);
@@ -119,15 +119,15 @@
     {
         for (y = 0; y < height; ++y)
         {
-            const uint8_t* input_offset = input + y * width * rgbBytes;
-            uint8_t* output_offset = output + y * rgbBytes;
+            const uint8_t* input_offset = (uint8_t*)input + y * pitch * rgbBytes;
+            uint8_t* output_offset = (uint8_t*)output + y * rgbBytes;
 
             for (x = 0; x < width; x += 8)
             {
                 mve_pred16_t tail_p = vctp16q(width - x);
 
                 uint16x8_t off_i = vidupq_n_u16(0, 1);
-                off_i = vmulq(off_i, rgbBytes);
+                off_i = vmulq_n_u16(off_i, rgbBytes);
 
                 uint16x8_t off_o = vcreateq_u16(0x0004000500060007, 0x0000000100020003);
                 off_o = vmulq(off_o, height * rgbBytes);

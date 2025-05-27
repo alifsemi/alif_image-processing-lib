@@ -72,7 +72,10 @@ aipl_error_t aipl_crop_default(const void* input, void* output,
     uint32_t bpp = aipl_color_format_depth (format);
 
     // Check for no cropping
-    if (left == 0 && top == 0 && right == width && bottom == height) {
+    if (left == 0 && top == 0
+        && right == width && bottom == height
+        && pitch == width)
+    {
         // No-op if cropping and in-place
         size_t size = width * height * (bpp / 8);
         if (input != output) {
@@ -83,7 +86,7 @@ aipl_error_t aipl_crop_default(const void* input, void* output,
     }
 
     // Updating the input frame column start
-    uint8_t *ip_fb = (uint8_t *)input + (top * width * (bpp / 8));
+    uint8_t *ip_fb = (uint8_t *)input + (top * pitch * (bpp / 8));
     uint8_t *op_fb = (uint8_t *)output;
 
     uint32_t new_width = right - left;
@@ -95,7 +98,7 @@ aipl_error_t aipl_crop_default(const void* input, void* output,
         memmove(op_fb, ip_fb_row, new_width * (bpp / 8));
 
         // Update fb
-        ip_fb += (width * (bpp / 8));
+        ip_fb += (pitch * (bpp / 8));
         op_fb += (new_width * (bpp / 8));
     }
 

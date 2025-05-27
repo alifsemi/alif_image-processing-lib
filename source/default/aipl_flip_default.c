@@ -28,6 +28,7 @@
 /*********************
  *      DEFINES
  *********************/
+#define INLINE inline __attribute__((always_inline))
 
 /**********************
  *      TYPEDEFS
@@ -36,6 +37,16 @@
 /**********************
  *  STATIC PROTOTYPES
  **********************/
+static INLINE void aipl_flip_row_hor(const uint8_t* src,
+                                     uint8_t* dst,
+                                     uint32_t width,
+                                     int rgbBytes);
+static INLINE void aipl_flip_rows_hor_ver(const uint8_t* src_top,
+                                          const uint8_t* src_bottom,
+                                          uint8_t* dst_top,
+                                          uint8_t* dst_bottom,
+                                          uint32_t width,
+                                          int rgbBytes);
 
 /**********************
  *  STATIC VARIABLES
@@ -65,56 +76,61 @@ aipl_error_t aipl_flip_default(const void* input, void* output,
     uint8_t* dst = output;
 
     const int rgbBytes = aipl_color_format_depth(format)/8;
-    int x, y, j;
 
     if (flip_horizontal && flip_vertical)
     {
-
-        for (y = 0; y < height / 2; ++y)
+        const uint8_t* src_top = src;
+        const uint8_t* src_bottom = src + (height - 1) * pitch * rgbBytes;
+        uint8_t* dst_top = dst;
+        uint8_t* dst_bottom = dst + (height - 1) * width * rgbBytes;
+        for (uint32_t y = 0; y < height / 2; ++y)
         {
-            for (x = 0; x < width / 2; ++x)
-            {
-                int top_left = (y * width + x) * rgbBytes;
-                int top_right = (y * width + (width - 1 - x)) * rgbBytes;
-                int bottom_left = ((height - 1 - y) * width + x) * rgbBytes;
-                int bottom_right = ((height - 1 - y) * width + (width - 1 - x)) * rgbBytes;
+            aipl_flip_rows_hor_ver(src_top, src_bottom, dst_top, dst_bottom,
+                                   width, rgbBytes);
 
-                for (j = 0; j < rgbBytes; j++)
-                {
-                    dst[top_left] = src[bottom_right];
-                    dst[bottom_right++] = src[top_left++];
-                    dst[top_right] = src[bottom_left];
-                    dst[bottom_left++] = src[top_right++];
-                }
-            }
+            src_top += pitch * rgbBytes;
+            src_bottom -= pitch * rgbBytes;
+            dst_top += width * rgbBytes;
+            dst_bottom -= width * rgbBytes;
+        }
+
+        if (height % 2)
+        {
+            aipl_flip_row_hor(src_top, dst_top, width, rgbBytes);
         }
     }
     else if (flip_horizontal)
     {
-        for (y = 0; y < height; ++y)
+        const uint8_t* src_row = src;
+        uint8_t* dst_row = dst;
+        for (uint32_t y = 0; y < height; ++y)
         {
-            for (x = 0; x < width / 2; ++x)
-            {
-                int left = (y * width + x) * rgbBytes;
-                int right = (y * width + (width - 1 - x)) * rgbBytes;
+            aipl_flip_row_hor(src_row, dst_row, width, rgbBytes);
 
-                for (j = 0; j < rgbBytes; j++)
-                {
-                    dst[left] = src[right];
-                    dst[right++] = src[left++];
-                }
-            }
+            src_row += pitch * rgbBytes;
+            dst_row += width * rgbBytes;
         }
     }
     else if (flip_vertical)
     {
-        size_t row_size = width * rgbBytes;
-        for (y = 0; y < height / 2; ++y)
+        const uint8_t* src_top = src;
+        const uint8_t* src_bottom = src + (height - 1) * pitch * rgbBytes;
+        uint8_t* dst_top = dst;
+        uint8_t* dst_bottom = dst + (height - 1) * width * rgbBytes;
+        for (uint32_t y = 0; y < height / 2; ++y)
         {
-            size_t top_row = y * row_size;
-            size_t bottom_row = (height - 1 - y) * row_size;
-            memmove(dst + bottom_row, src + top_row, row_size);
-            memmove(dst + top_row, src + bottom_row, row_size);
+            memmove(dst_top, src_bottom, width * rgbBytes);
+            memmove(dst_bottom, src_top, width * rgbBytes);
+
+            src_top += pitch * rgbBytes;
+            src_bottom -= pitch * rgbBytes;
+            dst_top += width * rgbBytes;
+            dst_bottom -= width * rgbBytes;
+        }
+
+        if (height % 2)
+        {
+            memmove(dst_top, src_top, width * rgbBytes);
         }
     }
     else
@@ -146,5 +162,59 @@ aipl_error_t aipl_flip_img_default(const aipl_image_t* input,
 /**********************
  *   STATIC FUNCTIONS
  **********************/
+static INLINE void aipl_flip_row_hor(const uint8_t* src,
+                                     uint8_t* dst,
+                                     uint32_t width,
+                                     int rgbBytes)
+{
+    uint32_t row_last = (width - 1) * rgbBytes;
+    uint32_t row_half = width / 2 * rgbBytes;
+    for (uint32_t i = 0; i < row_half; i += rgbBytes)
+    {
+        for (uint32_t j = 0; j < rgbBytes; ++j)
+        {
+            dst[i + j] = src[row_last - i + j];
+            dst[row_last - i + j] = src[i + j];
+        }
+    }
+
+    if (width % 2)
+    {
+        for (uint32_t j = 0; j < rgbBytes; ++j)
+        {
+            dst[row_half + j] = src[row_half + j];
+        }
+    }
+}
+
+static INLINE void aipl_flip_rows_hor_ver(const uint8_t* src_top,
+                                          const uint8_t* src_bottom,
+                                          uint8_t* dst_top,
+                                          uint8_t* dst_bottom,
+                                          uint32_t width,
+                                          int rgbBytes)
+{
+    uint32_t row_last = (width - 1) * rgbBytes;
+    uint32_t row_half = width / 2 * rgbBytes;
+    for (uint32_t i = 0; i < row_half; i += rgbBytes)
+    {
+        for (uint32_t j = 0; j < rgbBytes; ++j)
+        {
+            dst_top[i + j] = src_bottom[row_last - i + j];
+            dst_top[row_last - i + j] = src_bottom[i + j];
+            dst_bottom[i + j] = src_top[row_last - i + j];
+            dst_bottom[row_last - i + j] = src_top[i + j];
+        }
+    }
+
+    if (width % 2)
+    {
+        for (uint32_t j = 0; j < rgbBytes; ++j)
+        {
+            dst_top[row_half + j] = src_bottom[row_half + j];
+            dst_bottom[row_half + j] = src_top[row_half + j];
+        }
+    }
+}
 
 #endif
