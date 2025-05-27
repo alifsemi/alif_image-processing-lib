@@ -40,20 +40,25 @@
  *  STATIC VARIABLES
  **********************/
 static aipl_error_t aipl_resize_sw_8bit_channels(const void* input, void* output,
+                                                 int input_pitch,
                                                  int input_width, int input_height,
                                                  int output_width, int output_height,
                                                  aipl_color_format_t format);
 static aipl_error_t aipl_resize_sw_argb1555(const void* input, void* output,
+                                            int input_pitch,
                                             int input_width, int input_height,
                                             int output_width, int output_height);
 static aipl_error_t aipl_resize_sw_rgba5551(const void* input, void* output,
+                                            int input_pitch,
                                             int input_width, int input_height,
                                             int output_width, int output_height);
 #if !defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_HELIUM)
 static aipl_error_t aipl_resize_sw_4bit_channels(const void* input, void* output,
+                                                 int input_pitch,
                                                  int input_width, int input_height,
                                                  int output_width, int output_height);
 static aipl_error_t aipl_resize_sw_rgb565(const void* input, void* output,
+                                          int input_pitch,
                                           int input_width, int input_height,
                                           int output_width, int output_height);
 #endif
@@ -88,26 +93,26 @@ aipl_error_t aipl_resize_helium(const void* input, void* output,
         case AIPL_COLOR_RGBA8888:
         case AIPL_COLOR_RGB888:
         case AIPL_COLOR_BGR888:
-            return aipl_resize_sw_8bit_channels(input, output,
+            return aipl_resize_sw_8bit_channels(input, output, pitch,
                                                 width, height,
                                                 output_width, output_height,
                                                 format);
         case AIPL_COLOR_ARGB1555:
-            return aipl_resize_sw_argb1555(input, output,
+            return aipl_resize_sw_argb1555(input, output, pitch,
                                            width, height,
                                            output_width, output_height);
         case AIPL_COLOR_RGBA5551:
-            return aipl_resize_sw_rgba5551(input, output,
+            return aipl_resize_sw_rgba5551(input, output, pitch,
                                            width, height,
                                            output_width, output_height);
 #if !defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_HELIUM)
         case AIPL_COLOR_ARGB4444:
         case AIPL_COLOR_RGBA4444:
-            return aipl_resize_sw_4bit_channels(input, output,
+            return aipl_resize_sw_4bit_channels(input, output, pitch,
                                                 width, height,
                                                 output_width, output_height);
         case AIPL_COLOR_RGB565:
-            return aipl_resize_sw_rgb565(input, output,
+            return aipl_resize_sw_rgb565(input, output, pitch,
                                          width, height,
                                          output_width, output_height);
 #endif
@@ -141,6 +146,7 @@ aipl_error_t aipl_resize_img_helium(const aipl_image_t* input,
  **********************/
 
 static aipl_error_t aipl_resize_sw_8bit_channels(const void* input, void* output,
+                                                 int input_pitch,
                                                  int input_width, int input_height,
                                                  int output_width, int output_height,
                                                  aipl_color_format_t format)
@@ -175,6 +181,7 @@ static aipl_error_t aipl_resize_sw_8bit_channels(const void* input, void* output
 
     //from here out, *3 b/c RGB
     input_width *= pixel_size_B;
+    input_pitch *= pixel_size_B;
     //srcHeight not used for indexing
     //dstWidth still needed as is
     //dstHeight shouldn't be scaled
@@ -189,7 +196,7 @@ static aipl_error_t aipl_resize_sw_8bit_channels(const void* input, void* output
         src_y_accum += src_y_frac;
         ny_frac = FRAC_VAL - y_frac; // y fraction and 1.0 - y fraction
 
-        s = &srcImage[ty * input_width];
+        s = &srcImage[ty * input_pitch];
         d = &dstImage[y * output_width * pixel_size_B]; //not scaled above
         // start at 1/2 pixel in to account for integer downsampling which might miss pixels
         src_x_accum = FRAC_VAL / 2;
@@ -205,8 +212,8 @@ static aipl_error_t aipl_resize_sw_8bit_channels(const void* input, void* output
 
             uint32x4_t p00 = vldrbq_u32(&s[tx]);
             uint32x4_t p10 = vldrbq_u32(&s[tx + pixel_size_B]);
-            uint32x4_t p01 = vldrbq_u32(&s[tx + input_width]);
-            uint32x4_t p11 = vldrbq_u32(&s[tx + input_width + pixel_size_B]);
+            uint32x4_t p01 = vldrbq_u32(&s[tx + input_pitch]);
+            uint32x4_t p11 = vldrbq_u32(&s[tx + input_pitch + pixel_size_B]);
             p00 = vmulq(p00, nx_frac);
             p00 = vmlaq(p00, p10, x_frac);
             p00 = vrshrq(p00, FRAC_BITS);
@@ -226,6 +233,7 @@ static aipl_error_t aipl_resize_sw_8bit_channels(const void* input, void* output
 
 
 static aipl_error_t aipl_resize_sw_argb1555(const void* input, void* output,
+                                            int input_pitch,
                                             int input_width, int input_height,
                                             int output_width, int output_height)
 {
@@ -236,7 +244,7 @@ static aipl_error_t aipl_resize_sw_argb1555(const void* input, void* output,
     uint16_t* dstImage = (uint16_t*)output;
 
     uint32_t src_x_accum, src_y_accum; // accumulators and fractions for scaling the image
-    uint32_t x_frac, nx_frac, y_frac, ny_frac;
+    uint32_t y_frac, ny_frac;
     int x, y, ty;
 
     if (input_height < 2) {
@@ -263,7 +271,7 @@ static aipl_error_t aipl_resize_sw_argb1555(const void* input, void* output,
         src_y_accum += src_y_frac;
         ny_frac = FRAC_VAL - y_frac; // y fraction and 1.0 - y fraction
 
-        s = &srcImage[ty * input_width];
+        s = &srcImage[ty * input_pitch];
         d = &dstImage[y * output_width]; //not scaled above
         // start at 1/2 pixel in to account for integer downsampling which might miss pixels
         src_x_accum = FRAC_VAL / 2;
@@ -281,7 +289,7 @@ static aipl_error_t aipl_resize_sw_argb1555(const void* input, void* output,
             tx1 = vandq(vshrq(tx1, FRAC_BITS - 1), vdupq_n_u32(0xfffe));
             uint16x8_t tx00 = vmovntq(vreinterpretq_u16(tx0), tx1);
             uint16x8_t tx10 = vaddq(tx00, vdupq_n_u16(2));
-            uint16x8_t tx01 = vaddq(tx00, vdupq_n_u16(input_width * 2));
+            uint16x8_t tx01 = vaddq(tx00, vdupq_n_u16(input_pitch * 2));
             uint16x8_t tx11 = vaddq(tx01, vdupq_n_u16(2));
 
             uint16x8_t p00 = vldrhq_gather_offset_u16(s, tx00);
@@ -327,6 +335,7 @@ static aipl_error_t aipl_resize_sw_argb1555(const void* input, void* output,
 }
 
 static aipl_error_t aipl_resize_sw_rgba5551(const void* input, void* output,
+                                            int input_pitch,
                                             int input_width, int input_height,
                                             int output_width, int output_height)
 {
@@ -337,7 +346,7 @@ static aipl_error_t aipl_resize_sw_rgba5551(const void* input, void* output,
     uint16_t* dstImage = (uint16_t*)output;
 
     uint32_t src_x_accum, src_y_accum; // accumulators and fractions for scaling the image
-    uint32_t x_frac, nx_frac, y_frac, ny_frac;
+    uint32_t y_frac, ny_frac;
     int x, y, ty;
 
     if (input_height < 2) {
@@ -362,7 +371,7 @@ static aipl_error_t aipl_resize_sw_rgba5551(const void* input, void* output,
         src_y_accum += src_y_frac;
         ny_frac = FRAC_VAL - y_frac; // y fraction and 1.0 - y fraction
 
-        s = &srcImage[ty * input_width];
+        s = &srcImage[ty * input_pitch];
         d = &dstImage[y * output_width]; //not scaled above
         // start at 1/2 pixel in to account for integer downsampling which might miss pixels
         src_x_accum = FRAC_VAL / 2;
@@ -380,7 +389,7 @@ static aipl_error_t aipl_resize_sw_rgba5551(const void* input, void* output,
             tx1 = vandq(vshrq(tx1, FRAC_BITS - 1), vdupq_n_u32(0xfffe));
             uint16x8_t tx00 = vmovntq(vreinterpretq_u16(tx0), tx1);
             uint16x8_t tx10 = vaddq(tx00, vdupq_n_u16(2));
-            uint16x8_t tx01 = vaddq(tx00, vdupq_n_u16(input_width * 2));
+            uint16x8_t tx01 = vaddq(tx00, vdupq_n_u16(input_pitch * 2));
             uint16x8_t tx11 = vaddq(tx01, vdupq_n_u16(2));
 
             uint16x8_t p00 = vldrhq_gather_offset_u16(s, tx00);
@@ -427,6 +436,7 @@ static aipl_error_t aipl_resize_sw_rgba5551(const void* input, void* output,
 
 #if !defined(AIPL_DAVE2D_ACCELERATION) || defined(AIPL_INCLUDE_ALL_HELIUM)
 static aipl_error_t aipl_resize_sw_4bit_channels(const void* input, void* output,
+                                                 int input_pitch,
                                                  int input_width, int input_height,
                                                  int output_width, int output_height)
 {
@@ -437,7 +447,7 @@ static aipl_error_t aipl_resize_sw_4bit_channels(const void* input, void* output
     uint16_t* dstImage = (uint16_t*)output;
 
     uint32_t src_x_accum, src_y_accum; // accumulators and fractions for scaling the image
-    uint32_t x_frac, nx_frac, y_frac, ny_frac;
+    uint32_t y_frac, ny_frac;
     int x, y, ty;
 
     if (input_height < 2) {
@@ -462,7 +472,7 @@ static aipl_error_t aipl_resize_sw_4bit_channels(const void* input, void* output
         src_y_accum += src_y_frac;
         ny_frac = FRAC_VAL - y_frac; // y fraction and 1.0 - y fraction
 
-        s = &srcImage[ty * input_width];
+        s = &srcImage[ty * input_pitch];
         d = &dstImage[y * output_width]; //not scaled above
         // start at 1/2 pixel in to account for integer downsampling which might miss pixels
         src_x_accum = FRAC_VAL / 2;
@@ -480,7 +490,7 @@ static aipl_error_t aipl_resize_sw_4bit_channels(const void* input, void* output
             tx1 = vandq(vshrq(tx1, FRAC_BITS - 1), vdupq_n_u32(0xfffe));
             uint16x8_t tx00 = vmovntq(vreinterpretq_u16(tx0), tx1);
             uint16x8_t tx10 = vaddq(tx00, vdupq_n_u16(2));
-            uint16x8_t tx01 = vaddq(tx00, vdupq_n_u16(input_width * 2));
+            uint16x8_t tx01 = vaddq(tx00, vdupq_n_u16(input_pitch * 2));
             uint16x8_t tx11 = vaddq(tx01, vdupq_n_u16(2));
 
             uint16x8_t p00 = vldrhq_gather_offset_u16(s, tx00);
@@ -533,6 +543,7 @@ static aipl_error_t aipl_resize_sw_4bit_channels(const void* input, void* output
 }
 
 static aipl_error_t aipl_resize_sw_rgb565(const void* input, void* output,
+                                          int input_pitch,
                                           int input_width, int input_height,
                                           int output_width, int output_height)
 {
@@ -543,7 +554,7 @@ static aipl_error_t aipl_resize_sw_rgb565(const void* input, void* output,
     uint16_t* dstImage = (uint16_t*)output;
 
     uint32_t src_x_accum, src_y_accum; // accumulators and fractions for scaling the image
-    uint32_t x_frac, nx_frac, y_frac, ny_frac;
+    uint32_t y_frac, ny_frac;
     int x, y, ty;
 
     if (input_height < 2) {
@@ -568,7 +579,7 @@ static aipl_error_t aipl_resize_sw_rgb565(const void* input, void* output,
         src_y_accum += src_y_frac;
         ny_frac = FRAC_VAL - y_frac; // y fraction and 1.0 - y fraction
 
-        s = &srcImage[ty * input_width];
+        s = &srcImage[ty * input_pitch];
         d = &dstImage[y * output_width]; //not scaled above
         // start at 1/2 pixel in to account for integer downsampling which might miss pixels
         src_x_accum = FRAC_VAL / 2;
@@ -586,7 +597,7 @@ static aipl_error_t aipl_resize_sw_rgb565(const void* input, void* output,
             tx1 = vandq(vshrq(tx1, FRAC_BITS - 1), vdupq_n_u32(0xfffe));
             uint16x8_t tx00 = vmovntq(vreinterpretq_u16(tx0), tx1);
             uint16x8_t tx10 = vaddq(tx00, vdupq_n_u16(2));
-            uint16x8_t tx01 = vaddq(tx00, vdupq_n_u16(input_width * 2));
+            uint16x8_t tx01 = vaddq(tx00, vdupq_n_u16(input_pitch * 2));
             uint16x8_t tx11 = vaddq(tx01, vdupq_n_u16(2));
 
             uint16x8_t p00 = vldrhq_gather_offset_u16(s, tx00);

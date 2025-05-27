@@ -71,7 +71,7 @@
         {
             for (x = 0; x < width; ++x)
             {
-                int src_offset = (y * width + x) * rgbBytes;
+                int src_offset = (y * pitch + x) * rgbBytes;
                 int dst_offset = (x * height + height - 1 - y) * rgbBytes;
                 for (j = 0; j < rgbBytes; j++)
                     dst[dst_offset++] = src[src_offset++];
@@ -84,7 +84,7 @@
         {
             for (x = 0; x < width; ++x)
             {
-                int src_offset = (y * width + x) * rgbBytes;
+                int src_offset = (y * pitch + x) * rgbBytes;
                 int dst_offset = ((height - 1 - y) * width + width - 1 - x) * rgbBytes;
                 for (j = 0; j < rgbBytes; j++)
                     dst[dst_offset++] = src[src_offset++];
@@ -97,7 +97,7 @@
         {
             for (x = 0; x < width; ++x)
             {
-                int src_offset = (y * width + x) * rgbBytes;
+                int src_offset = (y * pitch + x) * rgbBytes;
                 int dst_offset = ((width - 1 - x) * height + y) * rgbBytes;
                 for (j = 0; j < rgbBytes; j++)
                     dst[dst_offset++] = src[src_offset++];
