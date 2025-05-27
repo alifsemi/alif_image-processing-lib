@@ -1628,7 +1628,7 @@ aipl_error_t aipl_color_convert_argb8888_to_i422_helium(const void* input,
         uint8_t* u_dst = u_ptr + i * width / 2;
         uint8_t* v_dst = v_ptr + i * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -2200,7 +2200,7 @@ aipl_error_t aipl_color_convert_argb4444_to_i422_helium(const void* input,
         uint8_t* u_dst = u_ptr + i * width / 2;
         uint8_t* v_dst = v_ptr + i * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -2704,7 +2704,7 @@ aipl_error_t aipl_color_convert_argb1555_to_i422_helium(const void* input,
         uint8_t* u_dst = u_ptr + i * width / 2;
         uint8_t* v_dst = v_ptr + i * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -3406,7 +3406,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_i422_helium(const void* input,
         uint8_t* u_dst = u_ptr + i * width / 2;
         uint8_t* v_dst = v_ptr + i * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -3978,7 +3978,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_i422_helium(const void* input,
         uint8_t* u_dst = u_ptr + i * width / 2;
         uint8_t* v_dst = v_ptr + i * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -4477,7 +4477,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_i422_helium(const void* input,
         uint8_t* u_dst = u_ptr + i * width / 2;
         uint8_t* v_dst = v_ptr + i * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -5781,7 +5781,7 @@ aipl_error_t aipl_color_convert_rgb565_to_i422_helium(const void* input,
         uint8_t* u_dst = u_ptr + i * width / 2;
         uint8_t* v_dst = v_ptr + i * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -6238,10 +6238,7 @@ aipl_error_t aipl_color_convert_yv12_to_i444_helium(const void* input,
         }
         else
         {
-            int32_t cnt = width;
-
-            uint32_t j = 0;
-            while (cnt > 0)
+            for (int32_t cnt = width / 2; cnt > 0; cnt -= 16)
             {
                 mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -6259,7 +6256,6 @@ aipl_error_t aipl_color_convert_yv12_to_i444_helium(const void* input,
                 v_src += 16;
                 u_dst += 32;
                 v_dst += 32;
-                cnt -= 32;
             }
         }
     }
@@ -6614,10 +6610,7 @@ aipl_error_t aipl_color_convert_i420_to_i444_helium(const void* input,
         }
         else
         {
-            int32_t cnt = width;
-
-            uint32_t j = 0;
-            while (cnt > 0)
+            for (int32_t cnt = width / 2; cnt > 0; cnt -= 16)
             {
                 mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -6635,7 +6628,6 @@ aipl_error_t aipl_color_convert_i420_to_i444_helium(const void* input,
                 v_src += 16;
                 u_dst += 32;
                 v_dst += 32;
-                cnt -= 32;
             }
         }
     }
@@ -7323,10 +7315,7 @@ aipl_error_t aipl_color_convert_i422_to_i444_helium(const void* input,
 
         memcpy(y_dst, y_src, width);
 
-        int32_t cnt = width;
-
-        uint32_t j = 0;
-        while (cnt > 0)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 16)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -7344,7 +7333,6 @@ aipl_error_t aipl_color_convert_i422_to_i444_helium(const void* input,
             v_src += 16;
             u_dst += 32;
             v_dst += 32;
-            cnt -= 32;
         }
     }
 
@@ -7386,10 +7374,8 @@ aipl_error_t aipl_color_convert_i422_to_nv21_helium(const void* input,
             uint8_t* u_dst = u_dst_ptr + i / 2 * width;
             const uint8_t* v_src = v_src_ptr + i * pitch / 2;
             uint8_t* v_dst = v_dst_ptr + i / 2 * width;
-            int32_t cnt = width;
 
-            uint32_t j = 0;
-            while (cnt > 0)
+            for (int32_t cnt = width / 2; cnt > 0; cnt -= 16)
             {
                 mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -7405,7 +7391,6 @@ aipl_error_t aipl_color_convert_i422_to_nv21_helium(const void* input,
                 v_src += 16;
                 u_dst += 32;
                 v_dst += 32;
-                cnt -= 32;
             }
         }
     }
@@ -7447,10 +7432,8 @@ aipl_error_t aipl_color_convert_i422_to_nv12_helium(const void* input,
             uint8_t* u_dst = u_dst_ptr + i / 2 * width;
             const uint8_t* v_src = v_src_ptr + i * pitch / 2;
             uint8_t* v_dst = v_dst_ptr + i / 2 * width;
-            int32_t cnt = width;
 
-            uint32_t j = 0;
-            while (cnt > 0)
+            for (int32_t cnt = width / 2; cnt > 0; cnt -= 16)
             {
                 mve_pred16_t tail_p = vctp8q(cnt);
 
@@ -7466,7 +7449,6 @@ aipl_error_t aipl_color_convert_i422_to_nv12_helium(const void* input,
                 v_src += 16;
                 u_dst += 32;
                 v_dst += 32;
-                cnt -= 32;
             }
         }
     }
@@ -11380,10 +11362,11 @@ aipl_error_t aipl_color_convert_24bit_to_i422_helium(const void* input,
             y_dst += 8;
         }
 
+        src = src_ptr + i * pitch * 3;
         uint8_t* u_dst = u_ptr + i * width / 2;
         uint8_t* v_dst = v_ptr + i * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -11525,7 +11508,7 @@ aipl_error_t aipl_color_convert_argb8888_to_yuv_planar_helium(const void* input,
         uint8_t* u_dst = u_ptr + i / 2 * width / 2;
         uint8_t* v_dst = v_ptr + i / 2 * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -11605,7 +11588,7 @@ aipl_error_t aipl_color_convert_argb8888_to_yuv_semi_planar_helium(const void* i
         uint8_t* u_dst = u_ptr + i * width / 2;
         uint8_t* v_dst = v_ptr + i * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -11682,7 +11665,7 @@ aipl_error_t aipl_color_convert_argb8888_to_yuv_packed_helium(const void* input,
         uint8_t* u_dst = u_ptr + i * width * 2;
         uint8_t* v_dst = v_ptr + i * width * 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -11750,7 +11733,7 @@ aipl_error_t aipl_color_convert_argb4444_to_yuv_planar_helium(const void* input,
         uint8_t* u_dst = u_ptr + i / 2 * width / 2;
         uint8_t* v_dst = v_ptr + i / 2 * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -11816,7 +11799,7 @@ aipl_error_t aipl_color_convert_argb4444_to_yuv_semi_planar_helium(const void* i
         uint8_t* u_dst = u_ptr + i * width / 2;
         uint8_t* v_dst = v_ptr + i * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -11875,10 +11858,11 @@ aipl_error_t aipl_color_convert_argb4444_to_yuv_packed_helium(const void* input,
             y_dst += 16;
         }
 
+        src = src_ptr + i * pitch;
         uint8_t* v_dst = v_ptr + i * width * 2;
         uint8_t* u_dst = u_ptr + i * width * 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -11944,7 +11928,7 @@ aipl_error_t aipl_color_convert_argb1555_to_yuv_planar_helium(const void* input,
         uint8_t* u_dst = u_ptr + i / 2 * width / 2;
         uint8_t* v_dst = v_ptr + i / 2 * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -12010,7 +11994,7 @@ aipl_error_t aipl_color_convert_argb1555_to_yuv_semi_planar_helium(const void* i
         uint8_t* u_dst = u_ptr + i * width / 2;
         uint8_t* v_dst = v_ptr + i * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -12069,10 +12053,11 @@ aipl_error_t aipl_color_convert_argb1555_to_yuv_packed_helium(const void* input,
             y_dst += 16;
         }
 
+        src = src_ptr + i * pitch;
         uint8_t* v_dst = v_ptr + i * width * 2;
         uint8_t* u_dst = u_ptr + i * width * 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -12150,7 +12135,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_yuv_planar_helium(const void* input,
         uint8_t* u_dst = u_ptr + i / 2 * width / 2;
         uint8_t* v_dst = v_ptr + i / 2 * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -12230,7 +12215,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_yuv_semi_planar_helium(const void* i
         uint8_t* u_dst = u_ptr + i * width / 2;
         uint8_t* v_dst = v_ptr + i * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -12307,7 +12292,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_yuv_packed_helium(const void* input,
         uint8_t* u_dst = u_ptr + i * width * 2;
         uint8_t* v_dst = v_ptr + i * width * 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -12375,7 +12360,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_yuv_planar_helium(const void* input,
         uint8_t* u_dst = u_ptr + i / 2 * width / 2;
         uint8_t* v_dst = v_ptr + i / 2 * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -12441,7 +12426,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_yuv_semi_planar_helium(const void* i
         uint8_t* u_dst = u_ptr + i * width / 2;
         uint8_t* v_dst = v_ptr + i * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -12500,10 +12485,11 @@ aipl_error_t aipl_color_convert_rgba4444_to_yuv_packed_helium(const void* input,
             y_dst += 16;
         }
 
+        src = src_ptr + i * pitch;
         uint8_t* v_dst = v_ptr + i * width * 2;
         uint8_t* u_dst = u_ptr + i * width * 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -12569,7 +12555,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_yuv_planar_helium(const void* input,
         uint8_t* u_dst = u_ptr + i / 2 * width / 2;
         uint8_t* v_dst = v_ptr + i / 2 * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -12635,7 +12621,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_yuv_semi_planar_helium(const void* i
         uint8_t* u_dst = u_ptr + i * width / 2;
         uint8_t* v_dst = v_ptr + i * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -12694,10 +12680,11 @@ aipl_error_t aipl_color_convert_rgba5551_to_yuv_packed_helium(const void* input,
             y_dst += 16;
         }
 
+        src = src_ptr + i * pitch;
         uint8_t* v_dst = v_ptr + i * width * 2;
         uint8_t* u_dst = u_ptr + i * width * 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -12768,7 +12755,7 @@ aipl_error_t aipl_color_convert_24bit_to_yuv_planar_helium(const void* input,
         uint8_t* u_dst = u_ptr + i / 2 * width / 2;
         uint8_t* v_dst = v_ptr + i / 2 * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -12842,7 +12829,7 @@ aipl_error_t aipl_color_convert_24bit_to_yuv_semi_planar_helium(const void* inpu
         uint8_t* u_dst = u_ptr + i * width / 2;
         uint8_t* v_dst = v_ptr + i * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -12907,10 +12894,11 @@ aipl_error_t aipl_color_convert_24bit_to_yuv_packed_helium(const void* input,
             y_dst += 16;
         }
 
+        src = src_ptr + i * pitch * 3;
         uint8_t* u_dst = u_ptr + i * width * 2;
         uint8_t* v_dst = v_ptr + i * width * 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -13142,7 +13130,7 @@ aipl_error_t aipl_color_convert_rgb565_to_yuv_planar_helium(const void* input,
         uint8_t* u_dst = u_ptr + i / 2 * width / 2;
         uint8_t* v_dst = v_ptr + i / 2 * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -13208,7 +13196,7 @@ aipl_error_t aipl_color_convert_rgb565_to_yuv_semi_planar_helium(const void* inp
         uint8_t* u_dst = u_ptr + i * width / 2;
         uint8_t* v_dst = v_ptr + i * width / 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -13267,10 +13255,11 @@ aipl_error_t aipl_color_convert_rgb565_to_yuv_packed_helium(const void* input,
             y_dst += 16;
         }
 
+        src = src_ptr + i * pitch;
         uint8_t* v_dst = v_ptr + i * width * 2;
         uint8_t* u_dst = u_ptr + i * width * 2;
 
-        for (int32_t cnt = width; cnt > 0; cnt -= 16)
+        for (int32_t cnt = width / 2; cnt > 0; cnt -= 8)
         {
             mve_pred16_t tail_p = vctp16q(cnt);
 
@@ -14753,26 +14742,21 @@ aipl_error_t aipl_color_convert_yuv_planar_to_semi_helium(const uint8_t* y_src,
             uint8_t* u_d = u_dst + i / 2 * width;
             const uint8_t* v_s = v_src + i / 2 * pitch / 2;
             uint8_t* v_d = v_dst + i / 2 * width;
-            int32_t cnt = width;
 
-            uint32_t j = 0;
-            while (cnt > 0)
+            for (int32_t cnt = width / 2; cnt > 0; cnt -= 16)
             {
                 mve_pred16_t tail_p = vctp8q(cnt);
 
                 uint8x16_t u = vld1q_z(u_s, tail_p);
-
-                vstrbq_scatter_offset_p(u_d, AIPL_2_BYTE_OFFSETS_U8, u, tail_p);
-
                 uint8x16_t v = vld1q_z(v_s, tail_p);
 
+                vstrbq_scatter_offset_p(u_d, AIPL_2_BYTE_OFFSETS_U8, u, tail_p);
                 vstrbq_scatter_offset_p(v_d, AIPL_2_BYTE_OFFSETS_U8, v, tail_p);
 
                 u_s += 16;
                 v_s += 16;
                 u_d += 32;
                 v_d += 32;
-                cnt -= 32;
             }
         }
     }
