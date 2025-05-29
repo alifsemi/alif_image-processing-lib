@@ -18,9 +18,10 @@
  *      INCLUDES
  *********************/
 #include "aipl_color_conversion_helium.h"
-#include <RTE_Device.h>
-#include "aipl_config.h"
+
 #include <string.h>
+
+#include "aipl_config.h"
 #include "aipl_mve_utils.h"
 #include "aipl_utils.h"
 
@@ -1785,7 +1786,6 @@ aipl_error_t aipl_color_convert_argb8888_to_yuy2_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -1803,7 +1803,6 @@ aipl_error_t aipl_color_convert_argb8888_to_uyvy_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -2331,7 +2330,6 @@ aipl_error_t aipl_color_convert_argb4444_to_yuy2_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -2349,7 +2347,6 @@ aipl_error_t aipl_color_convert_argb4444_to_uyvy_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -2488,10 +2485,6 @@ aipl_error_t aipl_color_convert_argb1555_to_alpha8_helium(const void* input,
 
             uint16x8_t px;
             aipl_mve_ldr_8px_argb1555(&px, src, tail_p);
-
-            uint16x8_t r = vandq(vshrq(px, 10), vdupq_n_u16(0x001f));
-            uint16x8_t g = vandq(vshrq(px, 5), vdupq_n_u16(0x001f));
-            uint16x8_t b = vandq(px, vdupq_n_u16(0x001f));
 
             uint16x8_t y;
             aipl_mve_cnvt_8px_argb1555_to_yuv_y(&y, px);
@@ -2835,7 +2828,6 @@ aipl_error_t aipl_color_convert_argb1555_to_yuy2_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -2853,7 +2845,6 @@ aipl_error_t aipl_color_convert_argb1555_to_uyvy_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -3563,7 +3554,6 @@ aipl_error_t aipl_color_convert_rgba8888_to_yuy2_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -3581,7 +3571,6 @@ aipl_error_t aipl_color_convert_rgba8888_to_uyvy_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -4109,7 +4098,6 @@ aipl_error_t aipl_color_convert_rgba4444_to_yuy2_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -4127,7 +4115,6 @@ aipl_error_t aipl_color_convert_rgba4444_to_uyvy_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -4608,7 +4595,6 @@ aipl_error_t aipl_color_convert_rgba5551_to_yuy2_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -4626,7 +4612,6 @@ aipl_error_t aipl_color_convert_rgba5551_to_uyvy_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -5011,7 +4996,6 @@ aipl_error_t aipl_color_convert_bgr888_to_yuy2_helium(const void* input,
                                                       uint32_t width,
                                                       uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -5029,7 +5013,6 @@ aipl_error_t aipl_color_convert_bgr888_to_uyvy_helium(const void* input,
                                                       uint32_t width,
                                                       uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -5414,7 +5397,6 @@ aipl_error_t aipl_color_convert_rgb888_to_yuy2_helium(const void* input,
                                                       uint32_t width,
                                                       uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -5432,7 +5414,6 @@ aipl_error_t aipl_color_convert_rgb888_to_uyvy_helium(const void* input,
                                                       uint32_t width,
                                                       uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -5912,7 +5893,6 @@ aipl_error_t aipl_color_convert_rgb565_to_yuy2_helium(const void* input,
                                                       uint32_t width,
                                                       uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -5930,7 +5910,6 @@ aipl_error_t aipl_color_convert_rgb565_to_uyvy_helium(const void* input,
                                                       uint32_t width,
                                                       uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -9116,7 +9095,6 @@ aipl_error_t aipl_color_convert_yuy2_to_argb8888_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -9134,7 +9112,6 @@ aipl_error_t aipl_color_convert_yuy2_to_argb4444_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -9152,7 +9129,6 @@ aipl_error_t aipl_color_convert_yuy2_to_argb1555_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -9170,7 +9146,6 @@ aipl_error_t aipl_color_convert_yuy2_to_rgba8888_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -9188,7 +9163,6 @@ aipl_error_t aipl_color_convert_yuy2_to_rgba4444_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -9206,7 +9180,6 @@ aipl_error_t aipl_color_convert_yuy2_to_rgba5551_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -9224,7 +9197,6 @@ aipl_error_t aipl_color_convert_yuy2_to_bgr888_helium(const void* input,
                                                       uint32_t width,
                                                       uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -9243,7 +9215,6 @@ aipl_error_t aipl_color_convert_yuy2_to_rgb888_helium(const void* input,
                                                       uint32_t width,
                                                       uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -9262,7 +9233,6 @@ aipl_error_t aipl_color_convert_yuy2_to_rgb565_helium(const void* input,
                                                       uint32_t width,
                                                       uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -9655,7 +9625,6 @@ aipl_error_t aipl_color_convert_uyvy_to_argb8888_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -9673,7 +9642,6 @@ aipl_error_t aipl_color_convert_uyvy_to_argb4444_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -9691,7 +9659,6 @@ aipl_error_t aipl_color_convert_uyvy_to_argb1555_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -9709,7 +9676,6 @@ aipl_error_t aipl_color_convert_uyvy_to_rgba8888_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -9727,7 +9693,6 @@ aipl_error_t aipl_color_convert_uyvy_to_rgba4444_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -9745,7 +9710,6 @@ aipl_error_t aipl_color_convert_uyvy_to_rgba5551_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -9763,7 +9727,6 @@ aipl_error_t aipl_color_convert_uyvy_to_bgr888_helium(const void* input,
                                                       uint32_t width,
                                                       uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -9782,7 +9745,6 @@ aipl_error_t aipl_color_convert_uyvy_to_rgb888_helium(const void* input,
                                                       uint32_t width,
                                                       uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -9801,7 +9763,6 @@ aipl_error_t aipl_color_convert_uyvy_to_rgb565_helium(const void* input,
                                                       uint32_t width,
                                                       uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -13303,7 +13264,6 @@ aipl_error_t aipl_color_convert_yuv_packed_to_alpha8_helium(const void* input,
         const uint8_t* y_src = y_ptr + i * pitch * 2;
         uint8_t* dst = dst_ptr + i * width;
 
-        uint32_t j = 0;
         while (cnt > 0)
         {
             mve_pred16_t tail_p = vctp8q(cnt);
@@ -14084,8 +14044,6 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba4444_helium(const uint8_t
 
     for (uint32_t i = 0; i < height; i += 2)
     {
-        int32_t cnt = width / 2;
-
         const uint8_t* y_src0 = y_ptr + i * pitch;
         const uint8_t* y_src1 = y_src0 + pitch;
         const uint8_t* u_src = u_ptr + i / 2 * pitch;
@@ -14253,8 +14211,6 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba5551_helium(const uint8_t
 
     for (uint32_t i = 0; i < height; i += 2)
     {
-        int32_t cnt = width / 2;
-
         const uint8_t* y_src0 = y_ptr + i * pitch;
         const uint8_t* y_src1 = y_src0 + pitch;
         const uint8_t* u_src = u_ptr + i / 2 * pitch;

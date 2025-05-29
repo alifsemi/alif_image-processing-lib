@@ -19,11 +19,8 @@
  *********************/
 #include <stdlib.h>
 #include <string.h>
-
-#include "RTE_Components.h"
-#include CMSIS_device_header
-#include <RTE_Device.h>
 #include <stddef.h>
+
 #include "aipl_config.h"
 #ifdef AIPL_DAVE2D_ACCELERATION
 #include "aipl_crop_dave2d.h"

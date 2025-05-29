@@ -24,7 +24,6 @@ extern "C" {
 /*********************
  *      INCLUDES
  *********************/
-#include <RTE_Device.h>
 #include "aipl_color_formats.h"
 #include "aipl_error.h"
 #include "aipl_image.h"

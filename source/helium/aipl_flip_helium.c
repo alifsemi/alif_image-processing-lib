@@ -17,12 +17,13 @@
 /*********************
  *      INCLUDES
  *********************/
-#include <string.h>
 #include "aipl_flip_helium.h"
-#include <RTE_Device.h>
+
+#include <string.h>
 #include <stddef.h>
-#include "aipl_cache.h"
 #include <arm_mve.h>
+
+#include "aipl_cache.h"
 
 #ifdef AIPL_HELIUM_ACCELERATION
 
@@ -76,7 +77,6 @@ aipl_error_t aipl_flip_helium(const void* input, void* output,
     uint8_t* dst = output;
 
     const int rgbBytes = aipl_color_format_depth(format)/8;
-    int x, y, j;
 
     if (flip_horizontal && flip_vertical)
     {

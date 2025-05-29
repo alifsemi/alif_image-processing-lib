@@ -18,8 +18,9 @@
  *      INCLUDES
  *********************/
 #include "aipl_rotate_default.h"
-#include <RTE_Device.h>
+
 #include <stddef.h>
+
 #include "aipl_cache.h"
 
 #if !defined(AIPL_HELIUM_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT)

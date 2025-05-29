@@ -17,11 +17,10 @@
 /*********************
  *      INCLUDES
  *********************/
-#include "RTE_Components.h"
-#include CMSIS_device_header
+#include <stdlib.h>
+
 #include "aipl_config.h"
 #include "aipl_dave2d.h"
-#include <stdlib.h>
 #include "aipl_cache.h"
 
 /*********************

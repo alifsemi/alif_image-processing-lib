@@ -18,8 +18,9 @@
  *      INCLUDES
  *********************/
 #include "aipl_color_conversion_dave2d.h"
-#include <RTE_Device.h>
+
 #include <stddef.h>
+
 #include "aipl_config.h"
 #include "aipl_dave2d.h"
 
@@ -1204,8 +1205,6 @@ aipl_error_t aipl_color_convert_alpha8_to_argb4444_dave2d(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-    const uint8_t* y_ptr = input;
-
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_alpha8, d2_mode_argb4444);
 
@@ -1238,8 +1237,6 @@ aipl_error_t aipl_color_convert_alpha8_to_rgba8888_dave2d(const void* input,
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
 
-    const uint8_t* y_ptr = input;
-
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_alpha8, d2_mode_rgba8888);
 
@@ -1254,8 +1251,6 @@ aipl_error_t aipl_color_convert_alpha8_to_rgba4444_dave2d(const void* input,
 {
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
-
-    const uint8_t* y_ptr = input;
 
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_alpha8, d2_mode_rgba4444);
@@ -1289,8 +1284,6 @@ aipl_error_t aipl_color_convert_alpha8_to_rgb565_dave2d(const void* input,
 {
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;
-
-    const uint8_t* y_ptr = input;
 
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
                                                 d2_mode_alpha8, d2_mode_rgb565);

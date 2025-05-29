@@ -17,15 +17,13 @@
 /*********************
  *      INCLUDES
  *********************/
+#include "aipl_crop_default.h"
+
 #include <stdlib.h>
 #include <string.h>
-
-#include "RTE_Components.h"
-#include CMSIS_device_header
-#include <RTE_Device.h>
 #include <stddef.h>
+
 #include "aipl_config.h"
-#include "aipl_crop_default.h"
 #include "aipl_cache.h"
 
 /*********************

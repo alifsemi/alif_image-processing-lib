@@ -18,8 +18,9 @@
  *      INCLUDES
  *********************/
 #include "aipl_resize_helium.h"
-#include <RTE_Device.h>
+
 #include <stddef.h>
+
 #include "aipl_mve_utils.h"
 
 #ifdef AIPL_HELIUM_ACCELERATION
@@ -244,7 +245,6 @@ static aipl_error_t aipl_resize_sw_argb1555(const void* input, void* output,
     uint16_t* dstImage = (uint16_t*)output;
 
     uint32_t src_x_accum, src_y_accum; // accumulators and fractions for scaling the image
-    uint32_t y_frac, ny_frac;
     int x, y, ty;
 
     if (input_height < 2) {
@@ -267,9 +267,7 @@ static aipl_error_t aipl_resize_sw_argb1555(const void* input, void* output,
     for (y = 0; y < output_height; y++) {
         // do indexing computations
         ty = src_y_accum >> FRAC_BITS; // src y
-        y_frac = src_y_accum & FRAC_MASK;
         src_y_accum += src_y_frac;
-        ny_frac = FRAC_VAL - y_frac; // y fraction and 1.0 - y fraction
 
         s = &srcImage[ty * input_pitch];
         d = &dstImage[y * output_width]; //not scaled above
@@ -346,7 +344,6 @@ static aipl_error_t aipl_resize_sw_rgba5551(const void* input, void* output,
     uint16_t* dstImage = (uint16_t*)output;
 
     uint32_t src_x_accum, src_y_accum; // accumulators and fractions for scaling the image
-    uint32_t y_frac, ny_frac;
     int x, y, ty;
 
     if (input_height < 2) {
@@ -367,9 +364,7 @@ static aipl_error_t aipl_resize_sw_rgba5551(const void* input, void* output,
     for (y = 0; y < output_height; y++) {
         // do indexing computations
         ty = src_y_accum >> FRAC_BITS; // src y
-        y_frac = src_y_accum & FRAC_MASK;
         src_y_accum += src_y_frac;
-        ny_frac = FRAC_VAL - y_frac; // y fraction and 1.0 - y fraction
 
         s = &srcImage[ty * input_pitch];
         d = &dstImage[y * output_width]; //not scaled above
@@ -447,7 +442,6 @@ static aipl_error_t aipl_resize_sw_4bit_channels(const void* input, void* output
     uint16_t* dstImage = (uint16_t*)output;
 
     uint32_t src_x_accum, src_y_accum; // accumulators and fractions for scaling the image
-    uint32_t y_frac, ny_frac;
     int x, y, ty;
 
     if (input_height < 2) {
@@ -468,9 +462,7 @@ static aipl_error_t aipl_resize_sw_4bit_channels(const void* input, void* output
     for (y = 0; y < output_height; y++) {
         // do indexing computations
         ty = src_y_accum >> FRAC_BITS; // src y
-        y_frac = src_y_accum & FRAC_MASK;
         src_y_accum += src_y_frac;
-        ny_frac = FRAC_VAL - y_frac; // y fraction and 1.0 - y fraction
 
         s = &srcImage[ty * input_pitch];
         d = &dstImage[y * output_width]; //not scaled above
@@ -479,7 +471,7 @@ static aipl_error_t aipl_resize_sw_4bit_channels(const void* input, void* output
 
         for (x = 0; x < output_width; x += 8)
         {
-            uint32x4_t offsets = vidupq_u32(0, 2);
+            uint32x4_t offsets = vidupq_u32(0U, 2);
             offsets = vmulq(offsets, src_x_frac);
             uint32x4_t tx0 = vaddq(vdupq_n_u32(src_x_accum), offsets);
             uint32x4_t tx1 = vaddq(vdupq_n_u32((src_x_accum + src_x_frac)), offsets);
@@ -554,7 +546,6 @@ static aipl_error_t aipl_resize_sw_rgb565(const void* input, void* output,
     uint16_t* dstImage = (uint16_t*)output;
 
     uint32_t src_x_accum, src_y_accum; // accumulators and fractions for scaling the image
-    uint32_t y_frac, ny_frac;
     int x, y, ty;
 
     if (input_height < 2) {
@@ -575,9 +566,7 @@ static aipl_error_t aipl_resize_sw_rgb565(const void* input, void* output,
     for (y = 0; y < output_height; y++) {
         // do indexing computations
         ty = src_y_accum >> FRAC_BITS; // src y
-        y_frac = src_y_accum & FRAC_MASK;
         src_y_accum += src_y_frac;
-        ny_frac = FRAC_VAL - y_frac; // y fraction and 1.0 - y fraction
 
         s = &srcImage[ty * input_pitch];
         d = &dstImage[y * output_width]; //not scaled above
@@ -586,7 +575,7 @@ static aipl_error_t aipl_resize_sw_rgb565(const void* input, void* output,
 
         for (x = 0; x < output_width; x += 8)
         {
-            uint32x4_t offsets = vidupq_u32(0, 2);
+            uint32x4_t offsets = vidupq_u32(0U, 2);
             offsets = vmulq(offsets, src_x_frac);
             uint32x4_t tx0 = vaddq(vdupq_n_u32(src_x_accum), offsets);
             uint32x4_t tx1 = vaddq(vdupq_n_u32((src_x_accum + src_x_frac)), offsets);
