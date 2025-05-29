@@ -25,7 +25,9 @@ extern "C" {
  *      INCLUDES
  *********************/
 #include <stdbool.h>
+
 #include "dave_driver.h"
+
 #include "aipl_config.h"
 #include "aipl_color_formats.h"
 #include "aipl_error.h"

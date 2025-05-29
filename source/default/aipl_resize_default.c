@@ -18,7 +18,7 @@
  *      INCLUDES
  *********************/
 #include "aipl_resize_default.h"
-#include <RTE_Device.h>
+
 #include <stddef.h>
 
 #if !defined(AIPL_HELIUM_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT)

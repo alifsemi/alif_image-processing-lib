@@ -26,7 +26,7 @@ extern "C" {
  *********************/
 #include "aipl_config.h"
 #ifdef AIPL_HELIUM_ACCELERATION
-#include "arm_mve.h"
+#include <arm_mve.h>
 
 /*********************
  *      DEFINES

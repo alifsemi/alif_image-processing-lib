@@ -18,9 +18,10 @@
  *      INCLUDES
  *********************/
 #include "aipl_rotate_helium.h"
-#include <RTE_Device.h>
+
 #include <stddef.h>
 #include <arm_mve.h>
+
 #include "aipl_cache.h"
 
 #ifdef AIPL_HELIUM_ACCELERATION

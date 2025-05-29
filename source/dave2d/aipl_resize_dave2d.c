@@ -18,8 +18,9 @@
  *      INCLUDES
  *********************/
 #include "aipl_resize_dave2d.h"
-#include <RTE_Device.h>
+
 #include <stddef.h>
+
 #include "aipl_config.h"
 #include "aipl_dave2d.h"
 

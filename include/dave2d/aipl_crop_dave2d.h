@@ -27,6 +27,9 @@ extern "C" {
 #include "aipl_color_formats.h"
 #include "aipl_error.h"
 #include "aipl_image.h"
+#include "aipl_config.h"
+
+#ifdef AIPL_DAVE2D_ACCELERATION
 
 /*********************
  *      DEFINES
@@ -87,6 +90,8 @@ aipl_error_t aipl_crop_img_dave2d(const aipl_image_t* input,
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif
+
+#endif /* AIPL_DAVE2D_ACCELERATION */
 
 #endif  /* AIPL_CROP_DAVE2D_H */
 

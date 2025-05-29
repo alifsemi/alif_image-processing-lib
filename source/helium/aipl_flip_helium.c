@@ -17,12 +17,13 @@
 /*********************
  *      INCLUDES
  *********************/
-#include <string.h>
 #include "aipl_flip_helium.h"
-#include <RTE_Device.h>
+
+#include <string.h>
 #include <stddef.h>
-#include "aipl_cache.h"
 #include <arm_mve.h>
+
+#include "aipl_cache.h"
 
 #ifdef AIPL_HELIUM_ACCELERATION
 

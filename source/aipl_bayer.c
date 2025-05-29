@@ -18,10 +18,9 @@
  *      INCLUDES
  *********************/
 #include <stddef.h>
-#include "aipl_bayer.h"
-#include <RTE_Device.h>
-#include "aipl_config.h"
 #include <arm_mve.h>
+
+#include "aipl_bayer.h"
 
 /*********************
  *      DEFINES

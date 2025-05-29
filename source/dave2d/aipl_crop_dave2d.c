@@ -17,13 +17,12 @@
 /*********************
  *      INCLUDES
  *********************/
-#include "RTE_Components.h"
-#include CMSIS_device_header
-#include <RTE_Device.h>
+#include "aipl_crop_dave2d.h"
+
 #include <stddef.h>
+
 #include "aipl_config.h"
 #include "aipl_dave2d.h"
-#include "aipl_crop_dave2d.h"
 
 /*********************
  *      DEFINES

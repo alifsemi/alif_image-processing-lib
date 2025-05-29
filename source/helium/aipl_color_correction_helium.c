@@ -19,8 +19,9 @@
  *      INCLUDES
  *********************/
 #include "aipl_color_correction_helium.h"
-#include <RTE_Device.h>
+
 #include <stddef.h>
+
 #include "aipl_mve_utils.h"
 
 #ifdef AIPL_HELIUM_ACCELERATION

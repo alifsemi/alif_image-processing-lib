@@ -18,9 +18,10 @@
  *      INCLUDES
  *********************/
 #include "aipl_color_conversion_helium.h"
-#include <RTE_Device.h>
-#include "aipl_config.h"
+
 #include <string.h>
+
+#include "aipl_config.h"
 #include "aipl_mve_utils.h"
 #include "aipl_utils.h"
 

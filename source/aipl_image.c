@@ -18,8 +18,10 @@
  *      INCLUDES
  *********************/
 #include "aipl_image.h"
-#include "aipl_video_alloc.h"
+
 #include <stdlib.h>
+
+#include "aipl_video_alloc.h"
 
 /*********************
  *      DEFINES

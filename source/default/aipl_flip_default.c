@@ -17,10 +17,11 @@
 /*********************
  *      INCLUDES
  *********************/
-#include <string.h>
 #include "aipl_flip_default.h"
-#include <RTE_Device.h>
+
+#include <string.h>
 #include <stddef.h>
+
 #include "aipl_cache.h"
 
 #if !defined(AIPL_HELIUM_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT)

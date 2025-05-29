@@ -19,8 +19,9 @@
  *      INCLUDES
  *********************/
 #include "aipl_color_correction_default.h"
-#include <RTE_Device.h>
+
 #include <stddef.h>
+
 #include "aipl_utils.h"
 
 #if !defined(AIPL_HELIUM_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT)
