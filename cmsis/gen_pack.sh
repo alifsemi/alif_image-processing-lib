@@ -28,17 +28,18 @@ DEFAULT_ARGS="-v"
 # An empty list defaults to all folders next to this script.
 # Default: empty (all folders)
 #
-# PACK_DIRS="
-#   <list directories here>
-# "
+PACK_DIRS="
+  ../include/
+  ../source/
+"
 
 # Specify file names to be added to pack base directory
 # Default: empty
 #
 PACK_BASE_FILES="
   aipl_config.h
-  License.txt
-  README.md
+  ../License.txt
+  ../README.md
 "
 
 # Specify file names to be deleted from pack build directory
