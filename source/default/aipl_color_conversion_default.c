@@ -1849,7 +1849,6 @@ aipl_error_t aipl_color_convert_argb8888_to_yuy2_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -1868,7 +1867,6 @@ aipl_error_t aipl_color_convert_argb8888_to_uyvy_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -2460,7 +2458,6 @@ aipl_error_t aipl_color_convert_argb4444_to_yuy2_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -2479,7 +2476,6 @@ aipl_error_t aipl_color_convert_argb4444_to_uyvy_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -3073,7 +3069,6 @@ aipl_error_t aipl_color_convert_argb1555_to_yuy2_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -3092,7 +3087,6 @@ aipl_error_t aipl_color_convert_argb1555_to_uyvy_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -3681,7 +3675,6 @@ aipl_error_t aipl_color_convert_rgba8888_to_yuy2_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -3700,7 +3693,6 @@ aipl_error_t aipl_color_convert_rgba8888_to_uyvy_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -4292,7 +4284,6 @@ aipl_error_t aipl_color_convert_rgba4444_to_yuy2_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -4311,7 +4302,6 @@ aipl_error_t aipl_color_convert_rgba4444_to_uyvy_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -4905,7 +4895,6 @@ aipl_error_t aipl_color_convert_rgba5551_to_yuy2_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -4924,7 +4913,6 @@ aipl_error_t aipl_color_convert_rgba5551_to_uyvy_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -5395,7 +5383,6 @@ aipl_error_t aipl_color_convert_bgr888_to_yuy2_default(const void* input,
                                                        uint32_t width,
                                                        uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -5414,7 +5401,6 @@ aipl_error_t aipl_color_convert_bgr888_to_uyvy_default(const void* input,
                                                        uint32_t width,
                                                        uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -5885,7 +5871,6 @@ aipl_error_t aipl_color_convert_rgb888_to_yuy2_default(const void* input,
                                                        uint32_t width,
                                                        uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -5904,7 +5889,6 @@ aipl_error_t aipl_color_convert_rgb888_to_uyvy_default(const void* input,
                                                        uint32_t width,
                                                        uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -6496,7 +6480,6 @@ aipl_error_t aipl_color_convert_rgb565_to_yuy2_default(const void* input,
                                                        uint32_t width,
                                                        uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
     uint8_t* u_ptr = output + 1;
     uint8_t* v_ptr = u_ptr + 2;
@@ -6515,7 +6498,6 @@ aipl_error_t aipl_color_convert_rgb565_to_uyvy_default(const void* input,
                                                        uint32_t width,
                                                        uint32_t height)
 {
-    uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
     uint8_t* v_ptr = u_ptr + 2;
@@ -10465,7 +10447,6 @@ aipl_error_t aipl_color_convert_yuy2_to_argb8888_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -10484,7 +10465,6 @@ aipl_error_t aipl_color_convert_yuy2_to_argb4444_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -10503,7 +10483,6 @@ aipl_error_t aipl_color_convert_yuy2_to_argb1555_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -10522,7 +10501,6 @@ aipl_error_t aipl_color_convert_yuy2_to_rgba8888_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -10541,7 +10519,6 @@ aipl_error_t aipl_color_convert_yuy2_to_rgba4444_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -10560,7 +10537,6 @@ aipl_error_t aipl_color_convert_yuy2_to_rgba5551_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -10579,7 +10555,6 @@ aipl_error_t aipl_color_convert_yuy2_to_bgr888_default(const void* input,
                                                        uint32_t width,
                                                        uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -10599,7 +10574,6 @@ aipl_error_t aipl_color_convert_yuy2_to_rgb888_default(const void* input,
                                                        uint32_t width,
                                                        uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -10619,7 +10593,6 @@ aipl_error_t aipl_color_convert_yuy2_to_rgb565_default(const void* input,
                                                        uint32_t width,
                                                        uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* y_ptr = input;
     const uint8_t* u_ptr = y_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -11016,7 +10989,6 @@ aipl_error_t aipl_color_convert_uyvy_to_argb8888_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -11035,7 +11007,6 @@ aipl_error_t aipl_color_convert_uyvy_to_argb4444_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -11054,7 +11025,6 @@ aipl_error_t aipl_color_convert_uyvy_to_argb1555_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -11073,7 +11043,6 @@ aipl_error_t aipl_color_convert_uyvy_to_rgba8888_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -11092,7 +11061,6 @@ aipl_error_t aipl_color_convert_uyvy_to_rgba4444_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -11111,7 +11079,6 @@ aipl_error_t aipl_color_convert_uyvy_to_rgba5551_default(const void* input,
                                                          uint32_t width,
                                                          uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -11130,7 +11097,6 @@ aipl_error_t aipl_color_convert_uyvy_to_bgr888_default(const void* input,
                                                        uint32_t width,
                                                        uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -11150,7 +11116,6 @@ aipl_error_t aipl_color_convert_uyvy_to_rgb888_default(const void* input,
                                                        uint32_t width,
                                                        uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;
@@ -11170,7 +11135,6 @@ aipl_error_t aipl_color_convert_uyvy_to_rgb565_default(const void* input,
                                                        uint32_t width,
                                                        uint32_t height)
 {
-    uint32_t yuv_size = pitch * height;
     const uint8_t* u_ptr = input;
     const uint8_t* y_ptr = u_ptr + 1;
     const uint8_t* v_ptr = u_ptr + 2;

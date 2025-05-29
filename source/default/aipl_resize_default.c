@@ -161,7 +161,7 @@ static aipl_error_t aipl_resize_sw_8bit_channels(const void* input, void* output
     const int FRAC_MASK = (FRAC_VAL - 1);
 
     uint32_t src_x_accum, src_y_accum; // accumulators and fractions for scaling the image
-    uint32_t x_frac, nx_frac, y_frac, ny_frac;
+    uint32_t x_frac, nx_frac;
     int x, y, ty;
 
     if (input_height < 2) {
@@ -186,9 +186,7 @@ static aipl_error_t aipl_resize_sw_8bit_channels(const void* input, void* output
     for (y = 0; y < output_height; y++) {
         // do indexing computations
         ty = src_y_accum >> FRAC_BITS; // src y
-        y_frac = src_y_accum & FRAC_MASK;
         src_y_accum += src_y_frac;
-        ny_frac = FRAC_VAL - y_frac; // y fraction and 1.0 - y fraction
 
         s = &srcImage[ty * input_pitch];
         d = &dstImage[y * output_width * pixel_size_B]; //not scaled above
@@ -238,7 +236,7 @@ static aipl_error_t aipl_resize_sw_argb1555(const void* input, void* output,
     uint16_t* dstImage = (uint16_t*)output;
 
     uint32_t src_x_accum, src_y_accum; // accumulators and fractions for scaling the image
-    uint32_t x_frac, nx_frac, y_frac, ny_frac;
+    uint32_t x_frac, nx_frac;
     int x, y, ty;
 
     if (input_height < 2) {
@@ -261,9 +259,7 @@ static aipl_error_t aipl_resize_sw_argb1555(const void* input, void* output,
     for (y = 0; y < output_height; y++) {
         // do indexing computations
         ty = src_y_accum >> FRAC_BITS; // src y
-        y_frac = src_y_accum & FRAC_MASK;
         src_y_accum += src_y_frac;
-        ny_frac = FRAC_VAL - y_frac; // y fraction and 1.0 - y fraction
 
         s = &srcImage[ty * input_pitch];
         d = &dstImage[y * output_width]; //not scaled above
@@ -329,7 +325,7 @@ static aipl_error_t aipl_resize_sw_rgba5551(const void* input, void* output,
     uint16_t* dstImage = (uint16_t*)output;
 
     uint32_t src_x_accum, src_y_accum; // accumulators and fractions for scaling the image
-    uint32_t x_frac, nx_frac, y_frac, ny_frac;
+    uint32_t x_frac, nx_frac;
     int x, y, ty;
 
     if (input_height < 2) {
@@ -350,9 +346,7 @@ static aipl_error_t aipl_resize_sw_rgba5551(const void* input, void* output,
     for (y = 0; y < output_height; y++) {
         // do indexing computations
         ty = src_y_accum >> FRAC_BITS; // src y
-        y_frac = src_y_accum & FRAC_MASK;
         src_y_accum += src_y_frac;
-        ny_frac = FRAC_VAL - y_frac; // y fraction and 1.0 - y fraction
 
         s = &srcImage[ty * input_pitch];
         d = &dstImage[y * output_width]; //not scaled above
@@ -420,7 +414,7 @@ static aipl_error_t aipl_resize_sw_4bit_channels(const void* input, void* output
     uint16_t* dstImage = (uint16_t*)output;
 
     uint32_t src_x_accum, src_y_accum; // accumulators and fractions for scaling the image
-    uint32_t x_frac, nx_frac, y_frac, ny_frac;
+    uint32_t x_frac, nx_frac;
     int x, y, ty;
 
     if (input_height < 2) {
@@ -441,9 +435,7 @@ static aipl_error_t aipl_resize_sw_4bit_channels(const void* input, void* output
     for (y = 0; y < output_height; y++) {
         // do indexing computations
         ty = src_y_accum >> FRAC_BITS; // src y
-        y_frac = src_y_accum & FRAC_MASK;
         src_y_accum += src_y_frac;
-        ny_frac = FRAC_VAL - y_frac; // y fraction and 1.0 - y fraction
 
         s = &srcImage[ty * input_pitch];
         d = &dstImage[y * output_width]; //not scaled above
@@ -517,7 +509,7 @@ static aipl_error_t aipl_resize_sw_rgb565(const void* input, void* output,
     uint16_t* dstImage = (uint16_t*)output;
 
     uint32_t src_x_accum, src_y_accum; // accumulators and fractions for scaling the image
-    uint32_t x_frac, nx_frac, y_frac, ny_frac;
+    uint32_t x_frac, nx_frac;
     int x, y, ty;
 
     if (input_height < 2) {
@@ -538,9 +530,7 @@ static aipl_error_t aipl_resize_sw_rgb565(const void* input, void* output,
     for (y = 0; y < output_height; y++) {
         // do indexing computations
         ty = src_y_accum >> FRAC_BITS; // src y
-        y_frac = src_y_accum & FRAC_MASK;
         src_y_accum += src_y_frac;
-        ny_frac = FRAC_VAL - y_frac; // y fraction and 1.0 - y fraction
 
         s = &srcImage[ty * input_pitch];
         d = &dstImage[y * output_width]; //not scaled above
