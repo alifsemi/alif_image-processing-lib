@@ -1548,7 +1548,7 @@ aipl_error_t aipl_color_convert_argb8888_to_yv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + yuv_size / 4;
 
     return aipl_color_convert_argb8888_to_yuv_planar_helium(input, pitch,
@@ -1566,7 +1566,7 @@ aipl_error_t aipl_color_convert_argb8888_to_i420_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size / 4;
 
     return aipl_color_convert_argb8888_to_yuv_planar_helium(input, pitch,
@@ -1587,7 +1587,7 @@ aipl_error_t aipl_color_convert_argb8888_to_i422_helium(const void* input,
 
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size / 2;
 
     const uint8_t* src_ptr = input;
@@ -1667,7 +1667,7 @@ aipl_error_t aipl_color_convert_argb8888_to_i444_helium(const void* input,
 
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size;
 
     const uint8_t* src_ptr = input;
@@ -1752,7 +1752,7 @@ aipl_error_t aipl_color_convert_argb8888_to_nv21_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + 1;
 
     return aipl_color_convert_argb8888_to_yuv_semi_planar_helium(input, pitch,
@@ -1770,7 +1770,7 @@ aipl_error_t aipl_color_convert_argb8888_to_nv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + 1;
 
     return aipl_color_convert_argb8888_to_yuv_semi_planar_helium(input, pitch,
@@ -1787,7 +1787,7 @@ aipl_error_t aipl_color_convert_argb8888_to_yuy2_helium(const void* input,
                                                         uint32_t height)
 {
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + 1;
+    uint8_t* u_ptr = y_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_argb8888_to_yuv_packed_helium(input, pitch,
@@ -1803,8 +1803,8 @@ aipl_error_t aipl_color_convert_argb8888_to_uyvy_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
+    uint8_t* y_ptr = u_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_argb8888_to_yuv_packed_helium(input, pitch,
@@ -2128,7 +2128,7 @@ aipl_error_t aipl_color_convert_argb4444_to_yv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + yuv_size / 4;
 
     return aipl_color_convert_argb4444_to_yuv_planar_helium(input, pitch,
@@ -2146,7 +2146,7 @@ aipl_error_t aipl_color_convert_argb4444_to_i420_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size / 4;
 
     return aipl_color_convert_argb4444_to_yuv_planar_helium(input, pitch,
@@ -2167,7 +2167,7 @@ aipl_error_t aipl_color_convert_argb4444_to_i422_helium(const void* input,
 
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size / 2;
 
     const uint16_t* src_ptr = input;
@@ -2235,7 +2235,7 @@ aipl_error_t aipl_color_convert_argb4444_to_i444_helium(const void* input,
 
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size;
 
     const uint16_t* src_ptr = input;
@@ -2296,7 +2296,7 @@ aipl_error_t aipl_color_convert_argb4444_to_nv21_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + 1;
 
     return aipl_color_convert_argb4444_to_yuv_semi_planar_helium(input, pitch,
@@ -2314,7 +2314,7 @@ aipl_error_t aipl_color_convert_argb4444_to_nv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + 1;
 
     return aipl_color_convert_argb4444_to_yuv_semi_planar_helium(input, pitch,
@@ -2331,7 +2331,7 @@ aipl_error_t aipl_color_convert_argb4444_to_yuy2_helium(const void* input,
                                                         uint32_t height)
 {
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + 1;
+    uint8_t* u_ptr = y_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_argb4444_to_yuv_packed_helium(input, pitch,
@@ -2347,8 +2347,8 @@ aipl_error_t aipl_color_convert_argb4444_to_uyvy_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
+    uint8_t* y_ptr = u_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_argb4444_to_yuv_packed_helium(input, pitch,
@@ -2627,7 +2627,7 @@ aipl_error_t aipl_color_convert_argb1555_to_yv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + yuv_size / 4;
 
     return aipl_color_convert_argb1555_to_yuv_planar_helium(input, pitch,
@@ -2645,7 +2645,7 @@ aipl_error_t aipl_color_convert_argb1555_to_i420_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size / 4;
 
     return aipl_color_convert_argb1555_to_yuv_planar_helium(input, pitch,
@@ -2666,7 +2666,7 @@ aipl_error_t aipl_color_convert_argb1555_to_i422_helium(const void* input,
 
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size / 2;
 
     const uint16_t* src_ptr = input;
@@ -2734,7 +2734,7 @@ aipl_error_t aipl_color_convert_argb1555_to_i444_helium(const void* input,
 
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size;
 
     const uint16_t* src_ptr = input;
@@ -2794,7 +2794,7 @@ aipl_error_t aipl_color_convert_argb1555_to_nv21_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + 1;
 
     return aipl_color_convert_argb1555_to_yuv_semi_planar_helium(input, pitch,
@@ -2812,7 +2812,7 @@ aipl_error_t aipl_color_convert_argb1555_to_nv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + 1;
 
     return aipl_color_convert_argb1555_to_yuv_semi_planar_helium(input, pitch,
@@ -2829,7 +2829,7 @@ aipl_error_t aipl_color_convert_argb1555_to_yuy2_helium(const void* input,
                                                         uint32_t height)
 {
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + 1;
+    uint8_t* u_ptr = y_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_argb1555_to_yuv_packed_helium(input, pitch,
@@ -2845,8 +2845,8 @@ aipl_error_t aipl_color_convert_argb1555_to_uyvy_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
+    uint8_t* y_ptr = u_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_argb1555_to_yuv_packed_helium(input, pitch,
@@ -3316,7 +3316,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_yv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + yuv_size / 4;
 
     return aipl_color_convert_rgba8888_to_yuv_planar_helium(input, pitch,
@@ -3334,7 +3334,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_i420_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size / 4;
 
     return aipl_color_convert_rgba8888_to_yuv_planar_helium(input, pitch,
@@ -3355,7 +3355,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_i422_helium(const void* input,
 
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size / 2;
 
     const uint8_t* src_ptr = input;
@@ -3435,7 +3435,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_i444_helium(const void* input,
 
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size;
 
     const uint8_t* src_ptr = input;
@@ -3520,7 +3520,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_nv21_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + 1;
 
     return aipl_color_convert_rgba8888_to_yuv_semi_planar_helium(input, pitch,
@@ -3538,7 +3538,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_nv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + 1;
 
     return aipl_color_convert_rgba8888_to_yuv_semi_planar_helium(input, pitch,
@@ -3555,7 +3555,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_yuy2_helium(const void* input,
                                                         uint32_t height)
 {
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + 1;
+    uint8_t* u_ptr = y_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_rgba8888_to_yuv_packed_helium(input, pitch,
@@ -3571,8 +3571,8 @@ aipl_error_t aipl_color_convert_rgba8888_to_uyvy_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
+    uint8_t* y_ptr = u_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_rgba8888_to_yuv_packed_helium(input, pitch,
@@ -3897,7 +3897,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_yv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + yuv_size / 4;
 
     return aipl_color_convert_rgba4444_to_yuv_planar_helium(input, pitch,
@@ -3915,7 +3915,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_i420_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size / 4;
 
     return aipl_color_convert_rgba4444_to_yuv_planar_helium(input, pitch,
@@ -3936,7 +3936,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_i422_helium(const void* input,
 
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size / 2;
 
     const uint16_t* src_ptr = input;
@@ -4003,7 +4003,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_i444_helium(const void* input,
 
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size;
 
     const uint16_t* src_ptr = input;
@@ -4064,7 +4064,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_nv21_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + 1;
 
     return aipl_color_convert_rgba4444_to_yuv_semi_planar_helium(input, pitch,
@@ -4082,7 +4082,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_nv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + 1;
 
     return aipl_color_convert_rgba4444_to_yuv_semi_planar_helium(input, pitch,
@@ -4099,7 +4099,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_yuy2_helium(const void* input,
                                                         uint32_t height)
 {
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + 1;
+    uint8_t* u_ptr = y_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_rgba4444_to_yuv_packed_helium(input, pitch,
@@ -4115,8 +4115,8 @@ aipl_error_t aipl_color_convert_rgba4444_to_uyvy_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
+    uint8_t* y_ptr = u_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_rgba4444_to_yuv_packed_helium(input, pitch,
@@ -4394,7 +4394,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_yv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + yuv_size / 4;
 
     return aipl_color_convert_rgba5551_to_yuv_planar_helium(input, pitch,
@@ -4412,7 +4412,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_i420_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size / 4;
 
     return aipl_color_convert_rgba5551_to_yuv_planar_helium(input, pitch,
@@ -4433,7 +4433,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_i422_helium(const void* input,
 
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size / 2;
 
     const uint16_t* src_ptr = input;
@@ -4500,7 +4500,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_i444_helium(const void* input,
 
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size;
 
     const uint16_t* src_ptr = input;
@@ -4561,7 +4561,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_nv21_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + 1;
 
     return aipl_color_convert_rgba5551_to_yuv_semi_planar_helium(input, pitch,
@@ -4579,7 +4579,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_nv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + 1;
 
     return aipl_color_convert_rgba5551_to_yuv_semi_planar_helium(input, pitch,
@@ -4596,7 +4596,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_yuy2_helium(const void* input,
                                                         uint32_t height)
 {
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + 1;
+    uint8_t* u_ptr = y_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_rgba5551_to_yuv_packed_helium(input, pitch,
@@ -4612,8 +4612,8 @@ aipl_error_t aipl_color_convert_rgba5551_to_uyvy_helium(const void* input,
                                                         uint32_t width,
                                                         uint32_t height)
 {
-    uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
+    uint8_t* y_ptr = u_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_rgba5551_to_yuv_packed_helium(input, pitch,
@@ -4877,7 +4877,7 @@ aipl_error_t aipl_color_convert_bgr888_to_yv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + yuv_size / 4;
 
     return aipl_color_convert_24bit_to_yuv_planar_helium(input, pitch,
@@ -4896,7 +4896,7 @@ aipl_error_t aipl_color_convert_bgr888_to_i420_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size / 4;
 
     return aipl_color_convert_24bit_to_yuv_planar_helium(input, pitch,
@@ -4960,7 +4960,7 @@ aipl_error_t aipl_color_convert_bgr888_to_nv21_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + 1;
 
     return aipl_color_convert_24bit_to_yuv_semi_planar_helium(input, pitch,
@@ -4979,7 +4979,7 @@ aipl_error_t aipl_color_convert_bgr888_to_nv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + 1;
 
     return aipl_color_convert_24bit_to_yuv_semi_planar_helium(input, pitch,
@@ -4997,7 +4997,7 @@ aipl_error_t aipl_color_convert_bgr888_to_yuy2_helium(const void* input,
                                                       uint32_t height)
 {
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + 1;
+    uint8_t* u_ptr = y_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_bgr888_to_yuv_packed_helium(input, pitch,
@@ -5013,8 +5013,8 @@ aipl_error_t aipl_color_convert_bgr888_to_uyvy_helium(const void* input,
                                                       uint32_t width,
                                                       uint32_t height)
 {
-    uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
+    uint8_t* y_ptr = u_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_bgr888_to_yuv_packed_helium(input, pitch,
@@ -5278,7 +5278,7 @@ aipl_error_t aipl_color_convert_rgb888_to_yv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + yuv_size / 4;
 
     return aipl_color_convert_24bit_to_yuv_planar_helium(input, pitch,
@@ -5297,7 +5297,7 @@ aipl_error_t aipl_color_convert_rgb888_to_i420_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size / 4;
 
     return aipl_color_convert_24bit_to_yuv_planar_helium(input, pitch,
@@ -5361,7 +5361,7 @@ aipl_error_t aipl_color_convert_rgb888_to_nv21_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + 1;
 
     return aipl_color_convert_24bit_to_yuv_semi_planar_helium(input, pitch,
@@ -5380,7 +5380,7 @@ aipl_error_t aipl_color_convert_rgb888_to_nv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + 1;
 
     return aipl_color_convert_24bit_to_yuv_semi_planar_helium(input, pitch,
@@ -5398,7 +5398,7 @@ aipl_error_t aipl_color_convert_rgb888_to_yuy2_helium(const void* input,
                                                       uint32_t height)
 {
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + 1;
+    uint8_t* u_ptr = y_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_rgb888_to_yuv_packed_helium(input, pitch,
@@ -5414,8 +5414,8 @@ aipl_error_t aipl_color_convert_rgb888_to_uyvy_helium(const void* input,
                                                       uint32_t width,
                                                       uint32_t height)
 {
-    uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
+    uint8_t* y_ptr = u_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_rgb888_to_yuv_packed_helium(input, pitch,
@@ -5692,7 +5692,7 @@ aipl_error_t aipl_color_convert_rgb565_to_yv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + yuv_size / 4;
 
     return aipl_color_convert_rgb565_to_yuv_planar_helium(input, pitch,
@@ -5710,7 +5710,7 @@ aipl_error_t aipl_color_convert_rgb565_to_i420_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size / 4;
 
     return aipl_color_convert_rgb565_to_yuv_planar_helium(input, pitch,
@@ -5731,7 +5731,7 @@ aipl_error_t aipl_color_convert_rgb565_to_i422_helium(const void* input,
 
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size / 2;
 
     const uint16_t* src_ptr = input;
@@ -5798,7 +5798,7 @@ aipl_error_t aipl_color_convert_rgb565_to_i444_helium(const void* input,
 
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size;
 
     const uint16_t* src_ptr = input;
@@ -5859,7 +5859,7 @@ aipl_error_t aipl_color_convert_rgb565_to_nv21_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* v_ptr = output + yuv_size;
+    uint8_t* v_ptr = y_ptr + yuv_size;
     uint8_t* u_ptr = v_ptr + 1;
 
     return aipl_color_convert_rgb565_to_yuv_semi_planar_helium(input, pitch,
@@ -5877,7 +5877,7 @@ aipl_error_t aipl_color_convert_rgb565_to_nv12_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + 1;
 
     return aipl_color_convert_rgb565_to_yuv_semi_planar_helium(input, pitch,
@@ -5894,7 +5894,7 @@ aipl_error_t aipl_color_convert_rgb565_to_yuy2_helium(const void* input,
                                                       uint32_t height)
 {
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + 1;
+    uint8_t* u_ptr = y_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_rgb565_to_yuv_packed_helium(input, pitch,
@@ -5910,8 +5910,8 @@ aipl_error_t aipl_color_convert_rgb565_to_uyvy_helium(const void* input,
                                                       uint32_t width,
                                                       uint32_t height)
 {
-    uint8_t* y_ptr = output + 1;
     uint8_t* u_ptr = output;
+    uint8_t* y_ptr = u_ptr + 1;
     uint8_t* v_ptr = u_ptr + 2;
 
     return aipl_color_convert_rgb565_to_yuv_packed_helium(input, pitch,
@@ -9611,7 +9611,7 @@ aipl_error_t aipl_color_convert_uyvy_to_alpha8_helium(const void* input,
                                                       uint32_t width,
                                                       uint32_t height)
 {
-    const uint8_t* y_ptr = input + 1;
+    const uint8_t* y_ptr = (uint8_t*)input + 1;
 
     return aipl_color_convert_yuv_packed_to_alpha8_helium(y_ptr, output, pitch,
                                                           width, height);
@@ -9892,7 +9892,7 @@ aipl_error_t aipl_color_convert_uyvy_to_i400_helium(const void* input,
                                                     uint32_t width,
                                                     uint32_t height)
 {
-    const uint8_t* y_ptr = input + 1;
+    const uint8_t* y_ptr = (uint8_t*)input + 1;
 
     return aipl_color_convert_yuv_packed_to_alpha8_helium(y_ptr, output, pitch,
                                                           width, height);
@@ -11296,7 +11296,7 @@ aipl_error_t aipl_color_convert_24bit_to_i422_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size / 2;
 
     const uint8_t* src_ptr = input;
@@ -11367,7 +11367,7 @@ aipl_error_t aipl_color_convert_24bit_to_i444_helium(const void* input,
 {
     uint32_t yuv_size = width * height;
     uint8_t* y_ptr = output;
-    uint8_t* u_ptr = output + yuv_size;
+    uint8_t* u_ptr = y_ptr + yuv_size;
     uint8_t* v_ptr = u_ptr + yuv_size;
 
     const uint8_t* src_ptr = input;

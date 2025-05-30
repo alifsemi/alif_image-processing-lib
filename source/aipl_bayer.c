@@ -18,8 +18,8 @@
  *      INCLUDES
  *********************/
 #include <stddef.h>
-#include <arm_mve.h>
 
+#include "aipl_arm_mve.h"
 #include "aipl_bayer.h"
 
 /*********************
@@ -197,7 +197,9 @@ aipl_error_t aipl_bayer_decoding_nearest_rgb565(
         while (pairs_to_go > 0) {
             mve_pred16_t p = vctp8q(pairs_to_go);
             uint8x16x2_t rg = vld2q(bayer);
+            uint8x16x2_t gr = vld2q(bayer + 1);
             uint8x16x2_t gb = vld2q(bayer + bayer_step);
+            uint8x16x2_t bg = vld2q(bayer + bayer_step + 1);
 #ifndef __ICCARM__
             __builtin_prefetch(bayer + bayer_step + 16 * 2 * 2);
 #endif
@@ -216,8 +218,6 @@ aipl_error_t aipl_bayer_decoding_nearest_rgb565(
             vstrbq_scatter_offset_p(rgb, inc, lower, p);
             vstrbq_scatter_offset_p(rgb+1, inc, upper, p);
 
-            uint8x16x2_t gr = vld2q(bayer + 1);
-            uint8x16x2_t bg = vld2q(bayer + bayer_step + 1);
             if (blue > 0) {
                 upper = vsriq(gr.val[1], bg.val[1], 5);
                 lower = vshlq_n(bg.val[1], 3);
@@ -314,7 +314,9 @@ aipl_error_t aipl_bayer_decoding_nearest_bgr888(
         while (pairs_to_go > 0) {
             mve_pred16_t p = vctp8q(pairs_to_go);
             uint8x16x2_t rg = vld2q(bayer);
+            uint8x16x2_t gr = vld2q(bayer + 1);
             uint8x16x2_t gb = vld2q(bayer + bayer_step);
+            uint8x16x2_t bg = vld2q(bayer + bayer_step + 1);
 #ifndef __ICCARM__
             __builtin_prefetch(bayer + bayer_step + 16*2*2);
 #endif
@@ -323,8 +325,6 @@ aipl_error_t aipl_bayer_decoding_nearest_bgr888(
             vstrbq_scatter_offset_p(rgb, inc, rg.val[1], p);
             vstrbq_scatter_offset_p(rgb + blue, inc, rg.val[0], p);
 
-            uint8x16x2_t gr = vld2q(bayer + 1);
-            uint8x16x2_t bg = vld2q(bayer + bayer_step + 1);
             vstrbq_scatter_offset_p(rgb + rgb_bytes - blue, inc, bg.val[0], p);
             vstrbq_scatter_offset_p(rgb + rgb_bytes, inc, bg.val[1], p);
             vstrbq_scatter_offset_p(rgb + rgb_bytes + blue, inc, gr.val[1], p);
@@ -409,7 +409,9 @@ aipl_error_t aipl_bayer_decoding_nearest_rgb888(
         while (pairs_to_go > 0) {
             mve_pred16_t p = vctp8q(pairs_to_go);
             uint8x16x2_t rg = vld2q(bayer);
+            uint8x16x2_t gr = vld2q(bayer + 1);
             uint8x16x2_t gb = vld2q(bayer + bayer_step);
+            uint8x16x2_t bg = vld2q(bayer + bayer_step + 1);
 #ifndef __ICCARM__
             __builtin_prefetch(bayer + bayer_step + 16*2*2);
 #endif
@@ -417,8 +419,6 @@ aipl_error_t aipl_bayer_decoding_nearest_rgb888(
             vstrbq_scatter_offset_p(rgb, inc, rg.val[1], p);
             vstrbq_scatter_offset_p(rgb + blue, inc, gb.val[1], p);
 
-            uint8x16x2_t gr = vld2q(bayer + 1);
-            uint8x16x2_t bg = vld2q(bayer + bayer_step + 1);
             vstrbq_scatter_offset_p(rgb + rgb_bytes - blue, inc, gr.val[1], p);
             vstrbq_scatter_offset_p(rgb + rgb_bytes, inc, bg.val[1], p);
             vstrbq_scatter_offset_p(rgb + rgb_bytes + blue, inc, bg.val[0], p);
@@ -504,7 +504,9 @@ aipl_error_t aipl_bayer_decoding_nearest_argb8888(
         while (pairs_to_go > 0) {
             mve_pred16_t p = vctp8q(pairs_to_go);
             uint8x16x2_t rg = vld2q(bayer);
+            uint8x16x2_t gr = vld2q(bayer + 1);
             uint8x16x2_t gb = vld2q(bayer + bayer_step);
+            uint8x16x2_t bg = vld2q(bayer + bayer_step + 1);
             uint8x16_t a = vcreateq_u8(0xffffffffffffffff, 0xffffffffffffffff);
 #ifndef __ICCARM__
             __builtin_prefetch(bayer + bayer_step + 16*2*2);
@@ -514,8 +516,6 @@ aipl_error_t aipl_bayer_decoding_nearest_argb8888(
             vstrbq_scatter_offset_p(rgb + blue, inc, rg.val[0], p);
             vstrbq_scatter_offset_p(rgb + 2, inc, a, p);
 
-            uint8x16x2_t gr = vld2q(bayer + 1);
-            uint8x16x2_t bg = vld2q(bayer + bayer_step + 1);
             vstrbq_scatter_offset_p(rgb + rgb_bytes - blue, inc, bg.val[0], p);
             vstrbq_scatter_offset_p(rgb + rgb_bytes, inc, bg.val[1], p);
             vstrbq_scatter_offset_p(rgb + rgb_bytes + blue, inc, gr.val[1], p);
@@ -606,7 +606,9 @@ aipl_error_t aipl_bayer_decoding_simple_rgb565(
 		while (pairs_to_go > 0) {
 			mve_pred16_t p = vctp8q(pairs_to_go);
 			uint8x16x2_t rg = vld2q(bayer);
+            uint8x16x2_t gr = vld2q(bayer + 1);
 			uint8x16x2_t gb = vld2q(bayer + bayer_step);
+            uint8x16x2_t bg = vld2q(bayer + bayer_step + 1);
 #ifndef __ICCARM__
 			__builtin_prefetch(bayer + bayer_step + 16 * 2 * 2);
 #endif
@@ -624,9 +626,6 @@ aipl_error_t aipl_bayer_decoding_simple_rgb565(
             }
             vstrbq_scatter_offset_p(rgb, inc, lower, p);
             vstrbq_scatter_offset_p(rgb + 1, inc, upper, p);
-
-            uint8x16x2_t gr = vld2q(bayer + 1);
-            uint8x16x2_t bg = vld2q(bayer + bayer_step + 1);
 
             uint8x16_t g1 = vrhaddq_x(gr.val[0], bg.val[1], p);
             lower = vshlq_n(g1, 3);
@@ -725,7 +724,9 @@ aipl_error_t aipl_bayer_decoding_simple_bgr888(
         while (pairs_to_go > 0) {
             mve_pred16_t p = vctp8q(pairs_to_go);
             uint8x16x2_t rg = vld2q(bayer);
+            uint8x16x2_t gr = vld2q(bayer + 1);
             uint8x16x2_t gb = vld2q(bayer + bayer_step);
+            uint8x16x2_t bg = vld2q(bayer + bayer_step + 1);
 #ifndef __ICCARM__
             __builtin_prefetch(bayer + bayer_step + 16*2*2);
 #endif
@@ -734,8 +735,6 @@ aipl_error_t aipl_bayer_decoding_simple_bgr888(
             vstrbq_scatter_offset_p(rgb, inc, g0, p);
             vstrbq_scatter_offset_p(rgb + blue, inc, rg.val[0], p);
 
-            uint8x16x2_t gr = vld2q(bayer + 1);
-            uint8x16x2_t bg = vld2q(bayer + bayer_step + 1);
             vstrbq_scatter_offset_p(rgb + rgb_bytes - blue, inc, bg.val[0], p);
             uint8x16_t g1 = vrhaddq_x(gr.val[0], bg.val[1], p);
             vstrbq_scatter_offset_p(rgb + rgb_bytes, inc, g1, p);
@@ -821,7 +820,9 @@ aipl_error_t aipl_bayer_decoding_simple_rgb888(
         while (pairs_to_go > 0) {
             mve_pred16_t p = vctp8q(pairs_to_go);
             uint8x16x2_t rg = vld2q(bayer);
+            uint8x16x2_t gr = vld2q(bayer + 1);
             uint8x16x2_t gb = vld2q(bayer + bayer_step);
+            uint8x16x2_t bg = vld2q(bayer + bayer_step + 1);
 #ifndef __ICCARM__
             __builtin_prefetch(bayer + bayer_step + 16*2*2);
 #endif
@@ -830,8 +831,6 @@ aipl_error_t aipl_bayer_decoding_simple_rgb888(
             vstrbq_scatter_offset_p(rgb, inc, g0, p);
             vstrbq_scatter_offset_p(rgb + blue, inc, gb.val[1], p);
 
-            uint8x16x2_t gr = vld2q(bayer + 1);
-            uint8x16x2_t bg = vld2q(bayer + bayer_step + 1);
             vstrbq_scatter_offset_p(rgb + rgb_bytes - blue, inc, gr.val[1], p);
             uint8x16_t g1 = vrhaddq_x(gr.val[0], bg.val[1], p);
             vstrbq_scatter_offset_p(rgb + rgb_bytes, inc, g1, p);
@@ -918,7 +917,9 @@ aipl_error_t aipl_bayer_decoding_simple_argb8888(
         while (pairs_to_go > 0) {
             mve_pred16_t p = vctp8q(pairs_to_go);
             uint8x16x2_t rg = vld2q(bayer);
+            uint8x16x2_t gr = vld2q(bayer + 1);
             uint8x16x2_t gb = vld2q(bayer + bayer_step);
+            uint8x16x2_t bg = vld2q(bayer + bayer_step + 1);
             uint8x16_t a = vcreateq_u8(0xffffffffffffffff, 0xffffffffffffffff);
 #ifndef __ICCARM__
             __builtin_prefetch(bayer + bayer_step + 16*2*2);
@@ -929,8 +930,6 @@ aipl_error_t aipl_bayer_decoding_simple_argb8888(
             vstrbq_scatter_offset_p(rgb + blue, inc, rg.val[0], p);
             vstrbq_scatter_offset_p(rgb + 2, inc, a, p);
 
-            uint8x16x2_t gr = vld2q(bayer + 1);
-            uint8x16x2_t bg = vld2q(bayer + bayer_step + 1);
             vstrbq_scatter_offset_p(rgb + rgb_bytes - blue, inc, bg.val[0], p);
             uint8x16_t g1 = vrhaddq_x(gr.val[0], bg.val[1], p);
             vstrbq_scatter_offset_p(rgb + rgb_bytes, inc, g1, p);

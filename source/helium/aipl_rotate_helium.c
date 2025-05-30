@@ -20,8 +20,8 @@
 #include "aipl_rotate_helium.h"
 
 #include <stddef.h>
-#include <arm_mve.h>
 
+#include "aipl_arm_mve.h"
 #include "aipl_cache.h"
 
 #ifdef AIPL_HELIUM_ACCELERATION
@@ -104,8 +104,12 @@
                 uint16x8_t off_i = vidupq_n_u16(0, 1);
                 off_i = vmulq_n_u16(off_i, rgbBytes);
 
+#if defined(__ARMCC_VERSION) || (GCC_VERSION >= 120300)
                 uint16x8_t off_o = vcreateq_u16(0x0004000500060007, 0x0000000100020003);
-                off_o = vmulq(off_o, rgbBytes);
+#else
+                uint16x8_t off_o = vcreateq_u16(0x0000000100020003, 0x0004000500060007);
+#endif
+                off_o = vmulq_n_u16(off_o, rgbBytes);
 
                 for (int i = 0; i < rgbBytes; ++i)
                 {
@@ -130,8 +134,12 @@
                 uint16x8_t off_i = vidupq_n_u16(0, 1);
                 off_i = vmulq_n_u16(off_i, rgbBytes);
 
+#if defined(__ARMCC_VERSION) || (GCC_VERSION >= 120300)
                 uint16x8_t off_o = vcreateq_u16(0x0004000500060007, 0x0000000100020003);
-                off_o = vmulq(off_o, height * rgbBytes);
+#else
+                uint16x8_t off_o = vcreateq_u16(0x0000000100020003, 0x0004000500060007);
+#endif
+                off_o = vmulq_n_u16(off_o, height * rgbBytes);
 
                 for (int i = 0; i < rgbBytes; ++i)
                 {

@@ -216,13 +216,13 @@ static aipl_error_t aipl_resize_sw_8bit_channels(const void* input, void* output
             uint32x4_t p01 = vldrbq_u32(&s[tx + input_pitch]);
             uint32x4_t p11 = vldrbq_u32(&s[tx + input_pitch + pixel_size_B]);
             p00 = vmulq(p00, nx_frac);
-            p00 = vmlaq(p00, p10, x_frac);
+            p00 = vmlaq_n_u32(p00, p10, x_frac);
             p00 = vrshrq(p00, FRAC_BITS);
             p01 = vmulq(p01, nx_frac);
-            p01 = vmlaq(p01, p11, x_frac);
+            p01 = vmlaq_n_u32(p01, p11, x_frac);
             p01 = vrshrq(p01, FRAC_BITS);
             p00 = vmulq(p00, ny_frac);
-            p00 = vmlaq(p00, p01, y_frac);
+            p00 = vmlaq_n_u32(p00, p01, y_frac);
             p00 = vrshrq(p00, FRAC_BITS);
             vstrbq_scatter_offset_p_u32(d, bgr_offset, p00, vctp32q(pixel_size_B));
 

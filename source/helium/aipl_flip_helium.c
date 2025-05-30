@@ -21,8 +21,8 @@
 
 #include <string.h>
 #include <stddef.h>
-#include <arm_mve.h>
 
+#include "aipl_arm_mve.h"
 #include "aipl_cache.h"
 
 #ifdef AIPL_HELIUM_ACCELERATION
@@ -177,7 +177,11 @@ static INLINE void aipl_flip_row_hor(const uint8_t* src,
         uint8x16_t frw_off = vidupq_n_u8(0, 1);
         frw_off = vmulq_n_u8(frw_off, rgbBytes);
 
+#if defined(__ARMCC_VERSION) || (GCC_VERSION >= 120300)
         uint8x16_t rvr_off = vcreateq_u8(0x08090a0b0c0d0e0f, 0x0001020304050607);
+#else
+        uint8x16_t rvr_off = vcreateq_u8(0x0001020304050607, 0x08090a0b0c0d0e0f);
+#endif
         rvr_off = vmulq_n_u8(rvr_off, rgbBytes);
 
         for (uint32_t j = 0; j < rgbBytes; ++j)
@@ -207,7 +211,12 @@ static INLINE void aipl_flip_rows_hor_ver(const uint8_t* src_top,
         uint8x16_t frw_off = vidupq_n_u8(0, 1);
         frw_off = vmulq_n_u8(frw_off, rgbBytes);
 
+
+#if defined(__ARMCC_VERSION) || (GCC_VERSION >= 120300)
         uint8x16_t rvr_off = vcreateq_u8(0x08090a0b0c0d0e0f, 0x0001020304050607);
+#else
+        uint8x16_t rvr_off = vcreateq_u8(0x0001020304050607, 0x08090a0b0c0d0e0f);
+#endif
         rvr_off = vmulq_n_u8(rvr_off, rgbBytes);
 
         for (uint32_t j = 0; j < rgbBytes; ++j)
