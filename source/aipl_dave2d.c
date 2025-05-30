@@ -236,7 +236,7 @@ d2_u32 aipl_dave2d_color_mode_convert(const void* input, void* output,
                                    &frmbf_format));
 
     /* Set output as framebuffer */
-    D2_CHECK_ERR(d2_framebuffer(handle, output, pitch, width, height,
+    D2_CHECK_ERR(d2_framebuffer(handle, output, width, width, height,
                                 output_mode));
 
     D2_CHECK_ERR(d2_setblitsrc(handle, (void*)input, pitch, width, height,
@@ -318,7 +318,7 @@ d2_u32 aipl_dave2d_texturing(const void* input, void* output,
     uint32_t new_height = scale ? output_height : height;
 
     /* Texture points and mapping parameters */
-    point_t p[4];
+    point_t p[4] = { 0 };
     d2_s32 dxu; d2_s32 dxv;
     d2_s32 dyu; d2_s32 dyv;
 

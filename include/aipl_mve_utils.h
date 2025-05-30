@@ -25,8 +25,9 @@ extern "C" {
  *      INCLUDES
  *********************/
 #include "aipl_config.h"
+
 #ifdef AIPL_HELIUM_ACCELERATION
-#include <arm_mve.h>
+#include "aipl_arm_mve.h"
 
 /*********************
  *      DEFINES
@@ -363,9 +364,9 @@ INLINE void aipl_mve_cnvt_4px_argb8888_to_rgba8888(uint32x4_t* dst,
 INLINE void aipl_mve_cnvt_8px_xrgb8888_to_yuv_y(uint16x8_t* dst,
                                                 aipl_mve_rgb_x8_t src)
 {
-    *dst = vmulq(src.r, 66);
-    *dst = vmlaq(*dst, src.g, 129);
-    *dst = vmlaq(*dst, src.b, 25);
+    *dst = vmulq_n_u16(src.r, 66);
+    *dst = vmlaq_n_u16(*dst, src.g, 129);
+    *dst = vmlaq_n_u16(*dst, src.b, 25);
 
     *dst = vshrq(vaddq(*dst, 128), 8);
     *dst = vaddq(*dst, 16);
@@ -402,9 +403,9 @@ INLINE void aipl_mve_cnvt_16px_xrgb8888_to_yuv_y(uint8x16_t* dst,
 INLINE void aipl_mve_cnvt_8px_xrgb8888_to_yuv_u(uint16x8_t* dst,
                                                 aipl_mve_rgb_x8_t src)
 {
-    *dst = vmulq(src.r, -38);
-    *dst = vmlaq(*dst, src.g, -74);
-    *dst = vmlaq(*dst, src.b, 112);
+    *dst = vmulq_n_u16(src.r, -38);
+    *dst = vmlaq_n_u16(*dst, src.g, -74);
+    *dst = vmlaq_n_u16(*dst, src.b, 112);
 
     *dst = vshrq(vaddq(*dst, 128), 8);
     *dst = vaddq(*dst, 128);
@@ -441,9 +442,9 @@ INLINE void aipl_mve_cnvt_16px_xrgb8888_to_yuv_u(uint8x16_t* dst,
 INLINE void aipl_mve_cnvt_8px_xrgb8888_to_yuv_v(uint16x8_t* dst,
                                                 aipl_mve_rgb_x8_t src)
 {
-    *dst = vmulq(src.r, 112);
-    *dst = vmlaq(*dst, src.g, -94);
-    *dst = vmlaq(*dst, src.b, -18);
+    *dst = vmulq_n_u16(src.r, 112);
+    *dst = vmlaq_n_u16(*dst, src.g, -94);
+    *dst = vmlaq_n_u16(*dst, src.b, -18);
 
     *dst = vshrq(vaddq(*dst, 128), 8);
     *dst = vaddq(*dst, 128);
@@ -532,7 +533,7 @@ INLINE void aipl_mve_str_16px_xrgb8888(uint8_t* dst,
 INLINE void aipl_mve_str_16px_argb8888_uncut(uint8_t* dst,
                                              aipl_mve_argb_x16_t src)
 {
-    uint8x16x4_t argb = { src.b, src.g, src.r, src.a };
+    uint8x16x4_t argb = { { src.b, src.g, src.r, src.a } };
 
     vst4q(dst, argb);
 }
@@ -548,7 +549,7 @@ INLINE void aipl_mve_str_16px_argb8888_uncut(uint8_t* dst,
 INLINE void aipl_mve_str_16px_xrgb8888_uncut(uint8_t* dst,
                                              aipl_mve_rgb_x16_t src)
 {
-    uint8x16x4_t argb = { src.b, src.g, src.r, vdupq_n_u8(0xff) };
+    uint8x16x4_t argb = { { src.b, src.g, src.r, vdupq_n_u8(0xff) } };
 
     vst4q(dst, argb);
 }
@@ -603,9 +604,9 @@ INLINE void aipl_mve_ldr_8px_extend_argb4444(aipl_mve_argb_x8_t* dst,
     uint16x8_t gb = vldrbq_gather_offset_z((uint8_t*)src, AIPL_2_BYTE_OFFSETS_U16, pred);
     uint16x8_t ar = vldrbq_gather_offset_z((uint8_t*)src + 1, AIPL_2_BYTE_OFFSETS_U16, pred);
 
-    dst->b = vmulq(vandq(gb, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
+    dst->b = vmulq_u16(vandq(gb, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
     dst->g = vorrq(vandq(gb, vdupq_n_u16(0x00f0)), vshrq(gb, 4));
-    dst->r = vmulq(vandq(ar, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
+    dst->r = vmulq_u16(vandq(ar, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
     dst->a = vorrq(vandq(ar, vdupq_n_u16(0x00f0)), vshrq(ar, 4));
 }
 
@@ -639,9 +640,9 @@ INLINE void aipl_mve_ldr_16px_xrgb4444(aipl_mve_rgb_x16_t* dst,
     uint8x16_t gb = vldrbq_gather_offset_z((uint8_t*)src, AIPL_2_BYTE_OFFSETS_U8, pred);
     uint8x16_t ar = vldrbq_gather_offset_z((uint8_t*)src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
 
-    dst->r = vmulq(vandq(ar, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->r = vmulq_u8(vandq(ar, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
     dst->g = vorrq(vandq(gb, vdupq_n_u8(0xf0)), vshrq(gb, 4));
-    dst->b = vmulq(vandq(gb, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->b = vmulq_u8(vandq(gb, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
 }
 
 /**
@@ -659,9 +660,9 @@ INLINE void aipl_mve_ldr_16px_argb4444(aipl_mve_argb_x16_t* dst,
     uint8x16_t gb = vldrbq_gather_offset_z((uint8_t*)src, AIPL_2_BYTE_OFFSETS_U8, pred);
     uint8x16_t ar = vldrbq_gather_offset_z((uint8_t*)src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
 
-    dst->b = vmulq(vandq(gb, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->b = vmulq_u8(vandq(gb, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
     dst->g = vorrq(vandq(gb, vdupq_n_u8(0xf0)), vshrq(gb, 4));
-    dst->r = vmulq(vandq(ar, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->r = vmulq_u8(vandq(ar, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
     dst->a = vorrq(vandq(ar, vdupq_n_u8(0xf0)), vshrq(ar, 4));
 }
 
@@ -677,9 +678,9 @@ INLINE void aipl_mve_ldr_16px_argb4444_uncut(aipl_mve_argb_x16_t* dst,
 {
     uint8x16x2_t argb = vld2q((const uint8_t*)src);
 
-    dst->b = vmulq(vandq(argb.val[0], vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->b = vmulq_u8(vandq(argb.val[0], vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
     dst->g = vorrq(vandq(argb.val[0], vdupq_n_u8(0xf0)), vshrq(argb.val[0], 4));
-    dst->r = vmulq(vandq(argb.val[1], vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->r = vmulq_u8(vandq(argb.val[1], vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
     dst->a = vorrq(vandq(argb.val[1], vdupq_n_u8(0xf0)), vshrq(argb.val[1], 4));
 }
 
@@ -695,9 +696,9 @@ INLINE void aipl_mve_ldr_16px_xrgb4444_uncut(aipl_mve_rgb_x16_t* dst,
 {
     uint8x16x2_t argb = vld2q((const uint8_t*)src);
 
-    dst->b = vmulq(vandq(argb.val[0], vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->b = vmulq_u8(vandq(argb.val[0], vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
     dst->g = vorrq(vandq(argb.val[0], vdupq_n_u8(0xf0)), vshrq(argb.val[0], 4));
-    dst->r = vmulq(vandq(argb.val[1], vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->r = vmulq_u8(vandq(argb.val[1], vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
 }
 
 /**
@@ -728,9 +729,9 @@ INLINE void aipl_mve_cnvt_8px_argb4444_to_yuv_y(uint16x8_t* dst,
     uint16x8_t g = vandq(vshrq(src, 4), vdupq_n_u16(0x000f));
     uint16x8_t b = vandq(src, vdupq_n_u16(0x000f));
 
-    *dst = vmulq(r, 66 * 0x11);
-    *dst = vmlaq(*dst, g, 129 * 0x11);
-    *dst = vmlaq(*dst, b, 25 * 0x11);
+    *dst = vmulq_n_u16(r, 66 * 0x11);
+    *dst = vmlaq_n_u16(*dst, g, 129 * 0x11);
+    *dst = vmlaq_n_u16(*dst, b, 25 * 0x11);
     *dst = vshrq(vaddq(*dst, 128), 8);
     *dst = vaddq(*dst, 16);
 }
@@ -751,15 +752,15 @@ INLINE void aipl_mve_cnvt_8px_argb4444_to_yuv_uv(uint16x8_t* u_dst,
     uint16x8_t g = vandq(vshrq(src, 4), vdupq_n_u16(0x000f));
     uint16x8_t b = vandq(src, vdupq_n_u16(0x000f));
 
-    *u_dst = vmulq(r, -38 * 0x11);
-    *u_dst = vmlaq(*u_dst, g, -74 * 0x11);
-    *u_dst = vmlaq(*u_dst, b, 112 * 0x11);
+    *u_dst = vmulq_n_u16(r, -38 * 0x11);
+    *u_dst = vmlaq_n_u16(*u_dst, g, -74 * 0x11);
+    *u_dst = vmlaq_n_u16(*u_dst, b, 112 * 0x11);
     *u_dst = vshrq(vaddq(*u_dst, 128), 8);
     *u_dst = vaddq(*u_dst, 128);
 
-    *v_dst = vmulq(r, 112 * 0x11);
-    *v_dst = vmlaq(*v_dst, g, -94 * 0x11);
-    *v_dst = vmlaq(*v_dst, b, -18 * 0x11);
+    *v_dst = vmulq_n_u16(r, 112 * 0x11);
+    *v_dst = vmlaq_n_u16(*v_dst, g, -94 * 0x11);
+    *v_dst = vmlaq_n_u16(*v_dst, b, -18 * 0x11);
     *v_dst = vshrq(vaddq(*v_dst, 128), 8);
     *v_dst = vaddq(*v_dst, 128);
 }
@@ -782,21 +783,21 @@ INLINE void aipl_mve_cnvt_8px_argb4444_to_yuv(uint16x8_t* y_dst,
     uint16x8_t g = vandq(vshrq(src, 4), vdupq_n_u16(0x000f));
     uint16x8_t b = vandq(src, vdupq_n_u16(0x000f));
 
-    *y_dst = vmulq(r, 66 * 0x11);
-    *y_dst = vmlaq(*y_dst, g, 129 * 0x11);
-    *y_dst = vmlaq(*y_dst, b, 25 * 0x11);
+    *y_dst = vmulq_n_u16(r, 66 * 0x11);
+    *y_dst = vmlaq_n_u16(*y_dst, g, 129 * 0x11);
+    *y_dst = vmlaq_n_u16(*y_dst, b, 25 * 0x11);
     *y_dst = vshrq(vaddq(*y_dst, 128), 8);
     *y_dst = vaddq(*y_dst, 16);
 
-    *u_dst = vmulq(r, -38 * 0x11);
-    *u_dst = vmlaq(*u_dst, g, -74 * 0x11);
-    *u_dst = vmlaq(*u_dst, b, 112 * 0x11);
+    *u_dst = vmulq_n_u16(r, -38 * 0x11);
+    *u_dst = vmlaq_n_u16(*u_dst, g, -74 * 0x11);
+    *u_dst = vmlaq_n_u16(*u_dst, b, 112 * 0x11);
     *u_dst = vshrq(vaddq(*u_dst, 128), 8);
     *u_dst = vaddq(*u_dst, 128);
 
-    *v_dst = vmulq(r, 112 * 0x11);
-    *v_dst = vmlaq(*v_dst, g, -94 * 0x11);
-    *v_dst = vmlaq(*v_dst, b, -18 * 0x11);
+    *v_dst = vmulq_n_u16(r, 112 * 0x11);
+    *v_dst = vmlaq_n_u16(*v_dst, g, -94 * 0x11);
+    *v_dst = vmlaq_n_u16(*v_dst, b, -18 * 0x11);
     *v_dst = vshrq(vaddq(*v_dst, 128), 8);
     *v_dst = vaddq(*v_dst, 128);
 }
@@ -981,7 +982,7 @@ INLINE void aipl_mve_ldr_16px_argb1555(aipl_mve_argb_x16_t* dst,
     dst->g = vorrq(dst->g, vshrq(dst->g, 5));
     dst->r = vandq(vshlq_n(upper, 1), vdupq_n_u8(0xf0));
     dst->r = vorrq(dst->r, vshrq(dst->r, 5));
-    dst->a = vmulq(vshrq(upper, 7), vdupq_n_u8(0xff));
+    dst->a = vmulq_u8(vshrq(upper, 7), vdupq_n_u8(0xff));
 }
 
 /**
@@ -1002,7 +1003,7 @@ INLINE void aipl_mve_ldr_16px_argb1555_uncut(aipl_mve_argb_x16_t* dst,
     dst->g = vorrq(dst->g, vshrq(dst->g, 5));
     dst->r = vandq(vshlq_n(argb.val[1], 1), vdupq_n_u8(0xf0));
     dst->r = vorrq(dst->r, vshrq(dst->r, 5));
-    dst->a = vmulq(vshrq(argb.val[1], 7), vdupq_n_u8(0xff));
+    dst->a = vmulq_u8(vshrq(argb.val[1], 7), vdupq_n_u8(0xff));
 }
 
 /**
@@ -1040,9 +1041,9 @@ INLINE void aipl_mve_cnvt_8px_argb1555_to_yuv_y(uint16x8_t* dst,
     uint16x8_t g = vandq(vshrq(src, 5), vdupq_n_u16(0x001f));
     uint16x8_t b = vandq(src, vdupq_n_u16(0x001f));
 
-    *dst = vmulq(r, 543);
-    *dst = vmlaq(*dst, g, 1061);
-    *dst = vmlaq(*dst, b, 205);
+    *dst = vmulq_n_u16(r, 543);
+    *dst = vmlaq_n_u16(*dst, g, 1061);
+    *dst = vmlaq_n_u16(*dst, b, 205);
     *dst = vshrq(vaddq(*dst, 128), 8);
     *dst = vaddq(*dst, 16);
 }
@@ -1063,15 +1064,15 @@ INLINE void aipl_mve_cnvt_8px_argb1555_to_yuv_uv(uint16x8_t* u_dst,
     uint16x8_t g = vandq(vshrq(src, 5), vdupq_n_u16(0x001f));
     uint16x8_t b = vandq(src, vdupq_n_u16(0x001f));
 
-    *u_dst = vmulq(r, -312);
-    *u_dst = vmlaq(*u_dst, g, -608);
-    *u_dst = vmlaq(*u_dst, b, 920);
+    *u_dst = vmulq_n_u16(r, -312);
+    *u_dst = vmlaq_n_u16(*u_dst, g, -608);
+    *u_dst = vmlaq_n_u16(*u_dst, b, 920);
     *u_dst = vshrq(vaddq(*u_dst, 128), 8);
     *u_dst = vaddq(*u_dst, 128);
 
-    *v_dst = vmulq(r, 920);
-    *v_dst = vmlaq(*v_dst, g, -773);
-    *v_dst = vmlaq(*v_dst, b, -147);
+    *v_dst = vmulq_n_u16(r, 920);
+    *v_dst = vmlaq_n_u16(*v_dst, g, -773);
+    *v_dst = vmlaq_n_u16(*v_dst, b, -147);
     *v_dst = vshrq(vaddq(*v_dst, 128), 8);
     *v_dst = vaddq(*v_dst, 128);
 }
@@ -1094,21 +1095,21 @@ INLINE void aipl_mve_cnvt_8px_argb1555_to_yuv(uint16x8_t* y_dst,
     uint16x8_t g = vandq(vshrq(src, 5), vdupq_n_u16(0x001f));
     uint16x8_t b = vandq(src, vdupq_n_u16(0x001f));
 
-    *y_dst = vmulq(r, 543);
-    *y_dst = vmlaq(*y_dst, g, 1061);
-    *y_dst = vmlaq(*y_dst, b, 205);
+    *y_dst = vmulq_n_u16(r, 543);
+    *y_dst = vmlaq_n_u16(*y_dst, g, 1061);
+    *y_dst = vmlaq_n_u16(*y_dst, b, 205);
     *y_dst = vshrq(vaddq(*y_dst, 128), 8);
     *y_dst = vaddq(*y_dst, 16);
 
-    *u_dst = vmulq(r, -312);
-    *u_dst = vmlaq(*u_dst, g, -608);
-    *u_dst = vmlaq(*u_dst, b, 920);
+    *u_dst = vmulq_n_u16(r, -312);
+    *u_dst = vmlaq_n_u16(*u_dst, g, -608);
+    *u_dst = vmlaq_n_u16(*u_dst, b, 920);
     *u_dst = vshrq(vaddq(*u_dst, 128), 8);
     *u_dst = vaddq(*u_dst, 128);
 
-    *v_dst = vmulq(r, 920);
-    *v_dst = vmlaq(*v_dst, g, -773);
-    *v_dst = vmlaq(*v_dst, b, -147);
+    *v_dst = vmulq_n_u16(r, 920);
+    *v_dst = vmlaq_n_u16(*v_dst, g, -773);
+    *v_dst = vmlaq_n_u16(*v_dst, b, -147);
     *v_dst = vshrq(vaddq(*v_dst, 128), 8);
     *v_dst = vaddq(*v_dst, 128);
 }
@@ -1476,7 +1477,7 @@ INLINE void aipl_mve_str_16px_rgba8888(uint8_t* dst,
 INLINE void aipl_mve_str_16px_rgba8888_uncut(uint8_t* dst,
                                              aipl_mve_argb_x16_t src)
 {
-    uint8x16x4_t rgba = { src.a, src.b, src.g, src.r };
+    uint8x16x4_t rgba = { { src.a, src.b, src.g, src.r } };
 
     vst4q(dst, rgba);
 }
@@ -1491,7 +1492,7 @@ INLINE void aipl_mve_str_16px_rgba8888_uncut(uint8_t* dst,
 INLINE void aipl_mve_str_16px_rgbx8888_uncut(uint8_t* dst,
                                              aipl_mve_rgb_x16_t src)
 {
-    uint8x16x4_t rgba = { vdupq_n_u8(0xff), src.b, src.g, src.r };
+    uint8x16x4_t rgba = { { vdupq_n_u8(0xff), src.b, src.g, src.r } };
 
     vst4q(dst, rgba);
 }
@@ -1544,9 +1545,9 @@ INLINE void aipl_mve_ldr_8px_extend_rgba4444(aipl_mve_argb_x8_t* dst,
     uint16x8_t rg = vldrbq_gather_offset_z((uint8_t*)src + 1, AIPL_2_BYTE_OFFSETS_U16, pred);
 
     dst->b = vorrq(vandq(ba, vdupq_n_u16(0x00f0)), vshrq(ba, 4));
-    dst->g = vmulq(vandq(rg, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
+    dst->g = vmulq_u16(vandq(rg, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
     dst->r = vorrq(vandq(rg, vdupq_n_u16(0x00f0)), vshrq(rg, 4));
-    dst->a = vmulq(vandq(ba, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
+    dst->a = vmulq_u16(vandq(ba, vdupq_n_u16(0x000f)), vdupq_n_u16(0x0011));
 }
 
 /**
@@ -1565,7 +1566,7 @@ INLINE void aipl_mve_ldr_16px_rgbx4444(aipl_mve_rgb_x16_t* dst,
     uint8x16_t rg = vldrbq_gather_offset_z((uint8_t*)src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
 
     dst->r = vorrq(vandq(rg, vdupq_n_u8(0xf0)), vshrq(rg, 4));
-    dst->g = vmulq(vandq(rg, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->g = vmulq_u8(vandq(rg, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
     dst->b = vorrq(vandq(ba, vdupq_n_u8(0xf0)), vshrq(ba, 4));
 }
 
@@ -1585,9 +1586,9 @@ INLINE void aipl_mve_ldr_16px_rgba4444(aipl_mve_argb_x16_t* dst,
     uint8x16_t rg = vldrbq_gather_offset_z((uint8_t*)src + 1, AIPL_2_BYTE_OFFSETS_U8, pred);
 
     dst->b = vorrq(vandq(ba, vdupq_n_u8(0xf0)), vshrq(ba, 4));
-    dst->g = vmulq(vandq(rg, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->g = vmulq_u8(vandq(rg, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
     dst->r = vorrq(vandq(rg, vdupq_n_u8(0xf0)), vshrq(rg, 4));
-    dst->a = vmulq(vandq(ba, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->a = vmulq_u8(vandq(ba, vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
 }
 
 /**
@@ -1603,7 +1604,7 @@ INLINE void aipl_mve_ldr_16px_rgbx4444_uncut(aipl_mve_rgb_x16_t* dst,
     uint8x16x2_t rgba = vld2q((const uint8_t*)src);
 
     dst->r = vorrq(vandq(rgba.val[1], vdupq_n_u8(0xf0)), vshrq(rgba.val[1], 4));
-    dst->g = vmulq(vandq(rgba.val[1], vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->g = vmulq_u8(vandq(rgba.val[1], vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
     dst->b = vorrq(vandq(rgba.val[0], vdupq_n_u8(0xf0)), vshrq(rgba.val[0], 4));
 }
 
@@ -1620,9 +1621,9 @@ INLINE void aipl_mve_ldr_16px_rgba4444_uncut(aipl_mve_argb_x16_t* dst,
     uint8x16x2_t rgba = vld2q((const uint8_t*)src);
 
     dst->r = vorrq(vandq(rgba.val[1], vdupq_n_u8(0xf0)), vshrq(rgba.val[1], 4));
-    dst->g = vmulq(vandq(rgba.val[1], vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->g = vmulq_u8(vandq(rgba.val[1], vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
     dst->b = vorrq(vandq(rgba.val[0], vdupq_n_u8(0xf0)), vshrq(rgba.val[0], 4));
-    dst->a = vmulq(vandq(rgba.val[0], vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
+    dst->a = vmulq_u8(vandq(rgba.val[0], vdupq_n_u8(0x0f)), vdupq_n_u8(0x11));
 }
 
 /**
@@ -1653,9 +1654,9 @@ INLINE void aipl_mve_cnvt_8px_rgba4444_to_yuv_y(uint16x8_t* dst,
     uint16x8_t g = vandq(vshrq(src, 8), vdupq_n_u16(0x000f));
     uint16x8_t b = vandq(vshrq(src, 4), vdupq_n_u16(0x000f));
 
-    *dst = vmulq(r, 66 * 0x11);
-    *dst = vmlaq(*dst, g, 129 * 0x11);
-    *dst = vmlaq(*dst, b, 25 * 0x11);
+    *dst = vmulq_n_u16(r, 66 * 0x11);
+    *dst = vmlaq_n_u16(*dst, g, 129 * 0x11);
+    *dst = vmlaq_n_u16(*dst, b, 25 * 0x11);
     *dst = vshrq(vaddq(*dst, 128), 8);
     *dst = vaddq(*dst, 16);
 }
@@ -1676,15 +1677,15 @@ INLINE void aipl_mve_cnvt_8px_rgba4444_to_yuv_uv(uint16x8_t* u_dst,
     uint16x8_t g = vandq(vshrq(src, 8), vdupq_n_u16(0x000f));
     uint16x8_t b = vandq(vshrq(src, 4), vdupq_n_u16(0x000f));
 
-    *u_dst = vmulq(r, -38 * 0x11);
-    *u_dst = vmlaq(*u_dst, g, -74 * 0x11);
-    *u_dst = vmlaq(*u_dst, b, 112 * 0x11);
+    *u_dst = vmulq_n_u16(r, -38 * 0x11);
+    *u_dst = vmlaq_n_u16(*u_dst, g, -74 * 0x11);
+    *u_dst = vmlaq_n_u16(*u_dst, b, 112 * 0x11);
     *u_dst = vshrq(vaddq(*u_dst, 128), 8);
     *u_dst = vaddq(*u_dst, 128);
 
-    *v_dst = vmulq(r, 112 * 0x11);
-    *v_dst = vmlaq(*v_dst, g, -94 * 0x11);
-    *v_dst = vmlaq(*v_dst, b, -18 * 0x11);
+    *v_dst = vmulq_n_u16(r, 112 * 0x11);
+    *v_dst = vmlaq_n_u16(*v_dst, g, -94 * 0x11);
+    *v_dst = vmlaq_n_u16(*v_dst, b, -18 * 0x11);
     *v_dst = vshrq(vaddq(*v_dst, 128), 8);
     *v_dst = vaddq(*v_dst, 128);
 }
@@ -1707,21 +1708,21 @@ INLINE void aipl_mve_cnvt_8px_rgba4444_to_yuv(uint16x8_t* y_dst,
     uint16x8_t g = vandq(vshrq(src, 8), vdupq_n_u16(0x000f));
     uint16x8_t b = vandq(vshrq(src, 4), vdupq_n_u16(0x000f));
 
-    *y_dst = vmulq(r, 66 * 0x11);
-    *y_dst = vmlaq(*y_dst, g, 129 * 0x11);
-    *y_dst = vmlaq(*y_dst, b, 25 * 0x11);
+    *y_dst = vmulq_n_u16(r, 66 * 0x11);
+    *y_dst = vmlaq_n_u16(*y_dst, g, 129 * 0x11);
+    *y_dst = vmlaq_n_u16(*y_dst, b, 25 * 0x11);
     *y_dst = vshrq(vaddq(*y_dst, 128), 8);
     *y_dst = vaddq(*y_dst, 16);
 
-    *u_dst = vmulq(r, -38 * 0x11);
-    *u_dst = vmlaq(*u_dst, g, -74 * 0x11);
-    *u_dst = vmlaq(*u_dst, b, 112 * 0x11);
+    *u_dst = vmulq_n_u16(r, -38 * 0x11);
+    *u_dst = vmlaq_n_u16(*u_dst, g, -74 * 0x11);
+    *u_dst = vmlaq_n_u16(*u_dst, b, 112 * 0x11);
     *u_dst = vshrq(vaddq(*u_dst, 128), 8);
     *u_dst = vaddq(*u_dst, 128);
 
-    *v_dst = vmulq(r, 112 * 0x11);
-    *v_dst = vmlaq(*v_dst, g, -94 * 0x11);
-    *v_dst = vmlaq(*v_dst, b, -18 * 0x11);
+    *v_dst = vmulq_n_u16(r, 112 * 0x11);
+    *v_dst = vmlaq_n_u16(*v_dst, g, -94 * 0x11);
+    *v_dst = vmlaq_n_u16(*v_dst, b, -18 * 0x11);
     *v_dst = vshrq(vaddq(*v_dst, 128), 8);
     *v_dst = vaddq(*v_dst, 128);
 }
@@ -1906,7 +1907,7 @@ INLINE void aipl_mve_ldr_16px_rgba5551(aipl_mve_argb_x16_t* dst,
     dst->g = vorrq(dst->g, vshrq(dst->g, 5));
     dst->r = vandq(upper, vdupq_n_u8(0xf8));
     dst->r = vorrq(dst->r, vshrq(dst->r, 5));
-    dst->a = vmulq(vandq(lower, vdupq_n_u8(0x01)), vdupq_n_u8(0xff));
+    dst->a = vmulq_u8(vandq(lower, vdupq_n_u8(0x01)), vdupq_n_u8(0xff));
 }
 
 /**
@@ -1947,7 +1948,7 @@ INLINE void aipl_mve_ldr_16px_rgba5551_uncut(aipl_mve_argb_x16_t* dst,
     dst->g = vorrq(dst->g, vshrq(dst->g, 5));
     dst->b = vshlq_n(vandq(rgba.val[0], vdupq_n_u8(0x3e)), 2);
     dst->b = vorrq(dst->b, vshrq(dst->b, 5));
-    dst->a = vmulq(vandq(rgba.val[0], vdupq_n_u8(0x01)), vdupq_n_u8(0xff));
+    dst->a = vmulq_u8(vandq(rgba.val[0], vdupq_n_u8(0x01)), vdupq_n_u8(0xff));
 }
 
 /**
@@ -1964,9 +1965,9 @@ INLINE void aipl_mve_cnvt_8px_rgba5551_to_yuv_y(uint16x8_t* dst,
     uint16x8_t g = vandq(vshrq(src, 6), vdupq_n_u16(0x001f));
     uint16x8_t b = vandq(vshrq(src, 1), vdupq_n_u16(0x001f));
 
-    *dst = vmulq(r, 543);
-    *dst = vmlaq(*dst, g, 1061);
-    *dst = vmlaq(*dst, b, 205);
+    *dst = vmulq_n_u16(r, 543);
+    *dst = vmlaq_n_u16(*dst, g, 1061);
+    *dst = vmlaq_n_u16(*dst, b, 205);
     *dst = vshrq(vaddq(*dst, 128), 8);
     *dst = vaddq(*dst, 16);
 }
@@ -1987,15 +1988,15 @@ INLINE void aipl_mve_cnvt_8px_rgba5551_to_yuv_uv(uint16x8_t* u_dst,
     uint16x8_t g = vandq(vshrq(src, 6), vdupq_n_u16(0x001f));
     uint16x8_t b = vandq(vshrq(src, 1), vdupq_n_u16(0x001f));
 
-    *u_dst = vmulq(r, -312);
-    *u_dst = vmlaq(*u_dst, g, -608);
-    *u_dst = vmlaq(*u_dst, b, 920);
+    *u_dst = vmulq_n_u16(r, -312);
+    *u_dst = vmlaq_n_u16(*u_dst, g, -608);
+    *u_dst = vmlaq_n_u16(*u_dst, b, 920);
     *u_dst = vshrq(vaddq(*u_dst, 128), 8);
     *u_dst = vaddq(*u_dst, 128);
 
-    *v_dst = vmulq(r, 920);
-    *v_dst = vmlaq(*v_dst, g, -773);
-    *v_dst = vmlaq(*v_dst, b, -147);
+    *v_dst = vmulq_n_u16(r, 920);
+    *v_dst = vmlaq_n_u16(*v_dst, g, -773);
+    *v_dst = vmlaq_n_u16(*v_dst, b, -147);
     *v_dst = vshrq(vaddq(*v_dst, 128), 8);
     *v_dst = vaddq(*v_dst, 128);
 }
@@ -2018,21 +2019,21 @@ INLINE void aipl_mve_cnvt_8px_rgba5551_to_yuv(uint16x8_t* y_dst,
     uint16x8_t g = vandq(vshrq(src, 6), vdupq_n_u16(0x001f));
     uint16x8_t b = vandq(vshrq(src, 1), vdupq_n_u16(0x001f));
 
-    *y_dst = vmulq(r, 543);
-    *y_dst = vmlaq(*y_dst, g, 1061);
-    *y_dst = vmlaq(*y_dst, b, 205);
+    *y_dst = vmulq_n_u16(r, 543);
+    *y_dst = vmlaq_n_u16(*y_dst, g, 1061);
+    *y_dst = vmlaq_n_u16(*y_dst, b, 205);
     *y_dst = vshrq(vaddq(*y_dst, 128), 8);
     *y_dst = vaddq(*y_dst, 16);
 
-    *u_dst = vmulq(r, -312);
-    *u_dst = vmlaq(*u_dst, g, -608);
-    *u_dst = vmlaq(*u_dst, b, 920);
+    *u_dst = vmulq_n_u16(r, -312);
+    *u_dst = vmlaq_n_u16(*u_dst, g, -608);
+    *u_dst = vmlaq_n_u16(*u_dst, b, 920);
     *u_dst = vshrq(vaddq(*u_dst, 128), 8);
     *u_dst = vaddq(*u_dst, 128);
 
-    *v_dst = vmulq(r, 920);
-    *v_dst = vmlaq(*v_dst, g, -773);
-    *v_dst = vmlaq(*v_dst, b, -147);
+    *v_dst = vmulq_n_u16(r, 920);
+    *v_dst = vmlaq_n_u16(*v_dst, g, -773);
+    *v_dst = vmlaq_n_u16(*v_dst, b, -147);
     *v_dst = vshrq(vaddq(*v_dst, 128), 8);
     *v_dst = vaddq(*v_dst, 128);
 }
@@ -2218,9 +2219,9 @@ INLINE void aipl_mve_cnvt_8px_rgb565_to_yuv_y(uint16x8_t* dst,
     uint16x8_t g = vandq(vshrq(src, 5), vdupq_n_u16(0x003f));
     uint16x8_t b = vandq(src, vdupq_n_u16(0x001f));
 
-    *dst = vmulq(r, 543);
-    *dst = vmlaq(*dst, g, 522);
-    *dst = vmlaq(*dst, b, 205);
+    *dst = vmulq_n_u16(r, 543);
+    *dst = vmlaq_n_u16(*dst, g, 522);
+    *dst = vmlaq_n_u16(*dst, b, 205);
     *dst = vshrq(vaddq(*dst, 128), 8);
     *dst = vaddq(*dst, 16);
 }
@@ -2241,15 +2242,15 @@ INLINE void aipl_mve_cnvt_8px_rgb565_to_yuv_uv(uint16x8_t* u_dst,
     uint16x8_t g = vandq(vshrq(src, 5), vdupq_n_u16(0x003f));
     uint16x8_t b = vandq(src, vdupq_n_u16(0x001f));
 
-    *u_dst = vmulq(r, -312);
-    *u_dst = vmlaq(*u_dst, g, -299);
-    *u_dst = vmlaq(*u_dst, b, 920);
+    *u_dst = vmulq_n_u16(r, -312);
+    *u_dst = vmlaq_n_u16(*u_dst, g, -299);
+    *u_dst = vmlaq_n_u16(*u_dst, b, 920);
     *u_dst = vshrq(vaddq(*u_dst, 128), 8);
     *u_dst = vaddq(*u_dst, 128);
 
-    *v_dst = vmulq(r, 920);
-    *v_dst = vmlaq(*v_dst, g, -380);
-    *v_dst = vmlaq(*v_dst, b, -147);
+    *v_dst = vmulq_n_u16(r, 920);
+    *v_dst = vmlaq_n_u16(*v_dst, g, -380);
+    *v_dst = vmlaq_n_u16(*v_dst, b, -147);
     *v_dst = vshrq(vaddq(*v_dst, 128), 8);
     *v_dst = vaddq(*v_dst, 128);
 }
@@ -2272,21 +2273,21 @@ INLINE void aipl_mve_cnvt_8px_rgb565_to_yuv(uint16x8_t* y_dst,
     uint16x8_t g = vandq(vshrq(src, 5), vdupq_n_u16(0x003f));
     uint16x8_t b = vandq(src, vdupq_n_u16(0x001f));
 
-    *y_dst = vmulq(r, 543);
-    *y_dst = vmlaq(*y_dst, g, 522);
-    *y_dst = vmlaq(*y_dst, b, 205);
+    *y_dst = vmulq_n_u16(r, 543);
+    *y_dst = vmlaq_n_u16(*y_dst, g, 522);
+    *y_dst = vmlaq_n_u16(*y_dst, b, 205);
     *y_dst = vshrq(vaddq(*y_dst, 128), 8);
     *y_dst = vaddq(*y_dst, 16);
 
-    *u_dst = vmulq(r, -312);
-    *u_dst = vmlaq(*u_dst, g, -299);
-    *u_dst = vmlaq(*u_dst, b, 920);
+    *u_dst = vmulq_n_u16(r, -312);
+    *u_dst = vmlaq_n_u16(*u_dst, g, -299);
+    *u_dst = vmlaq_n_u16(*u_dst, b, 920);
     *u_dst = vshrq(vaddq(*u_dst, 128), 8);
     *u_dst = vaddq(*u_dst, 128);
 
-    *v_dst = vmulq(r, 920);
-    *v_dst = vmlaq(*v_dst, g, -380);
-    *v_dst = vmlaq(*v_dst, b, -147);
+    *v_dst = vmulq_n_u16(r, 920);
+    *v_dst = vmlaq_n_u16(*v_dst, g, -380);
+    *v_dst = vmlaq_n_u16(*v_dst, b, -147);
     *v_dst = vshrq(vaddq(*v_dst, 128), 8);
     *v_dst = vaddq(*v_dst, 128);
 }
@@ -2574,7 +2575,7 @@ INLINE void aipl_mve_ldr_16px_i400(uint8x16_t* dst,
 INLINE void aipl_mve_cnvt_4px_i400_to_argb8888(uint32x4_t* dst,
                                                uint32x4_t src)
 {
-    *dst = vmulq(src, vdupq_n_u32(0x00010101));
+    *dst = vmulq_u32(src, vdupq_n_u32(0x00010101));
     *dst = vorrq(*dst, vdupq_n_u32(0xff000000));
 }
 
@@ -2589,7 +2590,7 @@ INLINE void aipl_mve_cnvt_8px_i400_to_argb4444(uint16x8_t* dst,
                                                uint16x8_t src)
 {
     *dst = vshrq(src, 4);
-    *dst = vmulq(*dst, vdupq_n_u16(0x0111));
+    *dst = vmulq_u16(*dst, vdupq_n_u16(0x0111));
     *dst = vorrq(*dst, vdupq_n_u16(0xf000));
 }
 
@@ -2604,7 +2605,7 @@ INLINE void aipl_mve_cnvt_8px_i400_to_argb1555(uint16x8_t* dst,
                                                uint16x8_t src)
 {
     *dst = vshrq(src, 3);
-    *dst = vmulq(*dst, vdupq_n_u16(0x0421));
+    *dst = vmulq_u16(*dst, vdupq_n_u16(0x0421));
     *dst = vorrq(*dst, vdupq_n_u16(0x8000));
 }
 
@@ -2618,7 +2619,7 @@ INLINE void aipl_mve_cnvt_8px_i400_to_argb1555(uint16x8_t* dst,
 INLINE void aipl_mve_cnvt_4px_i400_to_rgba8888(uint32x4_t* dst,
                                                uint32x4_t src)
 {
-    *dst = vmulq(src, vdupq_n_u32(0x01010100));
+    *dst = vmulq_u32(src, vdupq_n_u32(0x01010100));
     *dst = vorrq(*dst, vdupq_n_u32(0x000000ff));
 }
 
@@ -2633,7 +2634,7 @@ INLINE void aipl_mve_cnvt_8px_i400_to_rgba4444(uint16x8_t* dst,
                                                uint16x8_t src)
 {
     *dst = vshrq(src, 4);
-    *dst = vmulq(*dst, vdupq_n_u16(0x1110));
+    *dst = vmulq_u16(*dst, vdupq_n_u16(0x1110));
     *dst = vorrq(*dst, vdupq_n_u16(0x000f));
 }
 
@@ -2648,7 +2649,7 @@ INLINE void aipl_mve_cnvt_8px_i400_to_rgba5551(uint16x8_t* dst,
                                                uint16x8_t src)
 {
     *dst = vshrq(src, 3);
-    *dst = vmulq(*dst, vdupq_n_u16(0x0842));
+    *dst = vmulq_u16(*dst, vdupq_n_u16(0x0842));
     *dst = vorrq(*dst, vdupq_n_u16(0x0001));
 }
 
@@ -2663,7 +2664,7 @@ INLINE void aipl_mve_cnvt_8px_i400_to_rgb565(uint16x8_t* dst,
                                              uint16x8_t src)
 {
     *dst = vshrq(src, 3);
-    *dst = vmulq(*dst, vdupq_n_u16(0x0841));
+    *dst = vmulq_u16(*dst, vdupq_n_u16(0x0841));
 }
 
 /**
@@ -2715,13 +2716,13 @@ INLINE void aipl_mve_pre_cnvt_4px_yuv_to_rgb(int32x4_t* r_dst,
     int32x4_t d = vreinterpretq_s32(u);
     int32x4_t e = vreinterpretq_s32(v);
 
-    d = vsubq(d, 128);
-    e = vsubq(e, 128);
+    d = vsubq_n_s32(d, 128);
+    e = vsubq_n_s32(e, 128);
 
-    *r_dst = vmlaq(vdupq_n_s32(128), e, 409);
-    *g_dst = vmlaq(vdupq_n_s32(128), d, -100);
-    *g_dst = vmlaq(*g_dst, e, -208);
-    *b_dst = vmlaq(vdupq_n_s32(128), d, 516);
+    *r_dst = vmlaq_n_s32(vdupq_n_s32(128), e, 409);
+    *g_dst = vmlaq_n_s32(vdupq_n_s32(128), d, -100);
+    *g_dst = vmlaq_n_s32(*g_dst, e, -208);
+    *b_dst = vmlaq_n_s32(vdupq_n_s32(128), d, 516);
 }
 
 /**
@@ -2749,23 +2750,23 @@ INLINE void aipl_mve_pre_cnvt_8px_yuv_to_rgb(int32x4_t* r0_dst,
     int16x8_t d = vreinterpretq_s16(u);
     int16x8_t e = vreinterpretq_s16(v);
 
-    d = vsubq(d, 128);
-    e = vsubq(e, 128);
+    d = vsubq_n_s16(d, 128);
+    e = vsubq_n_s16(e, 128);
 
     int32x4_t d0 = vmovlbq(d);
     int32x4_t d1 = vmovltq(d);
     int32x4_t e0 = vmovlbq(e);
     int32x4_t e1 = vmovltq(e);
 
-    *r0_dst = vmlaq(vdupq_n_s32(128), e0, 409);
-    *g0_dst = vmlaq(vdupq_n_s32(128), d0, -100);
-    *g0_dst = vmlaq(*g0_dst, e0, -208);
-    *b0_dst = vmlaq(vdupq_n_s32(128), d0, 516);
+    *r0_dst = vmlaq_n_s32(vdupq_n_s32(128), e0, 409);
+    *g0_dst = vmlaq_n_s32(vdupq_n_s32(128), d0, -100);
+    *g0_dst = vmlaq_n_s32(*g0_dst, e0, -208);
+    *b0_dst = vmlaq_n_s32(vdupq_n_s32(128), d0, 516);
 
-    *r1_dst = vmlaq(vdupq_n_s32(128), e1, 409);
-    *g1_dst = vmlaq(vdupq_n_s32(128), d1, -100);
-    *g1_dst = vmlaq(*g1_dst, e1, -208);
-    *b1_dst = vmlaq(vdupq_n_s32(128), d1, 516);
+    *r1_dst = vmlaq_n_s32(vdupq_n_s32(128), e1, 409);
+    *g1_dst = vmlaq_n_s32(vdupq_n_s32(128), d1, -100);
+    *g1_dst = vmlaq_n_s32(*g1_dst, e1, -208);
+    *b1_dst = vmlaq_n_s32(vdupq_n_s32(128), d1, 516);
 }
 
 /**
@@ -2779,8 +2780,8 @@ INLINE void aipl_mve_pre_cnvt_4px_y(int32x4_t* c_dst,
                                     uint32x4_t y)
 {
     *c_dst = vreinterpretq_s32(y);
-    *c_dst = vsubq(*c_dst, 16);
-    *c_dst = vmulq(*c_dst, 298);
+    *c_dst = vsubq_n_s32(*c_dst, 16);
+    *c_dst = vmulq_n_s32(*c_dst, 298);
 }
 
 /**
@@ -2796,13 +2797,13 @@ INLINE void aipl_mve_pre_cnvt_8px_y(int32x4_t* c0_dst,
                                     uint16x8_t y)
 {
     uint16x8_t c = y;
-    c = vsubq(c, 16);
+    c = vsubq_n_u16(c, 16);
 
     *c0_dst = vreinterpretq_s32(vmovlbq(c));
     *c1_dst = vreinterpretq_s32(vmovltq(c));
 
-    *c0_dst = vmulq(*c0_dst, 298);
-    *c1_dst = vmulq(*c1_dst, 298);
+    *c0_dst = vmulq_n_s32(*c0_dst, 298);
+    *c1_dst = vmulq_n_s32(*c1_dst, 298);
 }
 
 /**
@@ -3236,21 +3237,21 @@ INLINE void aipl_mve_color_correction_rgb_channels_x8(uint16x8_t* r,
     float16x8_t g_f = vcvtq(*g);
     float16x8_t b_f = vcvtq(*b);
 
-    float16x8_t r_mac = vmulq(r_f, ccm[0]);
+    float16x8_t r_mac = vmulq_n_f16(r_f, ccm[0]);
     r_mac = vfmaq(r_mac, g_f, ccm[1]);
     r_mac = vfmaq(r_mac, b_f, ccm[2]);
 
     uint16x8_t r_out = vcvtq_u16_f16(r_mac);
     *r = vreinterpretq_u16(vqmovnbq(vdupq_n_u8(0), r_out));
 
-    float16x8_t g_mac = vmulq(r_f, ccm[3]);
+    float16x8_t g_mac = vmulq_n_f16(r_f, ccm[3]);
     g_mac = vfmaq(g_mac, g_f, ccm[4]);
     g_mac = vfmaq(g_mac, b_f, ccm[5]);
 
     uint16x8_t g_out = vcvtq_u16_f16(g_mac);
     *g = vreinterpretq_u16(vqmovnbq(vdupq_n_u8(0), g_out));
 
-    float16x8_t b_mac = vmulq(r_f, ccm[6]);
+    float16x8_t b_mac = vmulq_n_f16(r_f, ccm[6]);
     b_mac = vfmaq(b_mac, g_f, ccm[7]);
     b_mac = vfmaq(b_mac, b_f, ccm[8]);
 
@@ -3341,17 +3342,17 @@ INLINE void aipl_mve_white_balance_rgb_channels_x8(uint16x8_t* r,
     float16x8_t g_f = vcvtq(*g);
     float16x8_t b_f = vcvtq(*b);
 
-    float16x8_t r_mul = vmulq(r_f, ar);
+    float16x8_t r_mul = vmulq_n_f16(r_f, ar);
 
     uint16x8_t r_out = vcvtq_u16_f16(r_mul);
     *r = vreinterpretq_u16(vqmovnbq(vdupq_n_u8(0), r_out));
 
-    float16x8_t g_mul = vmulq(g_f, ag);
+    float16x8_t g_mul = vmulq_n_f16(g_f, ag);
 
     uint16x8_t g_out = vcvtq_u16_f16(g_mul);
     *g = vreinterpretq_u16(vqmovnbq(vdupq_n_u8(0), g_out));
 
-    float16x8_t b_mul = vmulq(b_f, ab);
+    float16x8_t b_mul = vmulq_n_f16(b_f, ab);
 
     uint16x8_t b_out = vcvtq_u16_f16(b_mul);
     *b = vreinterpretq_u16(vqmovnbq(vdupq_n_u8(0), b_out));
