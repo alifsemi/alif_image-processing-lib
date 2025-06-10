@@ -56,17 +56,13 @@ packchk -V
 ```
 export CMSIS_PACK_ROOT=<your pack root>
 ```
-3. Go to the `cmsis/` directory in this repository:
-```
-cd cmsis
-```
-4. Run the generating script:
+3. Run the generating script:
 ```
 ./gen_pack.sh
 ```
 4. Install generated CMSIS pack:
 ```
-cpackget add ./output/AlifSemiconductor.AIPL.1.1.1.pack
+cpackget add ./output/AlifSemiconductor.AIPL.1.2.0.pack
 ```
 
 ## How to build the library
