@@ -37,7 +37,7 @@ DEFAULT_ARGS="-v"
 #
 PACK_BASE_FILES="
   aipl_config.h
-  License.txt
+  LICENSE.txt
   README.md
 "
 
