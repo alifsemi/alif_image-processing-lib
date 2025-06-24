@@ -5,9 +5,12 @@
   <description>Alif Semiconductor image processing library that uses D/AVE2D and Helium acceleration</description>
   <url>https://github.com/alifsemi/alif_image-processing-lib/raw/main/</url>
   <supportContact>support@alifsemi.com</supportContact>
-  <license>License.txt</license>
+  <license>LICENSE.txt</license>
 
   <releases>
+    <release version="1.2.1" tag="v1.2.1" url="https://github.com/alifsemi/alif_image-processing-lib/releases/download/v1.2.1/AlifSemiconductor.AIPL.1.2.1.pack" date="2025-06-23">
+        Add LGPL3 and GPL3 licenses
+    </release>
     <release version="1.2.0" tag="v1.2.0" url="https://github.com/alifsemi/alif_image-processing-lib/releases/download/v1.2.0/AlifSemiconductor.AIPL.1.2.0.pack" date="2025-06-10">
         Bugfixes
     </release>
@@ -252,7 +255,7 @@
       </files>
     </component>
 
-    <component Cclass="Graphics" Cgroup="AIPL" Csub="Bayer" Cversion="1.2.0" condition="AIPL-Essential">
+    <component Cclass="Graphics" Cgroup="AIPL" Csub="Bayer" Cversion="1.2.1" condition="AIPL-Essential">
       <description>
         Alif Image Processing Library from:
           * RGGB
