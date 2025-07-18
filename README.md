@@ -35,7 +35,7 @@ Color correction:
 * White balance
 * Lookup Table channel transformation
 
-Bayer filters that can be decoded into RGB888 or BGR888 image:
+Bayer filters that can be decoded into any supported image format:
 * RGGB
 * GRBG
 * BGGR
