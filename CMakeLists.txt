@@ -37,6 +37,8 @@ add_library(aipl STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/source/helium/aipl_color_conversion_helium.c
     ${CMAKE_CURRENT_SOURCE_DIR}/source/default/aipl_color_conversion_default.c
     ${CMAKE_CURRENT_SOURCE_DIR}/source/aipl_bayer.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/default/aipl_bayer_default.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/helium/aipl_bayer_helium.c
 )
 
 # Directly use config template if no config was provided
