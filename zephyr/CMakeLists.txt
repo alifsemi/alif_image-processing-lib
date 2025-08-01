@@ -62,8 +62,4 @@ if (CONFIG_AIPL)
     ${AIPL_DIR}/source/default/aipl_color_conversion_default.c
   )
 
-  zephyr_library_sources_ifdef(
-    CONFIG_AIPL_BAYER
-    ${AIPL_DIR}/source/aipl_bayer.c
-  )
 endif()

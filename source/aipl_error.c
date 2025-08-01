@@ -62,10 +62,6 @@ const char* aipl_error_str(aipl_error_t error)
         return "AIPL_ERR_FRAME_OUT_OF_RANGE";
     case AIPL_ERR_D2:
         return "AIPL_ERR_D2";
-    case AIPL_ERR_BAYER_INVALID_METHOD:
-        return "AIPL_ERR_BAYER_INVALID_METHOD";
-    case AIPL_ERR_BAYER_INVALID_FILTER:
-        return "AIPL_ERR_BAYER_INVALID_FILTER";
     case AIPL_ERR_NOT_SUPPORTED:
         return "AIPL_ERR_NOT_SUPPORTED";
 
