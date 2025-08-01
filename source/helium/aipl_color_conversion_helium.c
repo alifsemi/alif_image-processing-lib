@@ -23,7 +23,6 @@
 
 #include "aipl_config.h"
 #include "aipl_mve_utils.h"
-#include "aipl_utils.h"
 
 #ifdef AIPL_HELIUM_ACCELERATION
 
