@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 
-project(aipl VERSION 1.2.0 LANGUAGES C)
+project(aipl VERSION 1.3.0 LANGUAGES C)
 
 # Add library sources
 add_library(aipl STATIC
@@ -36,6 +36,9 @@ add_library(aipl STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/source/dave2d/aipl_color_conversion_dave2d.c
     ${CMAKE_CURRENT_SOURCE_DIR}/source/helium/aipl_color_conversion_helium.c
     ${CMAKE_CURRENT_SOURCE_DIR}/source/default/aipl_color_conversion_default.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/aipl_demosaic.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/default/aipl_demosaic_default.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/helium/aipl_demosaic_helium.c
 )
 
 # Directly use config template if no config was provided

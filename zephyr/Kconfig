@@ -49,6 +49,10 @@ config AIPL_COLOR_CORRECTION
     bool "Include AIPL color correction functions"
     default y
 
+config AIPL_DEMOSAICING
+    bool "Include AIPL demosaicing"
+    default y
+
 menuconfig AIPL_COLOR_CONVERSION
     bool "Include AIPL color format conversions"
     default y

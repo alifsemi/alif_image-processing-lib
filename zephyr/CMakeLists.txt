@@ -62,4 +62,10 @@ if (CONFIG_AIPL)
     ${AIPL_DIR}/source/default/aipl_color_conversion_default.c
   )
 
+  zephyr_library_sources_ifdef(
+    CONFIG_AIPL_DEMOSAICING
+    ${AIPL_DIR}/source/aipl_demosaic.c
+    ${AIPL_DIR}/source/default/aipl_demosaic_default.c
+    ${AIPL_DIR}/source/helium/aipl_demosaic_helium.c
+  )
 endif()
