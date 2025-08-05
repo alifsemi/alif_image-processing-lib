@@ -55,11 +55,6 @@
         * NV12
         * YUY2
         * UYVY
-      Supported bayer filters that can be decoded into RGB888 or BGR888 image:
-        * RGGB
-        * GRBG
-        * BGGR
-        * GBRG
     </release>
   </releases>
 
@@ -252,25 +247,6 @@
         <file category="sourceC"  name="source/dave2d/aipl_color_conversion_dave2d.c"/>
         <file category="sourceC"  name="source/helium/aipl_color_conversion_helium.c"/>
         <file category="sourceC"  name="source/default/aipl_color_conversion_default.c"/>
-      </files>
-    </component>
-
-    <component Cclass="Graphics" Cgroup="AIPL" Csub="Bayer" Cversion="1.2.1" condition="AIPL-Essential">
-      <description>
-        Alif Image Processing Library from:
-          * RGGB
-          * GRBG
-          * BGGR
-          * GBRG
-        to either RGB or BGR
-      </description>
-            <files>
-        <!-- include folder / device header file -->
-        <file category="include"  name="include/"/>
-        <!-- include headers -->
-        <file category="header"   name="include/aipl_bayer.h"/>
-        <!-- source files -->
-        <file category="sourceC"  name="source/aipl_bayer.c"/>
       </files>
     </component>
 

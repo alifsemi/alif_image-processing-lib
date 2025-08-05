@@ -2646,8 +2646,9 @@ aipl_error_t aipl_color_convert_bgr888_to_argb8888_default(const void* input,
                                                            uint32_t height);
 
 #endif
-#if (AIPL_CONVERT_BGR888 & TO_ARGB4444)/**\
+#if (AIPL_CONVERT_BGR888 & TO_ARGB4444)\
      && (!defined(AIPL_HELIUM_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
+/**
  * Convert BGR888 image to ARGB4444
  * using default implementation with compiler imposed optimization
  *
@@ -3008,8 +3009,9 @@ aipl_error_t aipl_color_convert_rgb888_to_argb8888_default(const void* input,
                                                            uint32_t height);
 
 #endif
-#if (AIPL_CONVERT_RGB888 & TO_ARGB4444)/**\
+#if (AIPL_CONVERT_RGB888 & TO_ARGB4444)\
      && (!defined(AIPL_HELIUM_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
+/**
  * Convert RGB888 image to ARGB4444
  * using default implementation with compiler imposed optimization
  *

@@ -35,12 +35,6 @@ Color correction:
 * White balance
 * Lookup Table channel transformation
 
-Bayer filters that can be decoded into RGB888 or BGR888 image:
-* RGGB
-* GRBG
-* BGGR
-* GBRG
-
 ## CMSIS package requirements
 
 This CMSIS pack requires some packs to be installed and added to the project:
