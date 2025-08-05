@@ -8,6 +8,9 @@
   <license>LICENSE.txt</license>
 
   <releases>
+    <release version="1.3.0" tag="v1.3.0" url="https://github.com/alifsemi/alif_image-processing-lib/releases/download/v1.3.0/AlifSemiconductor.AIPL.1.3.0.pack" date="2025-08-01">
+        Rework demosaicing component
+    </release>
     <release version="1.2.1" tag="v1.2.1" url="https://github.com/alifsemi/alif_image-processing-lib/releases/download/v1.2.1/AlifSemiconductor.AIPL.1.2.1.pack" date="2025-06-23">
         Add LGPL3 and GPL3 licenses
     </release>
@@ -55,6 +58,11 @@
         * NV12
         * YUY2
         * UYVY
+      Supported Bayer filters that can be decoded into RGB888 or BGR888 image:
+        * RGGB
+        * GRBG
+        * BGGR
+        * GBRG
     </release>
   </releases>
 
@@ -247,6 +255,31 @@
         <file category="sourceC"  name="source/dave2d/aipl_color_conversion_dave2d.c"/>
         <file category="sourceC"  name="source/helium/aipl_color_conversion_helium.c"/>
         <file category="sourceC"  name="source/default/aipl_color_conversion_default.c"/>
+      </files>
+    </component>
+
+    <component Cclass="Graphics" Cgroup="AIPL" Csub="Demosaic" Cversion="1.3.0" condition="AIPL-Essential">
+      <description>
+        Alif Image Processing Library demosaicing from:
+          * RGGB
+          * GRBG
+          * BGGR
+          * GBRG
+        Bayer filters to any of the supported color formats
+      </description>
+      <files>
+        <!-- include folder / device header file -->
+        <file category="include"  name="include/"/>
+        <file category="include"  name="include/default/"/>
+        <file category="include"  name="include/helium/"/>
+        <!-- include headers -->
+        <file category="header"   name="include/aipl_demosaic.h"/>
+        <file category="header"   name="include/default/aipl_demosaic_default.h"/>
+        <file category="header"   name="include/helium/aipl_demosaic_helium.h"/>
+        <!-- source files -->
+        <file category="sourceC"  name="source/aipl_demosaic.c"/>
+        <file category="sourceC"  name="source/default/aipl_demosaic_default.c"/>
+        <file category="sourceC"  name="source/helium/aipl_demosaic_helium.c"/>
       </files>
     </component>
 

@@ -115,7 +115,62 @@ typedef struct {
 } aipl_rgb565_px_t;
 
 /**********************
- * GLOBAL PROTOTYPES
+ *      MACROS
+ **********************/
+#define AIPL_CNVT_RGB888_TO_YUV_Y(r, g, b) \
+    (((AIPL_YUV_Y_8BIT_RED_MULTIPLIER * (r) \
+       + AIPL_YUV_Y_8BIT_GREEN_MULTIPLIER * (g) \
+       + AIPL_YUV_Y_8BIT_BLUE_MULTIPLIER * (b) + 128) >> 8) + 16)
+#define AIPL_CNVT_RGB888_TO_YUV_U(r, g, b) \
+    (((AIPL_YUV_U_8BIT_RED_MULTIPLIER * (r) \
+       + AIPL_YUV_U_8BIT_GREEN_MULTIPLIER * (g) \
+       + AIPL_YUV_U_8BIT_BLUE_MULTIPLIER * (b) + 128) >> 8) + 128)
+#define AIPL_CNVT_RGB888_TO_YUV_V(r, g, b) \
+    (((AIPL_YUV_V_8BIT_RED_MULTIPLIER * (r) \
+       + AIPL_YUV_V_8BIT_GREEN_MULTIPLIER * (g) \
+       + AIPL_YUV_V_8BIT_BLUE_MULTIPLIER * (b) + 128) >> 8) + 128)
+
+#define AIPL_CNVT_RGB444_TO_YUV_Y(r, g, b) \
+    (((AIPL_YUV_Y_4BIT_RED_MULTIPLIER * (r) \
+       + AIPL_YUV_Y_4BIT_GREEN_MULTIPLIER * (g) \
+       + AIPL_YUV_Y_4BIT_BLUE_MULTIPLIER * (b) + 128) >> 8) + 16)
+#define AIPL_CNVT_RGB444_TO_YUV_U(r, g, b) \
+    (((AIPL_YUV_U_4BIT_RED_MULTIPLIER * (r) \
+       + AIPL_YUV_U_4BIT_GREEN_MULTIPLIER * (g) \
+       + AIPL_YUV_U_4BIT_BLUE_MULTIPLIER * (b) + 128) >> 8) + 128)
+#define AIPL_CNVT_RGB444_TO_YUV_V(r, g, b) \
+    (((AIPL_YUV_V_4BIT_RED_MULTIPLIER * (r) \
+       + AIPL_YUV_V_4BIT_GREEN_MULTIPLIER * (g) \
+       + AIPL_YUV_V_4BIT_BLUE_MULTIPLIER * (b) + 128) >> 8) + 128)
+
+#define AIPL_CNVT_RGB555_TO_YUV_Y(r, g, b) \
+    (((AIPL_YUV_Y_5BIT_RED_MULTIPLIER * (r) \
+       + AIPL_YUV_Y_5BIT_GREEN_MULTIPLIER * (g) \
+       + AIPL_YUV_Y_5BIT_BLUE_MULTIPLIER * (b) + 128) >> 8) + 16)
+#define AIPL_CNVT_RGB555_TO_YUV_U(r, g, b) \
+    (((AIPL_YUV_U_5BIT_RED_MULTIPLIER * (r) \
+       + AIPL_YUV_U_5BIT_GREEN_MULTIPLIER * (g) \
+       + AIPL_YUV_U_5BIT_BLUE_MULTIPLIER * (b) + 128) >> 8) + 128)
+#define AIPL_CNVT_RGB555_TO_YUV_V(r, g, b) \
+    (((AIPL_YUV_V_5BIT_RED_MULTIPLIER * (r) \
+       + AIPL_YUV_V_5BIT_GREEN_MULTIPLIER * (g) \
+       + AIPL_YUV_V_5BIT_BLUE_MULTIPLIER * (b) + 128) >> 8) + 128)
+
+#define AIPL_CNVT_RGB565_TO_YUV_Y(r, g, b) \
+    (((AIPL_YUV_Y_5BIT_RED_MULTIPLIER * (r) \
+       + AIPL_YUV_Y_6BIT_GREEN_MULTIPLIER * (g) \
+       + AIPL_YUV_Y_5BIT_BLUE_MULTIPLIER * (b) + 128) >> 8) + 16)
+#define AIPL_CNVT_RGB565_TO_YUV_U(r, g, b) \
+    (((AIPL_YUV_U_5BIT_RED_MULTIPLIER * (r) \
+       + AIPL_YUV_U_6BIT_GREEN_MULTIPLIER * (g) \
+       + AIPL_YUV_U_5BIT_BLUE_MULTIPLIER * (b) + 128) >> 8) + 128)
+#define AIPL_CNVT_RGB565_TO_YUV_V(r, g, b) \
+    (((AIPL_YUV_V_5BIT_RED_MULTIPLIER * (r) \
+       + AIPL_YUV_V_6BIT_GREEN_MULTIPLIER * (g) \
+       + AIPL_YUV_V_5BIT_BLUE_MULTIPLIER * (b) + 128) >> 8) + 128)
+
+/**********************
+ * GLOBAL FUNCTIONS
  **********************/
 /**
  * Convert ARGB8888 pixel into ARGB4444
@@ -226,7 +281,7 @@ INLINE void aipl_cnvt_px_argb8888_to_24bit(uint8_t* dst,
 INLINE void aipl_cnvt_px_argb8888_to_yuv_y(uint8_t* dst,
                                            const aipl_argb8888_px_t* src)
 {
-    *dst = ((66 * src->r + 129 * src->g + 25 * src->b + 128) >> 8) + 16;
+    *dst = AIPL_CNVT_RGB888_TO_YUV_Y(src->r, src->g, src->b);
 }
 
 /**
@@ -244,8 +299,8 @@ INLINE void aipl_cnvt_px_argb8888_to_yuv_uv(uint8_t* u_dst,
     uint8_t g = src->g;
     uint8_t b = src->b;
 
-    *u_dst = ((-38 * r - 74 * g + 112 * b + 128) >> 8) + 128;
-    *v_dst = ((112 * r - 94 * g - 18 * b + 128) >> 8) + 128;
+    *u_dst = AIPL_CNVT_RGB888_TO_YUV_U(r, g, b);
+    *v_dst = AIPL_CNVT_RGB888_TO_YUV_V(r, g, b);
 }
 
 /**
@@ -265,9 +320,9 @@ INLINE void aipl_cnvt_px_argb8888_to_yuv(uint8_t* y_dst,
     uint8_t g = src->g;
     uint8_t b = src->b;
 
-    *y_dst = ((66 * r + 129 * g + 25 * b + 128) >> 8) + 16;
-    *u_dst = ((-38 * r - 74 * g + 112 * b + 128) >> 8) + 128;
-    *v_dst = ((112 * r - 94 * g - 18 * b + 128) >> 8) + 128;
+    *y_dst = AIPL_CNVT_RGB888_TO_YUV_Y(r, g, b);
+    *u_dst = AIPL_CNVT_RGB888_TO_YUV_U(r, g, b);
+    *v_dst = AIPL_CNVT_RGB888_TO_YUV_V(r, g, b);
 }
 
 /**
@@ -387,7 +442,7 @@ INLINE void aipl_cnvt_px_argb4444_to_yuv_y(uint8_t* dst,
     uint8_t g = src->gb >> 4;
     uint8_t b = src->gb & 0x0f;
 
-    *dst = ((66 * 0x11 * r + 129 * 0x11 * g + 25 * 0x11 * b + 128) >> 8) + 16;
+    *dst = AIPL_CNVT_RGB444_TO_YUV_Y(r, g, b);
 }
 
 /**
@@ -405,8 +460,8 @@ INLINE void aipl_cnvt_px_argb4444_to_yuv_uv(uint8_t* u_dst,
     uint8_t g = src->gb >> 4;
     uint8_t b = src->gb & 0x0f;
 
-    *u_dst = ((-38 * 0x11 * r - 74 * 0x11 * g + 112 * 0x11 * b + 128) >> 8) + 128;
-    *v_dst = ((112 * 0x11 * r - 94 * 0x11 * g - 18 * 0x11 * b + 128) >> 8) + 128;
+    *u_dst = AIPL_CNVT_RGB444_TO_YUV_U(r, g, b);
+    *v_dst = AIPL_CNVT_RGB444_TO_YUV_V(r, g, b);
 }
 
 /**
@@ -426,9 +481,9 @@ INLINE void aipl_cnvt_px_argb4444_to_yuv(uint8_t* y_dst,
     uint8_t g = src->gb >> 4;
     uint8_t b = src->gb & 0x0f;
 
-    *y_dst = ((66 * 0x11 * r + 129 * 0x11 * g + 25 * 0x11 * b + 128) >> 8) + 16;
-    *u_dst = ((-38 * 0x11 * r - 74 * 0x11 * g + 112 * 0x11 * b + 128) >> 8) + 128;
-    *v_dst = ((112 * 0x11 * r - 94 * 0x11 * g - 18 * 0x11 * b + 128) >> 8) + 128;
+    *y_dst = AIPL_CNVT_RGB444_TO_YUV_Y(r, g, b);
+    *u_dst = AIPL_CNVT_RGB444_TO_YUV_U(r, g, b);
+    *v_dst = AIPL_CNVT_RGB444_TO_YUV_V(r, g, b);
 }
 
 /**
@@ -548,7 +603,7 @@ INLINE void aipl_cnvt_px_argb1555_to_yuv_y(uint8_t* dst,
     uint8_t g = ((src->t << 3) & 0x1f) | (src->b >> 5);
     uint8_t b = src->b & 0x1f;
 
-    *dst = ((543 * r + 1061 * g + 205 * b + 128) >> 8) + 16;
+    *dst = AIPL_CNVT_RGB555_TO_YUV_Y(r, g, b);
 }
 
 /**
@@ -566,8 +621,8 @@ INLINE void aipl_cnvt_px_argb1555_to_yuv_uv(uint8_t* u_dst,
     uint8_t g = ((src->t << 3) & 0x1f) | (src->b >> 5);
     uint8_t b = src->b & 0x1f;
 
-    *u_dst = ((-312 * r - 608 * g + 920 * b + 128) >> 8) + 128;
-    *v_dst = ((920 * r - 773 * g - 147 * b + 128) >> 8) + 128;
+    *u_dst = AIPL_CNVT_RGB555_TO_YUV_U(r, g, b);
+    *v_dst = AIPL_CNVT_RGB555_TO_YUV_V(r, g, b);
 }
 
 /**
@@ -587,9 +642,9 @@ INLINE void aipl_cnvt_px_argb1555_to_yuv(uint8_t* y_dst,
     uint8_t g = ((src->t << 3) & 0x1f) | (src->b >> 5);
     uint8_t b = src->b & 0x1f;
 
-    *y_dst = ((543 * r + 1061 * g + 205 * b + 128) >> 8) + 16;
-    *u_dst = ((-312 * r - 608 * g + 920 * b + 128) >> 8) + 128;
-    *v_dst = ((920 * r - 773 * g - 147 * b + 128) >> 8) + 128;
+    *y_dst = AIPL_CNVT_RGB555_TO_YUV_Y(r, g, b);
+    *u_dst = AIPL_CNVT_RGB555_TO_YUV_U(r, g, b);
+    *v_dst = AIPL_CNVT_RGB555_TO_YUV_V(r, g, b);
 }
 
 /**
@@ -742,10 +797,9 @@ INLINE void aipl_cnvt_px_rgba8888_to_yuv(uint8_t* y_dst,
     uint8_t g = src->g;
     uint8_t b = src->b;
 
-    *y_dst = ((66 * r + 129 * g + 25 * b + 128) >> 8) + 16;
-    *u_dst = ((-38 * r - 74 * g + 112 * b + 128) >> 8) + 128;
-    *v_dst = ((112 * r - 94 * g - 18 * b + 128) >> 8) + 128;
-
+    *y_dst = AIPL_CNVT_RGB888_TO_YUV_Y(r, g, b);
+    *u_dst = AIPL_CNVT_RGB888_TO_YUV_U(r, g, b);
+    *v_dst = AIPL_CNVT_RGB888_TO_YUV_V(r, g, b);
 }
 
 /**
@@ -865,7 +919,7 @@ INLINE void aipl_cnvt_px_rgba4444_to_yuv_y(uint8_t* dst,
     uint8_t g = src->rg & 0x0f;
     uint8_t b = src->ba >> 4;
 
-    *dst = ((66 * 0x11 * r + 129 * 0x11 * g + 25 * 0x11 * b + 128) >> 8) + 16;
+    *dst = AIPL_CNVT_RGB444_TO_YUV_Y(r, g, b);
 }
 
 /**
@@ -883,8 +937,8 @@ INLINE void aipl_cnvt_px_rgba4444_to_yuv_uv(uint8_t* u_dst,
     uint8_t g = src->rg & 0x0f;
     uint8_t b = src->ba >> 4;
 
-    *u_dst = ((-38 * 0x11 * r - 74 * 0x11 * g + 112 * 0x11 * b + 128) >> 8) + 128;
-    *v_dst = ((112 * 0x11 * r - 94 * 0x11 * g - 18 * 0x11 * b + 128) >> 8) + 128;
+    *u_dst = AIPL_CNVT_RGB444_TO_YUV_U(r, g, b);
+    *v_dst = AIPL_CNVT_RGB444_TO_YUV_V(r, g, b);
 }
 
 /**
@@ -904,9 +958,9 @@ INLINE void aipl_cnvt_px_rgba4444_to_yuv(uint8_t* y_dst,
     uint8_t g = src->rg & 0x0f;
     uint8_t b = src->ba >> 4;
 
-    *y_dst = ((66 * 0x11 * r + 129 * 0x11 * g + 25 * 0x11 * b + 128) >> 8) + 16;
-    *u_dst = ((-38 * 0x11 * r - 74 * 0x11 * g + 112 * 0x11 * b + 128) >> 8) + 128;
-    *v_dst = ((112 * 0x11 * r - 94 * 0x11 * g - 18 * 0x11 * b + 128) >> 8) + 128;
+    *y_dst = AIPL_CNVT_RGB444_TO_YUV_Y(r, g, b);
+    *u_dst = AIPL_CNVT_RGB444_TO_YUV_U(r, g, b);
+    *v_dst = AIPL_CNVT_RGB444_TO_YUV_V(r, g, b);
 }
 
 /**
@@ -1023,7 +1077,7 @@ INLINE void aipl_cnvt_px_rgba5551_to_yuv_y(uint8_t* dst,
     uint8_t g = ((src->t << 2) & 0x1f) | (src->b >> 6);
     uint8_t b = (src->b >> 1) & 0x1f;
 
-    *dst = ((543 * r + 1061 * g + 205 * b + 128) >> 8) + 16;
+    *dst = AIPL_CNVT_RGB555_TO_YUV_Y(r, g, b);
 }
 
 /**
@@ -1041,8 +1095,8 @@ INLINE void aipl_cnvt_px_rgba5551_to_yuv_uv(uint8_t* u_dst,
     uint8_t g = ((src->t << 2) & 0x1f) | (src->b >> 6);
     uint8_t b = (src->b >> 1) & 0x1f;
 
-    *u_dst = ((-312 * r - 608 * g + 920 * b + 128) >> 8) + 128;
-    *v_dst = ((920 * r - 773 * g - 147 * b + 128) >> 8) + 128;
+    *u_dst = AIPL_CNVT_RGB555_TO_YUV_U(r, g, b);
+    *v_dst = AIPL_CNVT_RGB555_TO_YUV_V(r, g, b);
 }
 
 /**
@@ -1062,9 +1116,9 @@ INLINE void aipl_cnvt_px_rgba5551_to_yuv(uint8_t* y_dst,
     uint8_t g = ((src->t << 2) & 0x1f) | (src->b >> 6);
     uint8_t b = (src->b >> 1) & 0x1f;
 
-    *y_dst = ((543 * r + 1061 * g + 205 * b + 128) >> 8) + 16;
-    *u_dst = ((-312 * r - 608 * g + 920 * b + 128) >> 8) + 128;
-    *v_dst = ((920 * r - 773 * g - 147 * b + 128) >> 8) + 128;
+    *y_dst = AIPL_CNVT_RGB555_TO_YUV_Y(r, g, b);
+    *u_dst = AIPL_CNVT_RGB555_TO_YUV_U(r, g, b);
+    *v_dst = AIPL_CNVT_RGB555_TO_YUV_V(r, g, b);
 }
 
 /**
@@ -1245,7 +1299,7 @@ INLINE void aipl_cnvt_px_24bit_to_yuv_y(uint8_t* dst,
                                         uint8_t g_offset,
                                         uint8_t b_offset)
 {
-    *dst = ((66 * src[r_offset] + 129 * src[g_offset] + 25 * src[b_offset] + 128) >> 8) + 16;
+    *dst = AIPL_CNVT_RGB888_TO_YUV_Y(src[r_offset], src[g_offset], src[b_offset]);
 }
 
 /**
@@ -1265,8 +1319,8 @@ INLINE void aipl_cnvt_px_24bit_to_yuv_uv(uint8_t* u_dst,
                                          uint8_t g_offset,
                                          uint8_t b_offset)
 {
-    *u_dst = ((-38 * src[r_offset] - 74 * src[g_offset] + 112 * src[b_offset] + 128) >> 8) + 128;
-    *v_dst = ((112 * src[r_offset] - 94 * src[g_offset] - 18 * src[b_offset] + 128) >> 8) + 128;
+    *u_dst = AIPL_CNVT_RGB888_TO_YUV_U(src[r_offset], src[g_offset], src[b_offset]);
+    *v_dst = AIPL_CNVT_RGB888_TO_YUV_V(src[r_offset], src[g_offset], src[b_offset]);
 }
 
 /**
@@ -1288,9 +1342,9 @@ INLINE void aipl_cnvt_px_24bit_to_yuv(uint8_t* y_dst,
                                       uint8_t g_offset,
                                       uint8_t b_offset)
 {
-    *y_dst = ((66 * src[r_offset] + 129 * src[g_offset] + 25 * src[b_offset] + 128) >> 8) + 16;
-    *u_dst = ((-38 * src[r_offset] - 74 * src[g_offset] + 112 * src[b_offset] + 128) >> 8) + 128;
-    *v_dst = ((112 * src[r_offset] - 94 * src[g_offset] - 18 * src[b_offset] + 128) >> 8) + 128;
+    *y_dst = AIPL_CNVT_RGB888_TO_YUV_Y(src[r_offset], src[g_offset], src[b_offset]);
+    *u_dst = AIPL_CNVT_RGB888_TO_YUV_U(src[r_offset], src[g_offset], src[b_offset]);
+    *v_dst = AIPL_CNVT_RGB888_TO_YUV_V(src[r_offset], src[g_offset], src[b_offset]);
 }
 
 /**
@@ -1408,7 +1462,7 @@ INLINE void aipl_cnvt_px_rgb565_to_yuv_y(uint8_t* dst,
     uint8_t g = ((src->t << 3) & 0x3f) | (src->b >> 5);
     uint8_t b = src->b & 0x1f;
 
-    *dst = ((543 * r + 522 * g + 205 * b + 128) >> 8) + 16;
+    *dst = AIPL_CNVT_RGB565_TO_YUV_Y(r, g, b);
 }
 
 /**
@@ -1426,8 +1480,8 @@ INLINE void aipl_cnvt_px_rgb565_to_yuv_uv(uint8_t* u_dst,
     uint8_t g = ((src->t << 3) & 0x3f) | (src->b >> 5);
     uint8_t b = src->b & 0x1f;
 
-    *u_dst = ((-312 * r - 299 * g + 920 * b + 128) >> 8) + 128;
-    *v_dst = ((920 * r - 380 * g - 147 * b + 128) >> 8) + 128;
+    *u_dst = AIPL_CNVT_RGB565_TO_YUV_U(r, g, b);
+    *v_dst = AIPL_CNVT_RGB565_TO_YUV_V(r, g, b);
 }
 
 /**
@@ -1447,9 +1501,9 @@ INLINE void aipl_cnvt_px_rgb565_to_yuv(uint8_t* y_dst,
     uint8_t g = ((src->t << 3) & 0x3f) | (src->b >> 5);
     uint8_t b = src->b & 0x1f;
 
-    *y_dst = ((543 * r + 522 * g + 205 * b + 128) >> 8) + 16;
-    *u_dst = ((-312 * r - 299 * g + 920 * b + 128) >> 8) + 128;
-    *v_dst = ((920 * r - 380 * g - 147 * b + 128) >> 8) + 128;
+    *y_dst = AIPL_CNVT_RGB565_TO_YUV_Y(r, g, b);
+    *u_dst = AIPL_CNVT_RGB565_TO_YUV_U(r, g, b);
+    *v_dst = AIPL_CNVT_RGB565_TO_YUV_V(r, g, b);
 }
 
 /**
@@ -1652,9 +1706,10 @@ INLINE void aipl_pre_cnvt_px_yuv_to_rgb(int32_t* r, int32_t* g, int32_t* b,
     int16_t d = u - 128;
     int16_t e = v - 128;
 
-    *r = 409 * e + 128;
-    *g = -100 * d - 208 * e + 128;
-    *b = 516 * d + 128;
+    *r = AIPL_YUV_RED_E_MULTIPLIER * e + 128;
+    *g = AIPL_YUV_GREEN_D_MULTIPLIER * d
+         + AIPL_YUV_GREEN_E_MULTIPLIER * e + 128;
+    *b = AIPL_YUV_BLUE_D_MULTIPLIER * d + 128;
 }
 
 /**
@@ -1666,7 +1721,7 @@ INLINE void aipl_pre_cnvt_px_yuv_to_rgb(int32_t* r, int32_t* g, int32_t* b,
  */
 INLINE void aipl_pre_cnvt_px_y(int32_t* c, uint8_t y)
 {
-    *c = (y - 16) * 298;
+    *c = (y - 16) * AIPL_YUV_C_MULTIPLIER;
 }
 
 /**
@@ -1862,6 +1917,64 @@ INLINE void aipl_cnvt_px_yuv_to_rgb565(aipl_rgb565_px_t* dst,
     dst->t = aipl_channel_cap_5bit((c + r) >> 11, 3) | (g0 >> 3);
     dst->b = (g0 << 5) | aipl_channel_cap_5bit((c + b) >> 11, 0);
 }
+
+/**
+ * Convert R, G and B channels into Y channel
+ *
+ * @param dst       destination Y channel pointer
+ * @param red       red channel
+ * @param green     green channel
+ * @param blue      blue channel
+ */
+INLINE void aipl_cnvt_px_rgb_to_yuv_y(uint8_t* dst,
+                                      uint8_t red,
+                                      uint8_t green,
+                                      uint8_t blue)
+{
+    *dst = AIPL_CNVT_RGB888_TO_YUV_Y(red, green, blue);
+}
+
+/**
+ * Convert R, G and B channels into U and V channels
+ *
+ * @param u_dst     destination U channel pointer
+ * @param v_dst     destination V channel pointer
+ * @param red       red channel
+ * @param green     green channel
+ * @param blue      blue channel
+ */
+INLINE void aipl_cnvt_px_rgb_to_yuv_uv(uint8_t* u_dst,
+                                       uint8_t* v_dst,
+                                       uint8_t red,
+                                       uint8_t green,
+                                       uint8_t blue)
+{
+    *u_dst = AIPL_CNVT_RGB888_TO_YUV_U(red, green, blue);
+    *v_dst = AIPL_CNVT_RGB888_TO_YUV_V(red, green, blue);
+}
+
+/**
+ * Convert R, G and B channels into Y, U and V channels
+ *
+ * @param y_dst     destination Y channel pointer
+ * @param u_dst     destination U channel pointer
+ * @param v_dst     destination V channel pointer
+ * @param red       red channel
+ * @param green     green channel
+ * @param blue      blue channel
+ */
+INLINE void aipl_cnvt_px_rgb_to_yuv(uint8_t* y_dst,
+                                    uint8_t* u_dst,
+                                    uint8_t* v_dst,
+                                    uint8_t red,
+                                    uint8_t green,
+                                    uint8_t blue)
+{
+    *y_dst = AIPL_CNVT_RGB888_TO_YUV_Y(red, green, blue);
+    *u_dst = AIPL_CNVT_RGB888_TO_YUV_U(red, green, blue);
+    *v_dst = AIPL_CNVT_RGB888_TO_YUV_V(red, green, blue);
+}
+
 
 /**********************
  *      MACROS
