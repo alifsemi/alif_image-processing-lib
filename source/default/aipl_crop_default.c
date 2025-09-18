@@ -88,8 +88,8 @@ aipl_error_t aipl_crop_default(const void* input, void* output,
     uint8_t *op_fb = (uint8_t *)output;
 
     uint32_t new_width = right - left;
-    uint32_t new_hight = bottom - top;
-    for(uint32_t i = 0; i < new_hight; ++i)
+    uint32_t new_height = bottom - top;
+    for(uint32_t i = 0; i < new_height; ++i)
     {
         // Update row address
         const uint8_t *ip_fb_row = ip_fb + left * (bpp / 8);
@@ -100,7 +100,7 @@ aipl_error_t aipl_crop_default(const void* input, void* output,
         op_fb += (new_width * (bpp / 8));
     }
 
-    size_t size = new_width * new_hight * (bpp / 8);
+    size_t size = new_width * new_height * (bpp / 8);
     aipl_cpu_cache_clean(output, size);
 
     return AIPL_ERR_OK;
@@ -115,8 +115,8 @@ aipl_error_t aipl_crop_img_default(const aipl_image_t* input,
         return AIPL_ERR_NULL_POINTER;
 
     uint32_t new_width = right - left;
-    uint32_t new_hight = bottom - top;
-    if (new_width != output->width || new_hight != output->height)
+    uint32_t new_height = bottom - top;
+    if (new_width != output->width || new_height != output->height)
     {
         return AIPL_ERR_SIZE_MISMATCH;
     }

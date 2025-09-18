@@ -869,9 +869,9 @@ INLINE void aipl_mve_str_8px_extended_argb4444(uint16_t* dst,
                                                mve_pred16_t pred)
 {
     uint8x16_t ar = vreinterpretq_u8(src.a);
-    ar = vsriq(ar, vreinterpretq_u8(src.r), 4);
+    ar = vsriq_n_u8(ar, vreinterpretq_u8(src.r), 4);
     uint8x16_t gb = vreinterpretq_u8(src.g);
-    gb = vsriq(gb, vreinterpretq_u8(src.b), 4);
+    gb = vsriq_n_u8(gb, vreinterpretq_u8(src.b), 4);
     uint16x8_t pix = vreinterpretq_u16(vmovntq(gb, vreinterpretq_u16(ar)));
 
     vst1q_p(dst, pix, pred);
@@ -889,8 +889,8 @@ INLINE void aipl_mve_str_16px_argb4444(uint16_t* dst,
                                        aipl_mve_argb_x16_t src,
                                        mve_pred16_t pred)
 {
-    uint8x16_t gb = vsriq(src.g, src.b, 4);
-    uint8x16_t ar = vsriq(src.a, src.r, 4);
+    uint8x16_t gb = vsriq_n_u8(src.g, src.b, 4);
+    uint8x16_t ar = vsriq_n_u8(src.a, src.r, 4);
 
     vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, gb, pred);
     vstrbq_scatter_offset_p((uint8_t*)dst + 1, AIPL_2_BYTE_OFFSETS_U8, ar, pred);
@@ -906,7 +906,7 @@ INLINE void aipl_mve_str_16px_argb4444(uint16_t* dst,
 INLINE void aipl_mve_str_16px_argb4444_uncut(uint16_t* dst,
                                              aipl_mve_argb_x16_t src)
 {
-    uint8x16x2_t argb = { vsriq(src.g, src.b, 4), vsriq(src.a, src.r, 4) };
+    uint8x16x2_t argb = { vsriq_n_u8(src.g, src.b, 4), vsriq_n_u8(src.a, src.r, 4) };
 
     vst2q((uint8_t*)dst, argb);
 }
@@ -923,8 +923,8 @@ INLINE void aipl_mve_str_16px_xrgb4444(uint16_t* dst,
                                        aipl_mve_rgb_x16_t src,
                                        mve_pred16_t pred)
 {
-    uint8x16_t ar = vsriq(vdupq_n_u8(0xf0), src.r, 4);
-    uint8x16_t gb = vsriq(src.g, src.b, 4);
+    uint8x16_t ar = vsriq_n_u8(vdupq_n_u8(0xf0), src.r, 4);
+    uint8x16_t gb = vsriq_n_u8(src.g, src.b, 4);
 
     vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, gb, pred);
     vstrbq_scatter_offset_p((uint8_t*)dst + 1, AIPL_2_BYTE_OFFSETS_U8, ar, pred);
@@ -940,7 +940,7 @@ INLINE void aipl_mve_str_16px_xrgb4444(uint16_t* dst,
 INLINE void aipl_mve_str_16px_xrgb4444_uncut(uint16_t* dst,
                                              aipl_mve_rgb_x16_t src)
 {
-    uint8x16x2_t argb = { vsriq(src.g, src.b, 4), vsriq(vdupq_n_u8(0xf0), src.r, 4) };
+    uint8x16x2_t argb = { vsriq_n_u8(src.g, src.b, 4), vsriq_n_u8(vdupq_n_u8(0xf0), src.r, 4) };
 
     vst2q((uint8_t*)dst, argb);
 }
@@ -1153,10 +1153,10 @@ INLINE void aipl_mve_str_16px_xrgb1555(uint16_t* dst,
                                        aipl_mve_rgb_x16_t src,
                                        mve_pred16_t pred)
 {
-    uint8x16_t upper = vsriq(vdupq_n_u8(0x80), src.r, 1);
-    upper = vsriq(upper, src.g, 6);
+    uint8x16_t upper = vsriq_n_u8(vdupq_n_u8(0x80), src.r, 1);
+    upper = vsriq_n_u8(upper, src.g, 6);
     uint8x16_t lower = vshlq_n(src.g, 2);
-    lower = vsriq(lower, src.b, 3);
+    lower = vsriq_n_u8(lower, src.b, 3);
 
     vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, lower, pred);
     vstrbq_scatter_offset_p((uint8_t*)dst + 1, AIPL_2_BYTE_OFFSETS_U8, upper, pred);
@@ -1174,10 +1174,10 @@ INLINE void aipl_mve_str_16px_argb1555(uint16_t* dst,
                                        aipl_mve_argb_x16_t src,
                                        mve_pred16_t pred)
 {
-    uint8x16_t upper = vsriq(src.a, src.r, 1);
-    upper = vsriq(upper, src.g, 6);
+    uint8x16_t upper = vsriq_n_u8(src.a, src.r, 1);
+    upper = vsriq_n_u8(upper, src.g, 6);
     uint8x16_t lower = vshlq_n(src.g, 2);
-    lower = vsriq(lower, src.b, 3);
+    lower = vsriq_n_u8(lower, src.b, 3);
 
     vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, lower, pred);
     vstrbq_scatter_offset_p((uint8_t*)dst + 1, AIPL_2_BYTE_OFFSETS_U8, upper, pred);
@@ -1193,9 +1193,9 @@ INLINE void aipl_mve_str_16px_argb1555(uint16_t* dst,
 INLINE void aipl_mve_str_16px_xrgb1555_uncut(uint16_t* dst,
                                              aipl_mve_rgb_x16_t src)
 {
-    uint8x16x2_t argb = { vshlq_n(src.g, 2), vsriq(vdupq_n_u8(0x80), src.r, 1) };
-    argb.val[0] = vsriq(argb.val[0], src.b, 3);
-    argb.val[1] = vsriq(argb.val[1], src.g, 6);
+    uint8x16x2_t argb = { vshlq_n(src.g, 2), vsriq_n_u8(vdupq_n_u8(0x80), src.r, 1) };
+    argb.val[0] = vsriq_n_u8(argb.val[0], src.b, 3);
+    argb.val[1] = vsriq_n_u8(argb.val[1], src.g, 6);
 
     vst2q((uint8_t*)dst, argb);
 }
@@ -1210,9 +1210,9 @@ INLINE void aipl_mve_str_16px_xrgb1555_uncut(uint16_t* dst,
 INLINE void aipl_mve_str_16px_argb1555_uncut(uint16_t* dst,
                                              aipl_mve_argb_x16_t src)
 {
-    uint8x16x2_t argb = { vshlq_n(src.g, 2), vsriq(src.a, src.r, 1) };
-    argb.val[0] = vsriq(argb.val[0], src.b, 3);
-    argb.val[1] = vsriq(argb.val[1], src.g, 6);
+    uint8x16x2_t argb = { vshlq_n(src.g, 2), vsriq_n_u8(src.a, src.r, 1) };
+    argb.val[0] = vsriq_n_u8(argb.val[0], src.b, 3);
+    argb.val[1] = vsriq_n_u8(argb.val[1], src.g, 6);
 
     vst2q((uint8_t*)dst, argb);
 }
@@ -1368,7 +1368,7 @@ INLINE void aipl_mve_cnvt_4px_rgba8888_to_argb8888(uint32x4_t* dst,
                                                    uint32x4_t src)
 {
     uint32x4_t a = vshlq_n(src, 24);
-    *dst = vsriq(a, *dst, 8);
+    *dst = vsriq_n_u32(a, *dst, 8);
 }
 
 /**
@@ -1649,7 +1649,7 @@ INLINE void aipl_mve_cnvt_8px_rgba4444_to_argb4444(uint16x8_t* dst,
                                                    uint16x8_t src)
 {
     *dst = vshlq_n(src, 12);
-    *dst = vsriq(*dst, src, 4);
+    *dst = vsriq_n_u16(*dst, src, 4);
 }
 
 /**
@@ -1740,9 +1740,9 @@ INLINE void aipl_mve_str_8px_extended_rgba4444(uint16_t* dst,
                                                mve_pred16_t pred)
 {
     uint8x16_t rg = vreinterpretq_u8(src.r);
-    rg = vsriq(rg, vreinterpretq_u8(src.g), 4);
+    rg = vsriq_n_u8(rg, vreinterpretq_u8(src.g), 4);
     uint8x16_t ba = vreinterpretq_u8(src.b);
-    ba = vsriq(ba, vreinterpretq_u8(src.a), 4);
+    ba = vsriq_n_u8(ba, vreinterpretq_u8(src.a), 4);
     uint16x8_t pix = vreinterpretq_u16(vmovntq(ba, vreinterpretq_u16(rg)));
 
     vst1q_p(dst, pix, pred);
@@ -1760,8 +1760,8 @@ INLINE void aipl_mve_str_16px_rgbx4444(uint16_t* dst,
                                        aipl_mve_rgb_x16_t src,
                                        mve_pred16_t pred)
 {
-    uint8x16_t rg = vsriq(src.r, src.g, 4);
-    uint8x16_t ba = vsriq(src.b, vdupq_n_u8(0xff), 4);
+    uint8x16_t rg = vsriq_n_u8(src.r, src.g, 4);
+    uint8x16_t ba = vsriq_n_u8(src.b, vdupq_n_u8(0xff), 4);
 
     vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, ba, pred);
     vstrbq_scatter_offset_p((uint8_t*)dst + 1, AIPL_2_BYTE_OFFSETS_U8, rg, pred);
@@ -1779,8 +1779,8 @@ INLINE void aipl_mve_str_16px_rgba4444(uint16_t* dst,
                                        aipl_mve_argb_x16_t src,
                                        mve_pred16_t pred)
 {
-    uint8x16_t rg = vsriq(src.r, src.g, 4);
-    uint8x16_t ba = vsriq(src.b, src.a, 4);
+    uint8x16_t rg = vsriq_n_u8(src.r, src.g, 4);
+    uint8x16_t ba = vsriq_n_u8(src.b, src.a, 4);
 
     vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, ba, pred);
     vstrbq_scatter_offset_p((uint8_t*)dst + 1, AIPL_2_BYTE_OFFSETS_U8, rg, pred);
@@ -1796,7 +1796,7 @@ INLINE void aipl_mve_str_16px_rgba4444(uint16_t* dst,
 INLINE void aipl_mve_str_16px_rgbx4444_uncut(uint16_t* dst,
                                              aipl_mve_rgb_x16_t src)
 {
-    uint8x16x2_t rgba = { vsriq(src.b, vdupq_n_u8(0xff), 4), vsriq(src.r, src.g, 4) };
+    uint8x16x2_t rgba = { vsriq_n_u8(src.b, vdupq_n_u8(0xff), 4), vsriq_n_u8(src.r, src.g, 4) };
 
     vst2q((uint8_t*)dst, rgba);
 }
@@ -1811,7 +1811,7 @@ INLINE void aipl_mve_str_16px_rgbx4444_uncut(uint16_t* dst,
 INLINE void aipl_mve_str_16px_rgba4444_uncut(uint16_t* dst,
                                              aipl_mve_argb_x16_t src)
 {
-    uint8x16x2_t rgba = { vsriq(src.b, src.a, 4), vsriq(src.r, src.g, 4) };
+    uint8x16x2_t rgba = { vsriq_n_u8(src.b, src.a, 4), vsriq_n_u8(src.r, src.g, 4) };
 
     vst2q((uint8_t*)dst, rgba);
 }
@@ -2023,9 +2023,9 @@ INLINE void aipl_mve_str_16px_rgbx5551(uint16_t* dst,
                                        aipl_mve_rgb_x16_t src,
                                        mve_pred16_t pred)
 {
-    uint8x16_t upper = vsriq(src.r, src.g, 5);
+    uint8x16_t upper = vsriq_n_u8(src.r, src.g, 5);
     uint8x16_t lower = vshlq_n(src.g, 3);
-    lower = vsriq(lower, src.b, 2);
+    lower = vsriq_n_u8(lower, src.b, 2);
     lower = vorrq(lower, vdupq_n_u8(0x01));
 
     vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, lower, pred);
@@ -2044,10 +2044,10 @@ INLINE void aipl_mve_str_16px_rgba5551(uint16_t* dst,
                                        aipl_mve_argb_x16_t src,
                                        mve_pred16_t pred)
 {
-    uint8x16_t upper = vsriq(src.r, src.g, 5);
+    uint8x16_t upper = vsriq_n_u8(src.r, src.g, 5);
     uint8x16_t lower = vshlq_n(src.g, 3);
-    lower = vsriq(lower, src.b, 2);
-    lower = vsriq(lower, src.a, 7);
+    lower = vsriq_n_u8(lower, src.b, 2);
+    lower = vsriq_n_u8(lower, src.a, 7);
 
     vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, lower, pred);
     vstrbq_scatter_offset_p((uint8_t*)dst + 1, AIPL_2_BYTE_OFFSETS_U8, upper, pred);
@@ -2063,8 +2063,8 @@ INLINE void aipl_mve_str_16px_rgba5551(uint16_t* dst,
 INLINE void aipl_mve_str_16px_rgbx5551_uncut(uint16_t* dst,
                                              aipl_mve_rgb_x16_t src)
 {
-    uint8x16x2_t rgba = { vshlq_n(src.g, 3), vsriq(src.r, src.g, 5) };
-    rgba.val[0] = vsriq(rgba.val[0], src.b, 2);
+    uint8x16x2_t rgba = { vshlq_n(src.g, 3), vsriq_n_u8(src.r, src.g, 5) };
+    rgba.val[0] = vsriq_n_u8(rgba.val[0], src.b, 2);
     rgba.val[0] = vorrq(rgba.val[0], vdupq_n_u8(0x01));
 
     vst2q((uint8_t*)dst, rgba);
@@ -2080,9 +2080,9 @@ INLINE void aipl_mve_str_16px_rgbx5551_uncut(uint16_t* dst,
 INLINE void aipl_mve_str_16px_rgba5551_uncut(uint16_t* dst,
                                              aipl_mve_argb_x16_t src)
 {
-    uint8x16x2_t rgba = { vshlq_n(src.g, 3), vsriq(src.r, src.g, 5) };
-    rgba.val[0] = vsriq(rgba.val[0], src.b, 2);
-    rgba.val[0] = vsriq(rgba.val[0], src.a, 7);
+    uint8x16x2_t rgba = { vshlq_n(src.g, 3), vsriq_n_u8(src.r, src.g, 5) };
+    rgba.val[0] = vsriq_n_u8(rgba.val[0], src.b, 2);
+    rgba.val[0] = vsriq_n_u8(rgba.val[0], src.a, 7);
 
     vst2q((uint8_t*)dst, rgba);
 }
@@ -2250,9 +2250,9 @@ INLINE void aipl_mve_str_16px_rgb565(uint16_t* dst,
                                      aipl_mve_rgb_x16_t src,
                                      mve_pred16_t pred)
 {
-    uint8x16_t upper = vsriq(src.r, src.g, 5);
+    uint8x16_t upper = vsriq_n_u8(src.r, src.g, 5);
     uint8x16_t lower = vshlq_n(src.g, 3);
-    lower = vsriq(lower, src.b, 3);
+    lower = vsriq_n_u8(lower, src.b, 3);
 
     vstrbq_scatter_offset_p((uint8_t*)dst, AIPL_2_BYTE_OFFSETS_U8, lower, pred);
     vstrbq_scatter_offset_p((uint8_t*)dst + 1, AIPL_2_BYTE_OFFSETS_U8, upper, pred);
@@ -2268,8 +2268,8 @@ INLINE void aipl_mve_str_16px_rgb565(uint16_t* dst,
 INLINE void aipl_mve_str_16px_rgb565_uncut(uint16_t* dst,
                                            aipl_mve_rgb_x16_t src)
 {
-    uint8x16x2_t rgb = { vshlq_n(src.g, 3), vsriq(src.r, src.g, 5) };
-    rgb.val[0] = vsriq(rgb.val[0], src.b, 3);
+    uint8x16x2_t rgb = { vshlq_n(src.g, 3), vsriq_n_u8(src.r, src.g, 5) };
+    rgb.val[0] = vsriq_n_u8(rgb.val[0], src.b, 3);
 
     vst2q((uint8_t*)dst, rgb);
 }

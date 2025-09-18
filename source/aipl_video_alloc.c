@@ -20,6 +20,7 @@
 #include "aipl_config.h"
 
 #if !AIPL_CUSTOM_VIDEO_ALLOC
+#include <stdlib.h>
 #include "aipl_video_alloc.h"
 
 /*********************

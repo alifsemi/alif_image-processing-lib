@@ -36,13 +36,15 @@
 /**********************
  *  STATIC PROTOTYPES
  **********************/
-aipl_error_t aipl_lut_transform_24bit_helium(const void* input, void* output,
-                                             uint32_t pitch,
-                                             uint32_t width, uint32_t height,
-                                             uint8_t* lut,
-                                             uint8_t r_offset,
-                                             uint8_t g_offset,
-                                             uint8_t b_offset);
+static aipl_error_t aipl_lut_transform_24bit_helium(const void* input,
+                                                    void* output,
+                                                    uint32_t pitch,
+                                                    uint32_t width,
+                                                    uint32_t height,
+                                                    uint8_t* lut,
+                                                    uint8_t r_offset,
+                                                    uint8_t g_offset,
+                                                    uint8_t b_offset);
 
 /**********************
  *  STATIC VARIABLES
@@ -463,13 +465,15 @@ aipl_error_t aipl_lut_transform_rgb565_helium(const void* input, void* output,
 /**********************
  *   STATIC FUNCTIONS
  **********************/
-aipl_error_t aipl_lut_transform_24bit_helium(const void* input, void* output,
-                                             uint32_t pitch,
-                                             uint32_t width, uint32_t height,
-                                             uint8_t* lut,
-                                             uint8_t r_offset,
-                                             uint8_t g_offset,
-                                             uint8_t b_offset)
+static aipl_error_t aipl_lut_transform_24bit_helium(const void* input,
+                                                    void* output,
+                                                    uint32_t pitch,
+                                                    uint32_t width,
+                                                    uint32_t height,
+                                                    uint8_t* lut,
+                                                    uint8_t r_offset,
+                                                    uint8_t g_offset,
+                                                    uint8_t b_offset)
 {
     if (input == NULL || output == NULL || lut == NULL)
         return AIPL_ERR_NULL_POINTER;

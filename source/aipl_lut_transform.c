@@ -90,9 +90,6 @@ aipl_error_t aipl_lut_transform_rgb(const void* input, void* output,
         default:
             return AIPL_ERR_UNSUPPORTED_FORMAT;
     }
-
-    return AIPL_ERR_OK;
-
 }
 
 aipl_error_t aipl_lut_transform_rgb_img(const aipl_image_t* input,
