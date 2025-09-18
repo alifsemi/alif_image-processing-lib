@@ -38,7 +38,7 @@
  *  STATIC PROTOTYPES
  **********************/
 #if (AIPL_CONVERT_ALPHA8_I400 & TO_BGR888 | AIPL_CONVERT_ALPHA8_I400 & TO_RGB888)
-aipl_error_t aipl_color_convert_alpha8_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_alpha8_to_24bit_helium(const void* input,
                                                        void* output,
                                                        uint32_t pitch,
                                                        uint32_t width,
@@ -48,7 +48,7 @@ aipl_error_t aipl_color_convert_alpha8_to_24bit_helium(const void* input,
                                                        uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_ARGB8888 & TO_BGR888 | AIPL_CONVERT_ARGB8888 & TO_RGB888)
-aipl_error_t aipl_color_convert_argb8888_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb8888_to_24bit_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -58,7 +58,7 @@ aipl_error_t aipl_color_convert_argb8888_to_24bit_helium(const void* input,
                                                          uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_ARGB4444 & TO_BGR888 | AIPL_CONVERT_ARGB4444 & TO_RGB888)
-aipl_error_t aipl_color_convert_argb4444_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb4444_to_24bit_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -68,7 +68,7 @@ aipl_error_t aipl_color_convert_argb4444_to_24bit_helium(const void* input,
                                                          uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_ARGB1555 & TO_BGR888 | AIPL_CONVERT_ARGB1555 & TO_RGB888)
-aipl_error_t aipl_color_convert_argb1555_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb1555_to_24bit_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -78,7 +78,7 @@ aipl_error_t aipl_color_convert_argb1555_to_24bit_helium(const void* input,
                                                          uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_RGBA8888 & TO_BGR888 | AIPL_CONVERT_RGBA8888 & TO_RGB888)
-aipl_error_t aipl_color_convert_rgba8888_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba8888_to_24bit_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -88,7 +88,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_24bit_helium(const void* input,
                                                          uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_RGBA4444 & TO_BGR888 | AIPL_CONVERT_RGBA4444 & TO_RGB888)
-aipl_error_t aipl_color_convert_rgba4444_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba4444_to_24bit_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -98,7 +98,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_24bit_helium(const void* input,
                                                          uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_RGBA5551 & TO_BGR888 | AIPL_CONVERT_RGBA5551 & TO_RGB888)
-aipl_error_t aipl_color_convert_rgba5551_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba5551_to_24bit_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -108,7 +108,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_24bit_helium(const void* input,
                                                          uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_RGB565 & TO_BGR888 | AIPL_CONVERT_RGB565 & TO_RGB888)
-aipl_error_t aipl_color_convert_rgb565_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgb565_to_24bit_helium(const void* input,
                                                        void* output,
                                                        uint32_t pitch,
                                                        uint32_t width,
@@ -118,7 +118,7 @@ aipl_error_t aipl_color_convert_rgb565_to_24bit_helium(const void* input,
                                                        uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_RGB888 & TO_BGR888 | AIPL_CONVERT_BGR888 & TO_RGB888)
-aipl_error_t aipl_color_convert_24bit_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_24bit_helium(const void* input,
                                                       void* output,
                                                       uint32_t pitch,
                                                       uint32_t width,
@@ -131,7 +131,7 @@ aipl_error_t aipl_color_convert_24bit_to_24bit_helium(const void* input,
                                                       uint8_t b_out_offset);
 #endif
 #if (AIPL_CONVERT_RGB888 & TO_ALPHA8_I400 | AIPL_CONVERT_BGR888 & TO_ALPHA8_I400)
-aipl_error_t aipl_color_convert_24bit_to_alpha8_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_alpha8_helium(const void* input,
                                                        void* output,
                                                        uint32_t pitch,
                                                        uint32_t width,
@@ -141,7 +141,7 @@ aipl_error_t aipl_color_convert_24bit_to_alpha8_helium(const void* input,
                                                        uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_RGB888 & TO_ARGB8888 | AIPL_CONVERT_BGR888 & TO_ARGB8888)
-aipl_error_t aipl_color_convert_24bit_to_argb8888_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_argb8888_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -151,7 +151,7 @@ aipl_error_t aipl_color_convert_24bit_to_argb8888_helium(const void* input,
                                                          uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_RGB888 & TO_ARGB4444 | AIPL_CONVERT_BGR888 & TO_ARGB4444)
-aipl_error_t aipl_color_convert_24bit_to_argb4444_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_argb4444_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -161,7 +161,7 @@ aipl_error_t aipl_color_convert_24bit_to_argb4444_helium(const void* input,
                                                          uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_RGB888 & TO_ARGB1555 | AIPL_CONVERT_BGR888 & TO_ARGB1555)
-aipl_error_t aipl_color_convert_24bit_to_argb1555_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_argb1555_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -171,7 +171,7 @@ aipl_error_t aipl_color_convert_24bit_to_argb1555_helium(const void* input,
                                                          uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_RGB888 & TO_RGBA8888 | AIPL_CONVERT_BGR888 & TO_RGBA8888)
-aipl_error_t aipl_color_convert_24bit_to_rgba8888_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_rgba8888_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -181,7 +181,7 @@ aipl_error_t aipl_color_convert_24bit_to_rgba8888_helium(const void* input,
                                                          uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_RGB888 & TO_RGBA4444 | AIPL_CONVERT_BGR888 & TO_RGBA4444)
-aipl_error_t aipl_color_convert_24bit_to_rgba4444_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_rgba4444_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -191,7 +191,7 @@ aipl_error_t aipl_color_convert_24bit_to_rgba4444_helium(const void* input,
                                                          uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_RGB888 & TO_RGBA5551 | AIPL_CONVERT_BGR888 & TO_RGBA5551)
-aipl_error_t aipl_color_convert_24bit_to_rgba5551_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_rgba5551_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -201,7 +201,7 @@ aipl_error_t aipl_color_convert_24bit_to_rgba5551_helium(const void* input,
                                                          uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_RGB888 & TO_RGB565 | AIPL_CONVERT_BGR888 & TO_RGB565)
-aipl_error_t aipl_color_convert_24bit_to_rgb565_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_rgb565_helium(const void* input,
                                                        void* output,
                                                        uint32_t pitch,
                                                        uint32_t width,
@@ -212,7 +212,7 @@ aipl_error_t aipl_color_convert_24bit_to_rgb565_helium(const void* input,
 #endif
 #if (AIPL_CONVERT_RGB888 & TO_I422 | AIPL_CONVERT_BGR888 & TO_I422) \
     && defined (AIPL_HELIUM_ACCELERATION)
-aipl_error_t aipl_color_convert_24bit_to_i422_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_i422_helium(const void* input,
                                                      void* output,
                                                      uint32_t pitch,
                                                      uint32_t width,
@@ -223,7 +223,7 @@ aipl_error_t aipl_color_convert_24bit_to_i422_helium(const void* input,
 #endif
 #if (AIPL_CONVERT_RGB888 & TO_I444 | AIPL_CONVERT_BGR888 & TO_I444) \
     && defined (AIPL_HELIUM_ACCELERATION)
-aipl_error_t aipl_color_convert_24bit_to_i444_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_i444_helium(const void* input,
                                                      void* output,
                                                      uint32_t pitch,
                                                      uint32_t width,
@@ -233,7 +233,7 @@ aipl_error_t aipl_color_convert_24bit_to_i444_helium(const void* input,
                                                      uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_ARGB8888 & TO_YV12 | AIPL_CONVERT_ARGB8888 & TO_I420)
-aipl_error_t aipl_color_convert_argb8888_to_yuv_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb8888_to_yuv_planar_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -242,7 +242,7 @@ aipl_error_t aipl_color_convert_argb8888_to_yuv_planar_helium(const void* input,
                                                               uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_ARGB8888 & TO_NV12 | AIPL_CONVERT_ARGB8888 & TO_NV21)
-aipl_error_t aipl_color_convert_argb8888_to_yuv_semi_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb8888_to_yuv_semi_planar_helium(const void* input,
                                                                    uint32_t pitch,
                                                                    uint32_t width,
                                                                    uint32_t height,
@@ -251,7 +251,7 @@ aipl_error_t aipl_color_convert_argb8888_to_yuv_semi_planar_helium(const void* i
                                                                    uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_ARGB8888 & TO_YUY2 | AIPL_CONVERT_ARGB8888 & TO_UYVY)
-aipl_error_t aipl_color_convert_argb8888_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb8888_to_yuv_packed_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -260,7 +260,7 @@ aipl_error_t aipl_color_convert_argb8888_to_yuv_packed_helium(const void* input,
                                                               uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_ARGB4444 & TO_YV12 | AIPL_CONVERT_ARGB4444 & TO_I420)
-aipl_error_t aipl_color_convert_argb4444_to_yuv_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb4444_to_yuv_planar_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -269,7 +269,7 @@ aipl_error_t aipl_color_convert_argb4444_to_yuv_planar_helium(const void* input,
                                                               uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_ARGB4444 & TO_NV12 | AIPL_CONVERT_ARGB4444 & TO_NV21)
-aipl_error_t aipl_color_convert_argb4444_to_yuv_semi_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb4444_to_yuv_semi_planar_helium(const void* input,
                                                                    uint32_t pitch,
                                                                    uint32_t width,
                                                                    uint32_t height,
@@ -278,7 +278,7 @@ aipl_error_t aipl_color_convert_argb4444_to_yuv_semi_planar_helium(const void* i
                                                                    uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_ARGB4444 & TO_YUY2 | AIPL_CONVERT_ARGB4444 & TO_UYVY)
-aipl_error_t aipl_color_convert_argb4444_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb4444_to_yuv_packed_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -287,7 +287,7 @@ aipl_error_t aipl_color_convert_argb4444_to_yuv_packed_helium(const void* input,
                                                               uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_ARGB1555 & TO_YV12 | AIPL_CONVERT_ARGB1555 & TO_I420)
-aipl_error_t aipl_color_convert_argb1555_to_yuv_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb1555_to_yuv_planar_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -296,7 +296,7 @@ aipl_error_t aipl_color_convert_argb1555_to_yuv_planar_helium(const void* input,
                                                               uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_ARGB1555 & TO_NV12 | AIPL_CONVERT_ARGB1555 & TO_NV21)
-aipl_error_t aipl_color_convert_argb1555_to_yuv_semi_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb1555_to_yuv_semi_planar_helium(const void* input,
                                                                    uint32_t pitch,
                                                                    uint32_t width,
                                                                    uint32_t height,
@@ -305,7 +305,7 @@ aipl_error_t aipl_color_convert_argb1555_to_yuv_semi_planar_helium(const void* i
                                                                    uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_ARGB1555 & TO_YUY2 | AIPL_CONVERT_ARGB1555 & TO_UYVY)
-aipl_error_t aipl_color_convert_argb1555_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb1555_to_yuv_packed_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -314,7 +314,7 @@ aipl_error_t aipl_color_convert_argb1555_to_yuv_packed_helium(const void* input,
                                                               uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_RGBA8888 & TO_YV12 | AIPL_CONVERT_RGBA8888 & TO_I420)
-aipl_error_t aipl_color_convert_rgba8888_to_yuv_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba8888_to_yuv_planar_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -323,7 +323,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_yuv_planar_helium(const void* input,
                                                               uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_RGBA8888 & TO_NV12 | AIPL_CONVERT_RGBA8888 & TO_NV21)
-aipl_error_t aipl_color_convert_rgba8888_to_yuv_semi_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba8888_to_yuv_semi_planar_helium(const void* input,
                                                                    uint32_t pitch,
                                                                    uint32_t width,
                                                                    uint32_t height,
@@ -332,7 +332,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_yuv_semi_planar_helium(const void* i
                                                                    uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_RGBA8888 & TO_YUY2 | AIPL_CONVERT_RGBA8888 & TO_UYVY)
-aipl_error_t aipl_color_convert_rgba8888_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba8888_to_yuv_packed_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -341,7 +341,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_yuv_packed_helium(const void* input,
                                                               uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_RGBA4444 & TO_YV12 | AIPL_CONVERT_RGBA4444 & TO_I420)
-aipl_error_t aipl_color_convert_rgba4444_to_yuv_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba4444_to_yuv_planar_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -350,7 +350,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_yuv_planar_helium(const void* input,
                                                               uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_RGBA4444 & TO_NV12 | AIPL_CONVERT_RGBA4444 & TO_NV21)
-aipl_error_t aipl_color_convert_rgba4444_to_yuv_semi_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba4444_to_yuv_semi_planar_helium(const void* input,
                                                                    uint32_t pitch,
                                                                    uint32_t width,
                                                                    uint32_t height,
@@ -359,7 +359,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_yuv_semi_planar_helium(const void* i
                                                                    uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_RGBA4444 & TO_YUY2 | AIPL_CONVERT_RGBA4444 & TO_UYVY)
-aipl_error_t aipl_color_convert_rgba4444_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba4444_to_yuv_packed_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -368,7 +368,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_yuv_packed_helium(const void* input,
                                                               uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_RGBA5551 & TO_YV12 | AIPL_CONVERT_RGBA5551 & TO_I420)
-aipl_error_t aipl_color_convert_rgba5551_to_yuv_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba5551_to_yuv_planar_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -377,7 +377,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_yuv_planar_helium(const void* input,
                                                               uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_RGBA5551 & TO_NV12 | AIPL_CONVERT_RGBA5551 & TO_NV21)
-aipl_error_t aipl_color_convert_rgba5551_to_yuv_semi_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba5551_to_yuv_semi_planar_helium(const void* input,
                                                                    uint32_t pitch,
                                                                    uint32_t width,
                                                                    uint32_t height,
@@ -386,7 +386,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_yuv_semi_planar_helium(const void* i
                                                                    uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_RGBA5551 & TO_YUY2 | AIPL_CONVERT_RGBA5551 & TO_UYVY)
-aipl_error_t aipl_color_convert_rgba5551_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba5551_to_yuv_packed_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -396,7 +396,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_yuv_packed_helium(const void* input,
 #endif
 #if (AIPL_CONVERT_BGR888 & TO_YV12 | AIPL_CONVERT_BGR888 & TO_I420\
      | AIPL_CONVERT_RGB888 & TO_YV12 | AIPL_CONVERT_RGB888 & TO_I420)
-aipl_error_t aipl_color_convert_24bit_to_yuv_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_yuv_planar_helium(const void* input,
                                                            uint32_t pitch,
                                                            uint32_t width,
                                                            uint32_t height,
@@ -409,7 +409,7 @@ aipl_error_t aipl_color_convert_24bit_to_yuv_planar_helium(const void* input,
 #endif
 #if (AIPL_CONVERT_BGR888 & TO_NV12 | AIPL_CONVERT_BGR888 & TO_NV21\
      | AIPL_CONVERT_RGB888 & TO_NV12 | AIPL_CONVERT_RGB888 & TO_NV21)
-aipl_error_t aipl_color_convert_24bit_to_yuv_semi_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_yuv_semi_planar_helium(const void* input,
                                                                 uint32_t pitch,
                                                                 uint32_t width,
                                                                 uint32_t height,
@@ -423,7 +423,7 @@ aipl_error_t aipl_color_convert_24bit_to_yuv_semi_planar_helium(const void* inpu
 #if (AIPL_CONVERT_BGR888 & TO_YUY2 | AIPL_CONVERT_BGR888 & TO_UYVY\
      | AIPL_CONVERT_RGB888 & TO_YUY2 | AIPL_CONVERT_RGB888 & TO_UYVY)\
     && defined(AIPL_HELIUM_ACCELERATION)
-aipl_error_t aipl_color_convert_24bit_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_yuv_packed_helium(const void* input,
                                                            uint32_t pitch,
                                                            uint32_t width,
                                                            uint32_t height,
@@ -435,7 +435,7 @@ aipl_error_t aipl_color_convert_24bit_to_yuv_packed_helium(const void* input,
                                                            uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_RGB888 & TO_YUY2 | AIPL_CONVERT_RGB888 & TO_UYVY)
-aipl_error_t aipl_color_convert_rgb888_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgb888_to_yuv_packed_helium(const void* input,
                                                             uint32_t pitch,
                                                             uint32_t width,
                                                             uint32_t height,
@@ -444,7 +444,7 @@ aipl_error_t aipl_color_convert_rgb888_to_yuv_packed_helium(const void* input,
                                                             uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_BGR888 & TO_YUY2 | AIPL_CONVERT_BGR888 & TO_UYVY)
-aipl_error_t aipl_color_convert_bgr888_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_bgr888_to_yuv_packed_helium(const void* input,
                                                             uint32_t pitch,
                                                             uint32_t width,
                                                             uint32_t height,
@@ -453,7 +453,7 @@ aipl_error_t aipl_color_convert_bgr888_to_yuv_packed_helium(const void* input,
                                                             uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_I422 & TO_BGR888 | AIPL_CONVERT_I422 & TO_RGB888)
-aipl_error_t aipl_color_convert_i422_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_i422_to_24bit_helium(const void* input,
                                                      void* output,
                                                      uint32_t pitch,
                                                      uint32_t width,
@@ -463,7 +463,7 @@ aipl_error_t aipl_color_convert_i422_to_24bit_helium(const void* input,
                                                      uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_I444 & TO_BGR888 | AIPL_CONVERT_I444 & TO_RGB888)
-aipl_error_t aipl_color_convert_i444_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_i444_to_24bit_helium(const void* input,
                                                      void* output,
                                                      uint32_t pitch,
                                                      uint32_t width,
@@ -473,7 +473,7 @@ aipl_error_t aipl_color_convert_i444_to_24bit_helium(const void* input,
                                                      uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_RGB565 & TO_YV12 | AIPL_CONVERT_RGB565 & TO_I420)
-aipl_error_t aipl_color_convert_rgb565_to_yuv_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgb565_to_yuv_planar_helium(const void* input,
                                                             uint32_t pitch,
                                                             uint32_t width,
                                                             uint32_t height,
@@ -482,7 +482,7 @@ aipl_error_t aipl_color_convert_rgb565_to_yuv_planar_helium(const void* input,
                                                             uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_RGB565 & TO_NV12 | AIPL_CONVERT_RGB565 & TO_NV21)
-aipl_error_t aipl_color_convert_rgb565_to_yuv_semi_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgb565_to_yuv_semi_planar_helium(const void* input,
                                                                  uint32_t pitch,
                                                                  uint32_t width,
                                                                  uint32_t height,
@@ -491,7 +491,7 @@ aipl_error_t aipl_color_convert_rgb565_to_yuv_semi_planar_helium(const void* inp
                                                                  uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_RGB565 & TO_YUY2 | AIPL_CONVERT_RGB565 & TO_UYVY)
-aipl_error_t aipl_color_convert_rgb565_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgb565_to_yuv_packed_helium(const void* input,
                                                             uint32_t pitch,
                                                             uint32_t width,
                                                             uint32_t height,
@@ -500,14 +500,14 @@ aipl_error_t aipl_color_convert_rgb565_to_yuv_packed_helium(const void* input,
                                                             uint8_t* v_ptr);
 #endif
 #if (AIPL_CONVERT_YUY2 & TO_ALPHA8_I400 | AIPL_CONVERT_UYVY & TO_ALPHA8_I400)
-aipl_error_t aipl_color_convert_yuv_packed_to_alpha8_helium(const void* input,
+static aipl_error_t aipl_color_convert_yuv_packed_to_alpha8_helium(const void* input,
                                                             void* output,
                                                             uint32_t pitch,
                                                             uint32_t width,
                                                             uint32_t height);
 #endif
 #if (AIPL_CONVERT_YV12 & TO_ARGB8888 | AIPL_CONVERT_I420 & TO_ARGB8888)
-aipl_error_t aipl_color_convert_yuv_planar_to_argb8888_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_planar_to_argb8888_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -516,7 +516,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_argb8888_helium(const uint8_t* y_p
                                                               uint32_t height);
 #endif
 #if (AIPL_CONVERT_NV12 & TO_ARGB8888 | AIPL_CONVERT_NV21 & TO_ARGB8888)
-aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb8888_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb8888_helium(const uint8_t* y_ptr,
                                                                    const uint8_t* u_ptr,
                                                                    const uint8_t* v_ptr,
                                                                    void* output,
@@ -525,7 +525,7 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb8888_helium(const uint8_t
                                                                    uint32_t height);
 #endif
 #if (AIPL_CONVERT_YUY2 & TO_ARGB8888 | AIPL_CONVERT_UYVY & TO_ARGB8888)
-aipl_error_t aipl_color_convert_yuv_packed_to_argb8888_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_packed_to_argb8888_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -534,7 +534,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_argb8888_helium(const uint8_t* y_p
                                                               uint32_t height);
 #endif
 #if (AIPL_CONVERT_YV12 & TO_ARGB4444 | AIPL_CONVERT_I420 & TO_ARGB4444)
-aipl_error_t aipl_color_convert_yuv_planar_to_argb4444_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_planar_to_argb4444_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -543,7 +543,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_argb4444_helium(const uint8_t* y_p
                                                               uint32_t height);
 #endif
 #if (AIPL_CONVERT_NV12 & TO_ARGB4444 | AIPL_CONVERT_NV21 & TO_ARGB4444)
-aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb4444_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb4444_helium(const uint8_t* y_ptr,
                                                                    const uint8_t* u_ptr,
                                                                    const uint8_t* v_ptr,
                                                                    void* output,
@@ -552,7 +552,7 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb4444_helium(const uint8_t
                                                                    uint32_t height);
 #endif
 #if (AIPL_CONVERT_YUY2 & TO_ARGB4444 | AIPL_CONVERT_UYVY & TO_ARGB4444)
-aipl_error_t aipl_color_convert_yuv_packed_to_argb4444_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_packed_to_argb4444_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -561,7 +561,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_argb4444_helium(const uint8_t* y_p
                                                               uint32_t height);
 #endif
 #if (AIPL_CONVERT_YV12 & TO_ARGB1555 | AIPL_CONVERT_I420 & TO_ARGB1555)
-aipl_error_t aipl_color_convert_yuv_planar_to_argb1555_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_planar_to_argb1555_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -570,7 +570,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_argb1555_helium(const uint8_t* y_p
                                                               uint32_t height);
 #endif
 #if (AIPL_CONVERT_NV12 & TO_ARGB1555 | AIPL_CONVERT_NV21 & TO_ARGB1555)
-aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb1555_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb1555_helium(const uint8_t* y_ptr,
                                                                    const uint8_t* u_ptr,
                                                                    const uint8_t* v_ptr,
                                                                    void* output,
@@ -579,7 +579,7 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb1555_helium(const uint8_t
                                                                    uint32_t height);
 #endif
 #if (AIPL_CONVERT_YUY2 & TO_ARGB1555 | AIPL_CONVERT_UYVY & TO_ARGB1555)
-aipl_error_t aipl_color_convert_yuv_packed_to_argb1555_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_packed_to_argb1555_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -588,7 +588,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_argb1555_helium(const uint8_t* y_p
                                                               uint32_t height);
 #endif
 #if (AIPL_CONVERT_YV12 & TO_RGBA8888 | AIPL_CONVERT_I420 & TO_RGBA8888)
-aipl_error_t aipl_color_convert_yuv_planar_to_rgba8888_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_planar_to_rgba8888_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -597,7 +597,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_rgba8888_helium(const uint8_t* y_p
                                                               uint32_t height);
 #endif
 #if (AIPL_CONVERT_NV12 & TO_RGBA8888 | AIPL_CONVERT_NV21 & TO_RGBA8888)
-aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba8888_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba8888_helium(const uint8_t* y_ptr,
                                                                    const uint8_t* u_ptr,
                                                                    const uint8_t* v_ptr,
                                                                    void* output,
@@ -606,7 +606,7 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba8888_helium(const uint8_t
                                                                    uint32_t height);
 #endif
 #if (AIPL_CONVERT_YUY2 & TO_RGBA8888 | AIPL_CONVERT_UYVY & TO_RGBA8888)
-aipl_error_t aipl_color_convert_yuv_packed_to_rgba8888_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_packed_to_rgba8888_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -615,7 +615,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_rgba8888_helium(const uint8_t* y_p
                                                               uint32_t height);
 #endif
 #if (AIPL_CONVERT_YV12 & TO_RGBA4444 | AIPL_CONVERT_I420 & TO_RGBA4444)
-aipl_error_t aipl_color_convert_yuv_planar_to_rgba4444_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_planar_to_rgba4444_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -624,7 +624,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_rgba4444_helium(const uint8_t* y_p
                                                               uint32_t height);
 #endif
 #if (AIPL_CONVERT_NV12 & TO_RGBA4444 | AIPL_CONVERT_NV21 & TO_RGBA4444)
-aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba4444_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba4444_helium(const uint8_t* y_ptr,
                                                                    const uint8_t* u_ptr,
                                                                    const uint8_t* v_ptr,
                                                                    void* output,
@@ -633,7 +633,7 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba4444_helium(const uint8_t
                                                                    uint32_t height);
 #endif
 #if (AIPL_CONVERT_YUY2 & TO_RGBA4444 | AIPL_CONVERT_UYVY & TO_RGBA4444)
-aipl_error_t aipl_color_convert_yuv_packed_to_rgba4444_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_packed_to_rgba4444_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -642,7 +642,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_rgba4444_helium(const uint8_t* y_p
                                                               uint32_t height);
 #endif
 #if (AIPL_CONVERT_YV12 & TO_RGBA5551 | AIPL_CONVERT_I420 & TO_RGBA5551)
-aipl_error_t aipl_color_convert_yuv_planar_to_rgba5551_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_planar_to_rgba5551_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -651,7 +651,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_rgba5551_helium(const uint8_t* y_p
                                                               uint32_t height);
 #endif
 #if (AIPL_CONVERT_NV12 & TO_RGBA5551 | AIPL_CONVERT_NV21 & TO_RGBA5551)
-aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba5551_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba5551_helium(const uint8_t* y_ptr,
                                                                    const uint8_t* u_ptr,
                                                                    const uint8_t* v_ptr,
                                                                    void* output,
@@ -660,7 +660,7 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba5551_helium(const uint8_t
                                                                    uint32_t height);
 #endif
 #if (AIPL_CONVERT_YUY2 & TO_RGBA5551 | AIPL_CONVERT_UYVY & TO_RGBA5551)
-aipl_error_t aipl_color_convert_yuv_packed_to_rgba5551_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_packed_to_rgba5551_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -670,7 +670,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_rgba5551_helium(const uint8_t* y_p
 #endif
 #if (AIPL_CONVERT_YV12 & TO_BGR888 | AIPL_CONVERT_I420 & TO_BGR888\
      | AIPL_CONVERT_YV12 & TO_RGB888 | AIPL_CONVERT_I420 & TO_RGB888)
-aipl_error_t aipl_color_convert_yuv_planar_to_24bit_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_planar_to_24bit_helium(const uint8_t* y_ptr,
                                                            const uint8_t* u_ptr,
                                                            const uint8_t* v_ptr,
                                                            void* output,
@@ -683,7 +683,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_24bit_helium(const uint8_t* y_ptr,
 #endif
 #if (AIPL_CONVERT_NV12 & TO_BGR888 | AIPL_CONVERT_NV21 & TO_BGR888\
      | AIPL_CONVERT_NV12 & TO_RGB888 | AIPL_CONVERT_NV21 & TO_RGB888)
-aipl_error_t aipl_color_convert_yuv_semi_planar_to_24bit_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_semi_planar_to_24bit_helium(const uint8_t* y_ptr,
                                                                 const uint8_t* u_ptr,
                                                                 const uint8_t* v_ptr,
                                                                 void* output,
@@ -696,7 +696,7 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_24bit_helium(const uint8_t* y
 #endif
 #if (AIPL_CONVERT_YUY2 & TO_BGR888 | AIPL_CONVERT_UYVY & TO_BGR888\
      | AIPL_CONVERT_YUY2 & TO_RGB888 | AIPL_CONVERT_UYVY & TO_RGB888)
-aipl_error_t aipl_color_convert_yuv_packed_to_24bit_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_packed_to_24bit_helium(const uint8_t* y_ptr,
                                                            const uint8_t* u_ptr,
                                                            const uint8_t* v_ptr,
                                                            void* output,
@@ -708,7 +708,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_24bit_helium(const uint8_t* y_ptr,
                                                            uint8_t b_offset);
 #endif
 #if (AIPL_CONVERT_YV12 & TO_RGB565 | AIPL_CONVERT_I420 & TO_RGB565)
-aipl_error_t aipl_color_convert_yuv_planar_to_rgb565_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_planar_to_rgb565_helium(const uint8_t* y_ptr,
                                                             const uint8_t* u_ptr,
                                                             const uint8_t* v_ptr,
                                                             void* output,
@@ -717,7 +717,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_rgb565_helium(const uint8_t* y_ptr
                                                             uint32_t height);
 #endif
 #if (AIPL_CONVERT_NV12 & TO_RGB565 | AIPL_CONVERT_NV21 & TO_RGB565)
-aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgb565_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgb565_helium(const uint8_t* y_ptr,
                                                                  const uint8_t* u_ptr,
                                                                  const uint8_t* v_ptr,
                                                                  void* output,
@@ -726,7 +726,7 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgb565_helium(const uint8_t* 
                                                                  uint32_t height);
 #endif
 #if (AIPL_CONVERT_YUY2 & TO_RGB565 | AIPL_CONVERT_UYVY & TO_RGB565)
-aipl_error_t aipl_color_convert_yuv_packed_to_rgb565_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_packed_to_rgb565_helium(const uint8_t* y_ptr,
                                                             const uint8_t* u_ptr,
                                                             const uint8_t* v_ptr,
                                                             void* output,
@@ -735,7 +735,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_rgb565_helium(const uint8_t* y_ptr
                                                             uint32_t height);
 #endif
 #if (AIPL_CONVERT_YV12 & (TO_NV12 | TO_NV21) | AIPL_CONVERT_I420 & (TO_NV12 | TO_NV21))
-aipl_error_t aipl_color_convert_yuv_planar_to_semi_helium(const uint8_t* y_src,
+static aipl_error_t aipl_color_convert_yuv_planar_to_semi_helium(const uint8_t* y_src,
                                                           const uint8_t* u_src,
                                                           const uint8_t* v_src,
                                                           uint8_t* y_dst,
@@ -746,7 +746,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_semi_helium(const uint8_t* y_src,
                                                           uint32_t height);
 #endif
 #if (AIPL_CONVERT_NV12 & (TO_YV12 | TO_I420) | AIPL_CONVERT_NV21 & (TO_YV12 | TO_I420))
-aipl_error_t aipl_color_convert_yuv_semi_to_planar_helium(const uint8_t* y_src,
+static aipl_error_t aipl_color_convert_yuv_semi_to_planar_helium(const uint8_t* y_src,
                                                           const uint8_t* u_src,
                                                           const uint8_t* v_src,
                                                           uint8_t* y_dst,
@@ -757,7 +757,7 @@ aipl_error_t aipl_color_convert_yuv_semi_to_planar_helium(const uint8_t* y_src,
                                                           uint32_t height);
 #endif
 #if (AIPL_CONVERT_YUY2 & (TO_YV12 | TO_I420) | AIPL_CONVERT_UYVY & (TO_YV12 | TO_I420))
-aipl_error_t aipl_color_convert_yuv_packed_to_planar_helium(const uint8_t* y_src,
+static aipl_error_t aipl_color_convert_yuv_packed_to_planar_helium(const uint8_t* y_src,
                                                             const uint8_t* u_src,
                                                             const uint8_t* v_src,
                                                             uint8_t* y_dst,
@@ -768,7 +768,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_planar_helium(const uint8_t* y_src
                                                             uint32_t height);
 #endif
 #if (AIPL_CONVERT_YUY2 & (TO_NV12 | TO_NV21) | AIPL_CONVERT_UYVY & (TO_NV12 | TO_NV21))
-aipl_error_t aipl_color_convert_yuv_packed_to_semi_helium(const uint8_t* y_src,
+static aipl_error_t aipl_color_convert_yuv_packed_to_semi_helium(const uint8_t* y_src,
                                                           const uint8_t* u_src,
                                                           const uint8_t* v_src,
                                                           uint8_t* y_dst,
@@ -779,7 +779,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_semi_helium(const uint8_t* y_src,
                                                           uint32_t height);
 #endif
 #if (AIPL_CONVERT_ALPHA8_I400 & (TO_YUY2 | TO_UYVY))
-aipl_error_t aipl_color_convert_alpha8_to_yuv_packed_helium(const uint8_t* input,
+static aipl_error_t aipl_color_convert_alpha8_to_yuv_packed_helium(const uint8_t* input,
                                                             uint8_t* y_dst,
                                                             uint8_t* u_dst,
                                                             uint8_t* v_dst,
@@ -10445,7 +10445,7 @@ aipl_error_t aipl_color_convert_i400_to_uyvy_helium(const void* input,
  *   STATIC FUNCTIONS
  **********************/
 #if (AIPL_CONVERT_ALPHA8_I400 & TO_BGR888 | AIPL_CONVERT_ALPHA8_I400 & TO_RGB888)
-aipl_error_t aipl_color_convert_alpha8_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_alpha8_to_24bit_helium(const void* input,
                                                        void* output,
                                                        uint32_t pitch,
                                                        uint32_t width,
@@ -10489,7 +10489,7 @@ aipl_error_t aipl_color_convert_alpha8_to_24bit_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_ARGB8888 & TO_BGR888 | AIPL_CONVERT_ARGB8888 & TO_RGB888)
-aipl_error_t aipl_color_convert_argb8888_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb8888_to_24bit_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -10539,7 +10539,7 @@ aipl_error_t aipl_color_convert_argb8888_to_24bit_helium(const void* input,
 }
 #endif
 #if (AIPL_CONVERT_ARGB4444 & TO_BGR888 | AIPL_CONVERT_ARGB4444 & TO_RGB888)
-aipl_error_t aipl_color_convert_argb4444_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb4444_to_24bit_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -10589,7 +10589,7 @@ aipl_error_t aipl_color_convert_argb4444_to_24bit_helium(const void* input,
 }
 #endif
 #if (AIPL_CONVERT_ARGB1555 & TO_BGR888 | AIPL_CONVERT_ARGB1555 & TO_RGB888)
-aipl_error_t aipl_color_convert_argb1555_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb1555_to_24bit_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -10639,7 +10639,7 @@ aipl_error_t aipl_color_convert_argb1555_to_24bit_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGBA8888 & TO_BGR888 | AIPL_CONVERT_RGBA8888 & TO_RGB888)
-aipl_error_t aipl_color_convert_rgba8888_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba8888_to_24bit_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -10690,7 +10690,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_24bit_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGBA4444 & TO_BGR888 | AIPL_CONVERT_RGBA4444 & TO_RGB888)
-aipl_error_t aipl_color_convert_rgba4444_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba4444_to_24bit_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -10741,7 +10741,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_24bit_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGBA5551 & TO_BGR888 | AIPL_CONVERT_RGBA5551 & TO_RGB888)
-aipl_error_t aipl_color_convert_rgba5551_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba5551_to_24bit_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -10792,7 +10792,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_24bit_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGB565 & TO_BGR888 | AIPL_CONVERT_RGB565 & TO_RGB888)
-aipl_error_t aipl_color_convert_rgb565_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgb565_to_24bit_helium(const void* input,
                                                        void* output,
                                                        uint32_t pitch,
                                                        uint32_t width,
@@ -10843,7 +10843,7 @@ aipl_error_t aipl_color_convert_rgb565_to_24bit_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGB888 & TO_BGR888 | AIPL_CONVERT_BGR888 & TO_RGB888)
-aipl_error_t aipl_color_convert_24bit_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_24bit_helium(const void* input,
                                                       void* output,
                                                       uint32_t pitch,
                                                       uint32_t width,
@@ -10889,7 +10889,7 @@ aipl_error_t aipl_color_convert_24bit_to_24bit_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGB888 & TO_ALPHA8_I400 | AIPL_CONVERT_BGR888 & TO_ALPHA8_I400)
-aipl_error_t aipl_color_convert_24bit_to_alpha8_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_alpha8_helium(const void* input,
                                                        void* output,
                                                        uint32_t pitch,
                                                        uint32_t width,
@@ -10932,7 +10932,7 @@ aipl_error_t aipl_color_convert_24bit_to_alpha8_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGB888 & TO_ARGB8888 | AIPL_CONVERT_BGR888 & TO_ARGB8888)
-aipl_error_t aipl_color_convert_24bit_to_argb8888_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_argb8888_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -10982,7 +10982,7 @@ aipl_error_t aipl_color_convert_24bit_to_argb8888_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGB888 & TO_ARGB4444 | AIPL_CONVERT_BGR888 & TO_ARGB4444)
-aipl_error_t aipl_color_convert_24bit_to_argb4444_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_argb4444_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -11032,7 +11032,7 @@ aipl_error_t aipl_color_convert_24bit_to_argb4444_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGB888 & TO_ARGB1555 | AIPL_CONVERT_BGR888 & TO_ARGB1555)
-aipl_error_t aipl_color_convert_24bit_to_argb1555_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_argb1555_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -11083,7 +11083,7 @@ aipl_error_t aipl_color_convert_24bit_to_argb1555_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGB888 & TO_RGBA8888 | AIPL_CONVERT_BGR888 & TO_RGBA8888)
-aipl_error_t aipl_color_convert_24bit_to_rgba8888_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_rgba8888_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -11133,7 +11133,7 @@ aipl_error_t aipl_color_convert_24bit_to_rgba8888_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGB888 & TO_RGBA4444 | AIPL_CONVERT_BGR888 & TO_RGBA4444)
-aipl_error_t aipl_color_convert_24bit_to_rgba4444_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_rgba4444_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -11183,7 +11183,7 @@ aipl_error_t aipl_color_convert_24bit_to_rgba4444_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGB888 & TO_RGBA5551 | AIPL_CONVERT_BGR888 & TO_RGBA5551)
-aipl_error_t aipl_color_convert_24bit_to_rgba5551_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_rgba5551_helium(const void* input,
                                                          void* output,
                                                          uint32_t pitch,
                                                          uint32_t width,
@@ -11233,7 +11233,7 @@ aipl_error_t aipl_color_convert_24bit_to_rgba5551_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGB888 & TO_RGB565 | AIPL_CONVERT_BGR888 & TO_RGB565)
-aipl_error_t aipl_color_convert_24bit_to_rgb565_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_rgb565_helium(const void* input,
                                                        void* output,
                                                        uint32_t pitch,
                                                        uint32_t width,
@@ -11284,7 +11284,7 @@ aipl_error_t aipl_color_convert_24bit_to_rgb565_helium(const void* input,
 
 #if (AIPL_CONVERT_RGB888 & TO_I422 | AIPL_CONVERT_BGR888 & TO_I422) \
     && defined (AIPL_HELIUM_ACCELERATION)
-aipl_error_t aipl_color_convert_24bit_to_i422_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_i422_helium(const void* input,
                                                      void* output,
                                                      uint32_t pitch,
                                                      uint32_t width,
@@ -11355,7 +11355,7 @@ aipl_error_t aipl_color_convert_24bit_to_i422_helium(const void* input,
 
 #if (AIPL_CONVERT_RGB888 & TO_I444 | AIPL_CONVERT_BGR888 & TO_I444) \
     && defined(AIPL_HELIUM_ACCELERATION)
-aipl_error_t aipl_color_convert_24bit_to_i444_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_i444_helium(const void* input,
                                                      void* output,
                                                      uint32_t pitch,
                                                      uint32_t width,
@@ -11415,7 +11415,7 @@ aipl_error_t aipl_color_convert_24bit_to_i444_helium(const void* input,
 
 
 #if (AIPL_CONVERT_ARGB8888 & TO_YV12 | AIPL_CONVERT_ARGB8888 & TO_I420)
-aipl_error_t aipl_color_convert_argb8888_to_yuv_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb8888_to_yuv_planar_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -11495,7 +11495,7 @@ aipl_error_t aipl_color_convert_argb8888_to_yuv_planar_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_ARGB8888 & TO_NV12 | AIPL_CONVERT_ARGB8888 & TO_NV21)
-aipl_error_t aipl_color_convert_argb8888_to_yuv_semi_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb8888_to_yuv_semi_planar_helium(const void* input,
                                                                    uint32_t pitch,
                                                                    uint32_t width,
                                                                    uint32_t height,
@@ -11575,7 +11575,7 @@ aipl_error_t aipl_color_convert_argb8888_to_yuv_semi_planar_helium(const void* i
 #endif
 
 #if (AIPL_CONVERT_ARGB8888 & TO_YUY2 | AIPL_CONVERT_ARGB8888 & TO_UYVY)
-aipl_error_t aipl_color_convert_argb8888_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb8888_to_yuv_packed_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -11652,7 +11652,7 @@ aipl_error_t aipl_color_convert_argb8888_to_yuv_packed_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_ARGB4444 & TO_YV12 | AIPL_CONVERT_ARGB4444 & TO_I420)
-aipl_error_t aipl_color_convert_argb4444_to_yuv_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb4444_to_yuv_planar_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -11718,7 +11718,7 @@ aipl_error_t aipl_color_convert_argb4444_to_yuv_planar_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_ARGB4444 & TO_NV12 | AIPL_CONVERT_ARGB4444 & TO_NV21)
-aipl_error_t aipl_color_convert_argb4444_to_yuv_semi_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb4444_to_yuv_semi_planar_helium(const void* input,
                                                                    uint32_t pitch,
                                                                    uint32_t width,
                                                                    uint32_t height,
@@ -11784,7 +11784,7 @@ aipl_error_t aipl_color_convert_argb4444_to_yuv_semi_planar_helium(const void* i
 #endif
 
 #if (AIPL_CONVERT_ARGB4444 & TO_YUY2 | AIPL_CONVERT_ARGB4444 & TO_UYVY)
-aipl_error_t aipl_color_convert_argb4444_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb4444_to_yuv_packed_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -11847,7 +11847,7 @@ aipl_error_t aipl_color_convert_argb4444_to_yuv_packed_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_ARGB1555 & TO_YV12 | AIPL_CONVERT_ARGB1555 & TO_I420)
-aipl_error_t aipl_color_convert_argb1555_to_yuv_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb1555_to_yuv_planar_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -11913,7 +11913,7 @@ aipl_error_t aipl_color_convert_argb1555_to_yuv_planar_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_ARGB1555 & TO_NV12 | AIPL_CONVERT_ARGB1555 & TO_NV21)
-aipl_error_t aipl_color_convert_argb1555_to_yuv_semi_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb1555_to_yuv_semi_planar_helium(const void* input,
                                                                    uint32_t pitch,
                                                                    uint32_t width,
                                                                    uint32_t height,
@@ -11979,7 +11979,7 @@ aipl_error_t aipl_color_convert_argb1555_to_yuv_semi_planar_helium(const void* i
 #endif
 
 #if (AIPL_CONVERT_ARGB1555 & TO_YUY2 | AIPL_CONVERT_ARGB1555 & TO_UYVY)
-aipl_error_t aipl_color_convert_argb1555_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_argb1555_to_yuv_packed_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -12042,7 +12042,7 @@ aipl_error_t aipl_color_convert_argb1555_to_yuv_packed_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGBA8888 & TO_YV12 | AIPL_CONVERT_RGBA8888 & TO_I420)
-aipl_error_t aipl_color_convert_rgba8888_to_yuv_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba8888_to_yuv_planar_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -12122,7 +12122,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_yuv_planar_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGBA8888 & TO_NV12 | AIPL_CONVERT_RGBA8888 & TO_NV21)
-aipl_error_t aipl_color_convert_rgba8888_to_yuv_semi_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba8888_to_yuv_semi_planar_helium(const void* input,
                                                                    uint32_t pitch,
                                                                    uint32_t width,
                                                                    uint32_t height,
@@ -12202,7 +12202,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_yuv_semi_planar_helium(const void* i
 #endif
 
 #if (AIPL_CONVERT_RGBA8888 & TO_YUY2 | AIPL_CONVERT_RGBA8888 & TO_UYVY)
-aipl_error_t aipl_color_convert_rgba8888_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba8888_to_yuv_packed_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -12279,7 +12279,7 @@ aipl_error_t aipl_color_convert_rgba8888_to_yuv_packed_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGBA4444 & TO_YV12 | AIPL_CONVERT_RGBA4444 & TO_I420)
-aipl_error_t aipl_color_convert_rgba4444_to_yuv_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba4444_to_yuv_planar_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -12345,7 +12345,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_yuv_planar_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGBA4444 & TO_NV12 | AIPL_CONVERT_RGBA4444 & TO_NV21)
-aipl_error_t aipl_color_convert_rgba4444_to_yuv_semi_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba4444_to_yuv_semi_planar_helium(const void* input,
                                                                    uint32_t pitch,
                                                                    uint32_t width,
                                                                    uint32_t height,
@@ -12411,7 +12411,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_yuv_semi_planar_helium(const void* i
 #endif
 
 #if (AIPL_CONVERT_RGBA4444 & TO_YUY2 | AIPL_CONVERT_RGBA4444 & TO_UYVY)
-aipl_error_t aipl_color_convert_rgba4444_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba4444_to_yuv_packed_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -12474,7 +12474,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_yuv_packed_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGBA5551 & TO_YV12 | AIPL_CONVERT_RGBA5551 & TO_I420)
-aipl_error_t aipl_color_convert_rgba5551_to_yuv_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba5551_to_yuv_planar_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -12540,7 +12540,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_yuv_planar_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGBA5551 & TO_NV12 | AIPL_CONVERT_RGBA5551 & TO_NV21)
-aipl_error_t aipl_color_convert_rgba5551_to_yuv_semi_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba5551_to_yuv_semi_planar_helium(const void* input,
                                                                    uint32_t pitch,
                                                                    uint32_t width,
                                                                    uint32_t height,
@@ -12606,7 +12606,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_yuv_semi_planar_helium(const void* i
 #endif
 
 #if (AIPL_CONVERT_RGBA5551 & TO_YUY2 | AIPL_CONVERT_RGBA5551 & TO_UYVY)
-aipl_error_t aipl_color_convert_rgba5551_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgba5551_to_yuv_packed_helium(const void* input,
                                                               uint32_t pitch,
                                                               uint32_t width,
                                                               uint32_t height,
@@ -12670,7 +12670,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_yuv_packed_helium(const void* input,
 
 #if (AIPL_CONVERT_BGR888 & TO_YV12 | AIPL_CONVERT_BGR888 & TO_I420\
      | AIPL_CONVERT_RGB888 & TO_YV12 | AIPL_CONVERT_RGB888 & TO_I420)
-aipl_error_t aipl_color_convert_24bit_to_yuv_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_yuv_planar_helium(const void* input,
                                                            uint32_t pitch,
                                                            uint32_t width,
                                                            uint32_t height,
@@ -12744,7 +12744,7 @@ aipl_error_t aipl_color_convert_24bit_to_yuv_planar_helium(const void* input,
 
 #if (AIPL_CONVERT_BGR888 & TO_NV12 | AIPL_CONVERT_BGR888 & TO_NV21\
      | AIPL_CONVERT_RGB888 & TO_NV12 | AIPL_CONVERT_RGB888 & TO_NV21)
-aipl_error_t aipl_color_convert_24bit_to_yuv_semi_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_yuv_semi_planar_helium(const void* input,
                                                                 uint32_t pitch,
                                                                 uint32_t width,
                                                                 uint32_t height,
@@ -12819,7 +12819,7 @@ aipl_error_t aipl_color_convert_24bit_to_yuv_semi_planar_helium(const void* inpu
 #if (AIPL_CONVERT_BGR888 & TO_YUY2 | AIPL_CONVERT_BGR888 & TO_UYVY\
      | AIPL_CONVERT_RGB888 & TO_YUY2 | AIPL_CONVERT_RGB888 & TO_UYVY)\
     && defined(AIPL_HELIUM_ACCELERATION)
-aipl_error_t aipl_color_convert_24bit_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_24bit_to_yuv_packed_helium(const void* input,
                                                            uint32_t pitch,
                                                            uint32_t width,
                                                            uint32_t height,
@@ -12886,7 +12886,7 @@ aipl_error_t aipl_color_convert_24bit_to_yuv_packed_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGB888 & TO_YUY2 | AIPL_CONVERT_RGB888 & TO_UYVY)
-aipl_error_t aipl_color_convert_rgb888_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgb888_to_yuv_packed_helium(const void* input,
                                                             uint32_t pitch,
                                                             uint32_t width,
                                                             uint32_t height,
@@ -12905,7 +12905,7 @@ aipl_error_t aipl_color_convert_rgb888_to_yuv_packed_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_BGR888 & TO_YUY2 | AIPL_CONVERT_BGR888 & TO_UYVY)
-aipl_error_t aipl_color_convert_bgr888_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_bgr888_to_yuv_packed_helium(const void* input,
                                                             uint32_t pitch,
                                                             uint32_t width,
                                                             uint32_t height,
@@ -12924,7 +12924,7 @@ aipl_error_t aipl_color_convert_bgr888_to_yuv_packed_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_I422 & TO_BGR888 | AIPL_CONVERT_I422 & TO_RGB888)
-aipl_error_t aipl_color_convert_i422_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_i422_to_24bit_helium(const void* input,
                                                      void* output,
                                                      uint32_t pitch,
                                                      uint32_t width,
@@ -12985,7 +12985,7 @@ aipl_error_t aipl_color_convert_i422_to_24bit_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_I444 & TO_BGR888 | AIPL_CONVERT_I444 & TO_RGB888)
-aipl_error_t aipl_color_convert_i444_to_24bit_helium(const void* input,
+static aipl_error_t aipl_color_convert_i444_to_24bit_helium(const void* input,
                                                      void* output,
                                                      uint32_t pitch,
                                                      uint32_t width,
@@ -13049,7 +13049,7 @@ aipl_error_t aipl_color_convert_i444_to_24bit_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGB565 & TO_YV12 | AIPL_CONVERT_RGB565 & TO_I420)
-aipl_error_t aipl_color_convert_rgb565_to_yuv_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgb565_to_yuv_planar_helium(const void* input,
                                                             uint32_t pitch,
                                                             uint32_t width,
                                                             uint32_t height,
@@ -13115,7 +13115,7 @@ aipl_error_t aipl_color_convert_rgb565_to_yuv_planar_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_RGB565 & TO_NV12 | AIPL_CONVERT_RGB565 & TO_NV21)
-aipl_error_t aipl_color_convert_rgb565_to_yuv_semi_planar_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgb565_to_yuv_semi_planar_helium(const void* input,
                                                                  uint32_t pitch,
                                                                  uint32_t width,
                                                                  uint32_t height,
@@ -13181,7 +13181,7 @@ aipl_error_t aipl_color_convert_rgb565_to_yuv_semi_planar_helium(const void* inp
 #endif
 
 #if (AIPL_CONVERT_RGB565 & TO_YUY2 | AIPL_CONVERT_RGB565 & TO_UYVY)
-aipl_error_t aipl_color_convert_rgb565_to_yuv_packed_helium(const void* input,
+static aipl_error_t aipl_color_convert_rgb565_to_yuv_packed_helium(const void* input,
                                                             uint32_t pitch,
                                                             uint32_t width,
                                                             uint32_t height,
@@ -13245,7 +13245,7 @@ aipl_error_t aipl_color_convert_rgb565_to_yuv_packed_helium(const void* input,
 
 
 #if (AIPL_CONVERT_YUY2 & TO_ALPHA8_I400 | AIPL_CONVERT_UYVY & TO_ALPHA8_I400)
-aipl_error_t aipl_color_convert_yuv_packed_to_alpha8_helium(const void* input,
+static aipl_error_t aipl_color_convert_yuv_packed_to_alpha8_helium(const void* input,
                                                             void* output,
                                                             uint32_t pitch,
                                                             uint32_t width,
@@ -13282,7 +13282,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_alpha8_helium(const void* input,
 #endif
 
 #if (AIPL_CONVERT_YV12 & TO_ARGB8888 | AIPL_CONVERT_I420 & TO_ARGB8888)
-aipl_error_t aipl_color_convert_yuv_planar_to_argb8888_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_planar_to_argb8888_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -13344,7 +13344,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_argb8888_helium(const uint8_t* y_p
 #endif
 
 #if (AIPL_CONVERT_NV12 & TO_ARGB8888 | AIPL_CONVERT_NV21 & TO_ARGB8888)
-aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb8888_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb8888_helium(const uint8_t* y_ptr,
                                                                    const uint8_t* u_ptr,
                                                                    const uint8_t* v_ptr,
                                                                    void* output,
@@ -13406,7 +13406,7 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb8888_helium(const uint8_t
 #endif
 
 #if (AIPL_CONVERT_YUY2 & TO_ARGB8888 | AIPL_CONVERT_UYVY & TO_ARGB8888)
-aipl_error_t aipl_color_convert_yuv_packed_to_argb8888_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_packed_to_argb8888_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -13459,7 +13459,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_argb8888_helium(const uint8_t* y_p
 #endif
 
 #if (AIPL_CONVERT_YV12 & TO_ARGB4444 | AIPL_CONVERT_I420 & TO_ARGB4444)
-aipl_error_t aipl_color_convert_yuv_planar_to_argb4444_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_planar_to_argb4444_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -13517,7 +13517,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_argb4444_helium(const uint8_t* y_p
 #endif
 
 #if (AIPL_CONVERT_NV12 & TO_ARGB4444 | AIPL_CONVERT_NV21 & TO_ARGB4444)
-aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb4444_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb4444_helium(const uint8_t* y_ptr,
                                                                    const uint8_t* u_ptr,
                                                                    const uint8_t* v_ptr,
                                                                    void* output,
@@ -13575,7 +13575,7 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb4444_helium(const uint8_t
 #endif
 
 #if (AIPL_CONVERT_YUY2 & TO_ARGB4444 | AIPL_CONVERT_UYVY & TO_ARGB4444)
-aipl_error_t aipl_color_convert_yuv_packed_to_argb4444_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_packed_to_argb4444_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -13626,7 +13626,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_argb4444_helium(const uint8_t* y_p
 #endif
 
 #if (AIPL_CONVERT_YV12 & TO_ARGB1555 | AIPL_CONVERT_I420 & TO_ARGB1555)
-aipl_error_t aipl_color_convert_yuv_planar_to_argb1555_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_planar_to_argb1555_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -13684,7 +13684,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_argb1555_helium(const uint8_t* y_p
 #endif
 
 #if (AIPL_CONVERT_NV12 & TO_ARGB1555 | AIPL_CONVERT_NV21 & TO_ARGB1555)
-aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb1555_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb1555_helium(const uint8_t* y_ptr,
                                                                    const uint8_t* u_ptr,
                                                                    const uint8_t* v_ptr,
                                                                    void* output,
@@ -13742,7 +13742,7 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_argb1555_helium(const uint8_t
 #endif
 
 #if (AIPL_CONVERT_YUY2 & TO_ARGB1555 | AIPL_CONVERT_UYVY & TO_ARGB1555)
-aipl_error_t aipl_color_convert_yuv_packed_to_argb1555_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_packed_to_argb1555_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -13793,7 +13793,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_argb1555_helium(const uint8_t* y_p
 #endif
 
 #if (AIPL_CONVERT_YV12 & TO_RGBA8888 | AIPL_CONVERT_I420 & TO_RGBA8888)
-aipl_error_t aipl_color_convert_yuv_planar_to_rgba8888_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_planar_to_rgba8888_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -13855,7 +13855,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_rgba8888_helium(const uint8_t* y_p
 #endif
 
 #if (AIPL_CONVERT_NV12 & TO_RGBA8888 | AIPL_CONVERT_NV21 & TO_RGBA8888)
-aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba8888_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba8888_helium(const uint8_t* y_ptr,
                                                                    const uint8_t* u_ptr,
                                                                    const uint8_t* v_ptr,
                                                                    void* output,
@@ -13917,7 +13917,7 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba8888_helium(const uint8_t
 #endif
 
 #if (AIPL_CONVERT_YUY2 & TO_RGBA8888 | AIPL_CONVERT_UYVY & TO_RGBA8888)
-aipl_error_t aipl_color_convert_yuv_packed_to_rgba8888_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_packed_to_rgba8888_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -13970,7 +13970,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_rgba8888_helium(const uint8_t* y_p
 #endif
 
 #if (AIPL_CONVERT_YV12 & TO_RGBA4444 | AIPL_CONVERT_I420 & TO_RGBA4444)
-aipl_error_t aipl_color_convert_yuv_planar_to_rgba4444_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_planar_to_rgba4444_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -14028,7 +14028,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_rgba4444_helium(const uint8_t* y_p
 #endif
 
 #if (AIPL_CONVERT_NV12 & TO_RGBA4444 | AIPL_CONVERT_NV21 & TO_RGBA4444)
-aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba4444_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba4444_helium(const uint8_t* y_ptr,
                                                                    const uint8_t* u_ptr,
                                                                    const uint8_t* v_ptr,
                                                                    void* output,
@@ -14086,7 +14086,7 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba4444_helium(const uint8_t
 #endif
 
 #if (AIPL_CONVERT_YUY2 & TO_RGBA4444 | AIPL_CONVERT_UYVY & TO_RGBA4444)
-aipl_error_t aipl_color_convert_yuv_packed_to_rgba4444_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_packed_to_rgba4444_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -14137,7 +14137,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_rgba4444_helium(const uint8_t* y_p
 #endif
 
 #if (AIPL_CONVERT_YV12 & TO_RGBA5551 | AIPL_CONVERT_I420 & TO_RGBA5551)
-aipl_error_t aipl_color_convert_yuv_planar_to_rgba5551_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_planar_to_rgba5551_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -14195,7 +14195,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_rgba5551_helium(const uint8_t* y_p
 #endif
 
 #if (AIPL_CONVERT_NV12 & TO_RGBA5551 | AIPL_CONVERT_NV21 & TO_RGBA5551)
-aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba5551_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba5551_helium(const uint8_t* y_ptr,
                                                                    const uint8_t* u_ptr,
                                                                    const uint8_t* v_ptr,
                                                                    void* output,
@@ -14253,7 +14253,7 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgba5551_helium(const uint8_t
 #endif
 
 #if (AIPL_CONVERT_YUY2 & TO_RGBA5551 | AIPL_CONVERT_UYVY & TO_RGBA5551)
-aipl_error_t aipl_color_convert_yuv_packed_to_rgba5551_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_packed_to_rgba5551_helium(const uint8_t* y_ptr,
                                                               const uint8_t* u_ptr,
                                                               const uint8_t* v_ptr,
                                                               void* output,
@@ -14304,7 +14304,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_rgba5551_helium(const uint8_t* y_p
 #endif
 
 #if (AIPL_CONVERT_YV12 & TO_BGR888 | AIPL_CONVERT_I420 & TO_BGR888)
-aipl_error_t aipl_color_convert_yuv_planar_to_24bit_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_planar_to_24bit_helium(const uint8_t* y_ptr,
                                                            const uint8_t* u_ptr,
                                                            const uint8_t* v_ptr,
                                                            void* output,
@@ -14374,7 +14374,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_24bit_helium(const uint8_t* y_ptr,
 #endif
 
 #if (AIPL_CONVERT_NV12 & TO_BGR888 | AIPL_CONVERT_NV21 & TO_BGR888)
-aipl_error_t aipl_color_convert_yuv_semi_planar_to_24bit_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_semi_planar_to_24bit_helium(const uint8_t* y_ptr,
                                                                 const uint8_t* u_ptr,
                                                                 const uint8_t* v_ptr,
                                                                 void* output,
@@ -14444,7 +14444,7 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_24bit_helium(const uint8_t* y
 #endif
 
 #if (AIPL_CONVERT_YUY2 & TO_BGR888 | AIPL_CONVERT_UYVY & TO_BGR888)
-aipl_error_t aipl_color_convert_yuv_packed_to_24bit_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_packed_to_24bit_helium(const uint8_t* y_ptr,
                                                            const uint8_t* u_ptr,
                                                            const uint8_t* v_ptr,
                                                            void* output,
@@ -14502,7 +14502,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_24bit_helium(const uint8_t* y_ptr,
 #endif
 
 #if (AIPL_CONVERT_YV12 & TO_RGB565 | AIPL_CONVERT_I420 & TO_RGB565)
-aipl_error_t aipl_color_convert_yuv_planar_to_rgb565_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_planar_to_rgb565_helium(const uint8_t* y_ptr,
                                                             const uint8_t* u_ptr,
                                                             const uint8_t* v_ptr,
                                                             void* output,
@@ -14560,7 +14560,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_rgb565_helium(const uint8_t* y_ptr
 #endif
 
 #if (AIPL_CONVERT_NV12 & TO_RGB565 | AIPL_CONVERT_NV21 & TO_RGB565)
-aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgb565_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgb565_helium(const uint8_t* y_ptr,
                                                                  const uint8_t* u_ptr,
                                                                  const uint8_t* v_ptr,
                                                                  void* output,
@@ -14618,7 +14618,7 @@ aipl_error_t aipl_color_convert_yuv_semi_planar_to_rgb565_helium(const uint8_t* 
 #endif
 
 #if (AIPL_CONVERT_YUY2 & TO_RGB565 | AIPL_CONVERT_UYVY & TO_RGB565)
-aipl_error_t aipl_color_convert_yuv_packed_to_rgb565_helium(const uint8_t* y_ptr,
+static aipl_error_t aipl_color_convert_yuv_packed_to_rgb565_helium(const uint8_t* y_ptr,
                                                             const uint8_t* u_ptr,
                                                             const uint8_t* v_ptr,
                                                             void* output,
@@ -14670,7 +14670,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_rgb565_helium(const uint8_t* y_ptr
 
 
 #if (AIPL_CONVERT_YV12 & (TO_NV12 | TO_NV21) | AIPL_CONVERT_I420 & (TO_NV12 | TO_NV21))
-aipl_error_t aipl_color_convert_yuv_planar_to_semi_helium(const uint8_t* y_src,
+static aipl_error_t aipl_color_convert_yuv_planar_to_semi_helium(const uint8_t* y_src,
                                                           const uint8_t* u_src,
                                                           const uint8_t* v_src,
                                                           uint8_t* y_dst,
@@ -14722,7 +14722,7 @@ aipl_error_t aipl_color_convert_yuv_planar_to_semi_helium(const uint8_t* y_src,
 
 
 #if (AIPL_CONVERT_NV12 & (TO_YV12 | TO_I420) | AIPL_CONVERT_NV21 & (TO_YV12 | TO_I420))
-aipl_error_t aipl_color_convert_yuv_semi_to_planar_helium(const uint8_t* y_src,
+static aipl_error_t aipl_color_convert_yuv_semi_to_planar_helium(const uint8_t* y_src,
                                                           const uint8_t* u_src,
                                                           const uint8_t* v_src,
                                                           uint8_t* y_dst,
@@ -14779,7 +14779,7 @@ aipl_error_t aipl_color_convert_yuv_semi_to_planar_helium(const uint8_t* y_src,
 
 
 #if (AIPL_CONVERT_YUY2 & (TO_YV12 | TO_I420) | AIPL_CONVERT_UYVY & (TO_YV12 | TO_I420))
-aipl_error_t aipl_color_convert_yuv_packed_to_planar_helium(const uint8_t* y_src,
+static aipl_error_t aipl_color_convert_yuv_packed_to_planar_helium(const uint8_t* y_src,
                                                             const uint8_t* u_src,
                                                             const uint8_t* v_src,
                                                             uint8_t* y_dst,
@@ -14846,7 +14846,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_planar_helium(const uint8_t* y_src
 #endif
 
 #if (AIPL_CONVERT_YUY2 & (TO_NV12 | TO_NV21) | AIPL_CONVERT_UYVY & (TO_NV12 | TO_NV21))
-aipl_error_t aipl_color_convert_yuv_packed_to_semi_helium(const uint8_t* y_src,
+static aipl_error_t aipl_color_convert_yuv_packed_to_semi_helium(const uint8_t* y_src,
                                                           const uint8_t* u_src,
                                                           const uint8_t* v_src,
                                                           uint8_t* y_dst,
@@ -14913,7 +14913,7 @@ aipl_error_t aipl_color_convert_yuv_packed_to_semi_helium(const uint8_t* y_src,
 #endif
 
 #if (AIPL_CONVERT_ALPHA8_I400 & (TO_YUY2 | TO_UYVY))
-aipl_error_t aipl_color_convert_alpha8_to_yuv_packed_helium(const uint8_t* input,
+static aipl_error_t aipl_color_convert_alpha8_to_yuv_packed_helium(const uint8_t* input,
                                                             uint8_t* y_dst,
                                                             uint8_t* u_dst,
                                                             uint8_t* v_dst,

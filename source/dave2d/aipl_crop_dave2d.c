@@ -90,8 +90,8 @@ aipl_error_t aipl_crop_img_dave2d(const aipl_image_t* input,
         return AIPL_ERR_NULL_POINTER;
 
     uint32_t new_width = right - left;
-    uint32_t new_hight = bottom - top;
-    if (new_width != output->width || new_hight != output->height)
+    uint32_t new_height = bottom - top;
+    if (new_width != output->width || new_height != output->height)
     {
         return AIPL_ERR_SIZE_MISMATCH;
     }

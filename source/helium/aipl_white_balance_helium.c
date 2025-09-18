@@ -36,13 +36,16 @@
 /**********************
  *  STATIC PROTOTYPES
  **********************/
-aipl_error_t aipl_white_balance_24bit_helium(const void* input, void* output,
-                                             uint32_t pitch,
-                                             uint32_t width, uint32_t height,
-                                             float ar, float ag, float ab,
-                                             uint8_t r_offset,
-                                             uint8_t g_offset,
-                                             uint8_t b_offset);
+static aipl_error_t aipl_white_balance_24bit_helium(const void* input,
+                                                    void* output,
+                                                    uint32_t pitch,
+                                                    uint32_t width,
+                                                    uint32_t height,
+                                                    float ar, float ag,
+                                                    float ab,
+                                                    uint8_t r_offset,
+                                                    uint8_t g_offset,
+                                                    uint8_t b_offset);
 
 /**********************
  *  STATIC VARIABLES
@@ -464,13 +467,16 @@ aipl_error_t aipl_white_balance_rgb565_helium(const void* input, void* output,
 /**********************
  *   STATIC FUNCTIONS
  **********************/
-aipl_error_t aipl_white_balance_24bit_helium(const void* input, void* output,
-                                             uint32_t pitch,
-                                             uint32_t width, uint32_t height,
-                                             float ar, float ag, float ab,
-                                             uint8_t r_offset,
-                                             uint8_t g_offset,
-                                             uint8_t b_offset)
+static aipl_error_t aipl_white_balance_24bit_helium(const void* input,
+                                                    void* output,
+                                                    uint32_t pitch,
+                                                    uint32_t width,
+                                                    uint32_t height,
+                                                    float ar, float ag,
+                                                    float ab,
+                                                    uint8_t r_offset,
+                                                    uint8_t g_offset,
+                                                    uint8_t b_offset)
 {
     if (input == NULL || output == NULL)
         return AIPL_ERR_NULL_POINTER;

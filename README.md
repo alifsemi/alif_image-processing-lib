@@ -62,7 +62,7 @@ export CMSIS_PACK_ROOT=<your pack root>
 ```
 4. Install generated CMSIS pack:
 ```
-cpackget add ./output/AlifSemiconductor.AIPL.1.2.0.pack
+cpackget add ./output/AlifSemiconductor.AIPL.1.3.1.pack
 ```
 
 ## How to build the library

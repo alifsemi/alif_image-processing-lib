@@ -90,8 +90,6 @@ aipl_error_t aipl_white_balance_rgb(const void* input, void* output,
         default:
             return AIPL_ERR_UNSUPPORTED_FORMAT;
     }
-
-    return AIPL_ERR_OK;
 }
 
 aipl_error_t aipl_white_balance_rgb_img(const aipl_image_t* input,
@@ -110,8 +108,6 @@ aipl_error_t aipl_white_balance_rgb_img(const aipl_image_t* input,
     return aipl_white_balance_rgb(input->data, output->data, input->pitch,
                                   input->width, input->height, input->format,
                                   ar, ag, ab);
-
-    return AIPL_ERR_OK;
 }
 
 aipl_error_t aipl_white_balance_argb8888(const void* input, void* output,
