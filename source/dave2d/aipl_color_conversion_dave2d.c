@@ -789,7 +789,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_argb4444_dave2d(const void* input,
         return AIPL_ERR_NULL_POINTER;
 
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
-                                                d2_mode_rgba4444, d2_mode_rgba8888);
+                                                d2_mode_rgba4444, d2_mode_argb4444);
 
     return aipl_dave2d_error_convert(ret);
 }
@@ -804,7 +804,7 @@ aipl_error_t aipl_color_convert_rgba4444_to_rgba8888_dave2d(const void* input,
         return AIPL_ERR_NULL_POINTER;
 
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
-                                                d2_mode_rgba4444, d2_mode_rgba4444);
+                                                d2_mode_rgba4444, d2_mode_rgba8888);
 
     return aipl_dave2d_error_convert(ret);
 }
@@ -939,7 +939,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_argb4444_dave2d(const void* input,
         return AIPL_ERR_NULL_POINTER;
 
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
-                                                d2_mode_rgba5551, d2_mode_rgba8888);
+                                                d2_mode_rgba5551, d2_mode_argb4444);
 
     return aipl_dave2d_error_convert(ret);
 }
@@ -954,7 +954,7 @@ aipl_error_t aipl_color_convert_rgba5551_to_rgba8888_dave2d(const void* input,
         return AIPL_ERR_NULL_POINTER;
 
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
-                                                d2_mode_rgba5551, d2_mode_rgba5551);
+                                                d2_mode_rgba5551, d2_mode_rgba8888);
 
     return aipl_dave2d_error_convert(ret);
 }
@@ -1089,7 +1089,7 @@ aipl_error_t aipl_color_convert_rgb565_to_argb4444_dave2d(const void* input,
         return AIPL_ERR_NULL_POINTER;
 
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
-                                                d2_mode_rgb565, d2_mode_rgba8888);
+                                                d2_mode_rgb565, d2_mode_argb4444);
 
     return aipl_dave2d_error_convert(ret);
 }
@@ -1104,7 +1104,7 @@ aipl_error_t aipl_color_convert_rgb565_to_rgba8888_dave2d(const void* input,
         return AIPL_ERR_NULL_POINTER;
 
     d2_s32 ret = aipl_dave2d_color_mode_convert(input, output, pitch, width, height,
-                                                d2_mode_rgb565, d2_mode_rgb565);
+                                                d2_mode_rgb565, d2_mode_rgba8888);
 
     return aipl_dave2d_error_convert(ret);
 }
