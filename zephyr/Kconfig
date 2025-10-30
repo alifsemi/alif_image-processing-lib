@@ -21,6 +21,10 @@ config AIPL_CUSTOM_VIDEO_ALLOC
     bool "Use custom video memory allocation functions"
     default y
 
+config AIPL_CUSTOM_CACHE
+    bool "Use custom cache management functions"
+    default y
+
 config AIPL_CUSTOM_DAVE2D_INIT
     bool "Use custom D/AVE2D initialization function"
 

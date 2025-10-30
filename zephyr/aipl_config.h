@@ -29,6 +29,20 @@
  #endif
 
  /**
+ * Custom cache management functions
+ *
+ * Options:
+ *  0 - use default functions from DFP
+ *  1 - the cache invalidate and clean functions must be
+ *      provided by the user
+ */
+ #ifdef CONFIG_AIPL_CUSTOM_CACHE
+ #define AIPL_CUSTOM_CACHE           1
+ #else
+ #define AIPL_CUSTOM_CACHE           0
+ #endif
+
+ /**
   * Custom D/AVE2D initialization function
   *
   * Options:

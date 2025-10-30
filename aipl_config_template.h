@@ -19,10 +19,20 @@ extern "C" {
  *
  * Options:
  *  0 - use default malloc()
- *  1 - the allocation and free functions should be
+ *  1 - the allocation and free functions must be
  *      provided by the user
  */
 #define AIPL_CUSTOM_VIDEO_ALLOC     1
+
+/**
+ * Custom cache management functions
+ *
+ * Options:
+ *  0 - use default functions from
+ *  1 - the cache invalidate and clean functions must be
+ *      provided by the user
+ */
+#define AIPL_CUSTOM_CACHE           1
 
 /**
  * Custom D/AVE2D initialization function

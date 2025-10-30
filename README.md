@@ -41,6 +41,20 @@ Bayer filters that can be decoded into any supported image format:
 * BGGR
 * GBRG
 
+## Video memory allocation and cache management functions
+
+The library relies on video memory allocation functions:
+* aipl_video_alloc
+* aipl_video_free
+
+and on cache management functions:
+* aipl_cpu_cache_clean
+* aipl_cpu_cache_invalidate
+
+These functions have the default implementations which can be turned on by setting `AIPL_CUSTOM_VIDEO_ALLOC` and `AIPL_CUSTOM_CACHE` to 0 AIPL config. The default implementation rely on Alif Ensemble CMSIS package and default malloc/free functions.
+
+AIPL as static library does not include these default functions and they must be defined by the user.
+
 ## CMSIS package requirements
 
 This CMSIS pack requires some packs to be installed and added to the project:
@@ -62,7 +76,7 @@ export CMSIS_PACK_ROOT=<your pack root>
 ```
 4. Install generated CMSIS pack:
 ```
-cpackget add ./output/AlifSemiconductor.AIPL.1.3.1.pack
+cpackget add ./output/AlifSemiconductor.AIPL.1.3.2.pack
 ```
 
 ## How to build the library
