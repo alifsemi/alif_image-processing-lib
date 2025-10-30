@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 
-project(aipl VERSION 1.3.1 LANGUAGES C)
+project(aipl VERSION 1.3.2 LANGUAGES C)
 
 # Add library sources
 add_library(aipl STATIC
