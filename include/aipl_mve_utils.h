@@ -2810,17 +2810,20 @@ INLINE void aipl_mve_cnvt_8px_yuv_to_rgb(uint16x8_t* r_dst,
                                          int32x4_t g1_src,
                                          int32x4_t b1_src)
 {
-    int32x4_t r0 = vshrq(vaddq(c0_src, r0_src), 8);
-    int32x4_t g0 = vshrq(vaddq(c0_src, g0_src), 8);
-    int32x4_t b0 = vshrq(vaddq(c0_src, b0_src), 8);
+    int32x4_t r0 = vaddq(c0_src, r0_src);
+    int32x4_t g0 = vaddq(c0_src, g0_src);
+    int32x4_t b0 = vaddq(c0_src, b0_src);
+    int32x4_t r1 = vaddq(c1_src, r1_src);
+    int32x4_t g1 = vaddq(c1_src, g1_src);
+    int32x4_t b1 = vaddq(c1_src, b1_src);
 
-    int32x4_t r1 = vshrq(vaddq(c1_src, r1_src), 8);
-    int32x4_t g1 = vshrq(vaddq(c1_src, g1_src), 8);
-    int32x4_t b1 = vshrq(vaddq(c1_src, b1_src), 8);
+    uint16x8_t r_intermediate = vqrshruntq(vqrshrunbq(vuninitializedq_u16(), r0, 8), r1, 8);
+    uint16x8_t g_intermediate = vqrshruntq(vqrshrunbq(vuninitializedq_u16(), g0, 8), g1, 8);
+    uint16x8_t b_intermediate = vqrshruntq(vqrshrunbq(vuninitializedq_u16(), b0, 8), b1, 8);
 
-    *r_dst = vqmovuntq(vqmovunbq(vdupq_n_u16(0), r0), r1);
-    *g_dst = vqmovuntq(vqmovunbq(vdupq_n_u16(0), g0), g1);
-    *b_dst = vqmovuntq(vqmovunbq(vdupq_n_u16(0), b0), b1);
+    *r_dst = vreinterpretq_u16(vqmovnbq(vdupq_n_u8(0), r_intermediate));
+    *g_dst = vreinterpretq_u16(vqmovnbq(vdupq_n_u8(0), g_intermediate));
+    *b_dst = vreinterpretq_u16(vqmovnbq(vdupq_n_u8(0), b_intermediate));
 }
 
 /**
