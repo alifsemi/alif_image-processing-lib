@@ -141,13 +141,7 @@
     </component>
 
     <component Cclass="Graphics" Cgroup="AIPL" Csub="Basic" Cversion="1.2.0" condition="AIPL-Essential">
-      <description>
-        Alif Image Processing Library basic functions:
-          * Crop
-          * Flip
-          * Resize
-          * Rotate
-      </description>
+      <description>Alif Image Processing Library basic functions: Crop, Flip, Resize, Rotate</description>
       <files>
         <!-- include folder / device header file -->
         <file category="include"  name="include/"/>
@@ -190,12 +184,7 @@
     </component>
 
     <component Cclass="Graphics" Cgroup="AIPL" Csub="Color correction" Cversion="1.2.0" condition="AIPL-Essential">
-      <description>
-        Alif Image Processing Library color correction functions:
-          * Color correction (using a matrix)
-          * White balance (multiply each channel)
-          * Lookup Table transformation (mapping each 8-bit channel value to another)
-      </description>
+      <description>Alif Image Processing Library color correction functions:Color correction (using a matrix), White balance (multiply each channel), Lookup Table transformation (mapping each 8-bit channel value to another)</description>
       <files>
         <!-- include folder / device header file -->
         <file category="include"  name="include/"/>
@@ -225,28 +214,7 @@
     </component>
 
     <component Cclass="Graphics" Cgroup="AIPL" Csub="Color conversion" Cversion="1.2.0" condition="AIPL-Essential">
-      <description>
-        Alif Image Processing Library color conversions between the following formats:
-          * ALPHA8
-          * ARGB8888
-          * ARGB4444
-          * ARGB1555
-          * RGBA8888
-          * RGBA4444
-          * RGBA5551
-          * BGR888
-          * RGB888
-          * RGB565
-          * YV12
-          * I420
-          * I422
-          * I444
-          * I400
-          * NV21
-          * NV12
-          * YUY2
-          * UYVY
-      </description>
+      <description>Alif Image Processing Library color conversions</description>
       <files>
         <!-- include folder / device header file -->
         <file category="include"  name="include/"/>
@@ -267,14 +235,7 @@
     </component>
 
     <component Cclass="Graphics" Cgroup="AIPL" Csub="Demosaic" Cversion="1.3.0" condition="AIPL-Essential">
-      <description>
-        Alif Image Processing Library demosaicing from:
-          * RGGB
-          * GRBG
-          * BGGR
-          * GBRG
-        Bayer filters to any of the supported color formats
-      </description>
+      <description>Alif Image Processing Library demosaicing</description>
       <files>
         <!-- include folder / device header file -->
         <file category="include"  name="include/"/>
