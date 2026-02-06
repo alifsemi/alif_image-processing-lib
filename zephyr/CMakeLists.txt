@@ -25,47 +25,83 @@ if (CONFIG_AIPL)
   zephyr_library_sources_ifdef(
     CONFIG_AIPL_BASIC
     ${AIPL_DIR}/source/aipl_crop.c
-    ${AIPL_DIR}/source/dave2d/aipl_crop_dave2d.c
     ${AIPL_DIR}/source/default/aipl_crop_default.c
     ${AIPL_DIR}/source/aipl_flip.c
-    ${AIPL_DIR}/source/dave2d/aipl_flip_dave2d.c
     ${AIPL_DIR}/source/default/aipl_flip_default.c
-    ${AIPL_DIR}/source/helium/aipl_flip_helium.c
     ${AIPL_DIR}/source/aipl_resize.c
-    ${AIPL_DIR}/source/dave2d/aipl_resize_dave2d.c
     ${AIPL_DIR}/source/default/aipl_resize_default.c
-    ${AIPL_DIR}/source/helium/aipl_resize_helium.c
     ${AIPL_DIR}/source/aipl_rotate.c
-    ${AIPL_DIR}/source/dave2d/aipl_rotate_dave2d.c
     ${AIPL_DIR}/source/default/aipl_rotate_default.c
-    ${AIPL_DIR}/source/helium/aipl_rotate_helium.c
   )
+
+  if(CONFIG_AIPL_DAVE2D_ACCELERATION)
+    zephyr_library_sources_ifdef(
+      CONFIG_AIPL_BASIC
+      ${AIPL_DIR}/source/dave2d/aipl_crop_dave2d.c
+      ${AIPL_DIR}/source/dave2d/aipl_flip_dave2d.c
+      ${AIPL_DIR}/source/dave2d/aipl_resize_dave2d.c
+      ${AIPL_DIR}/source/dave2d/aipl_rotate_dave2d.c
+    )
+  endif()
+
+  if(CONFIG_AIPL_HELIUM_ACCELERATION)
+    zephyr_library_sources_ifdef(
+    CONFIG_AIPL_BASIC
+      ${AIPL_DIR}/source/helium/aipl_flip_helium.c
+      ${AIPL_DIR}/source/helium/aipl_resize_helium.c
+      ${AIPL_DIR}/source/helium/aipl_rotate_helium.c
+    )
+  endif()
 
   zephyr_library_sources_ifdef(
     CONFIG_AIPL_COLOR_CORRECTION
     ${AIPL_DIR}/source/aipl_color_correction.c
     ${AIPL_DIR}/source/default/aipl_color_correction_default.c
-    ${AIPL_DIR}/source/helium/aipl_color_correction_helium.c
     ${AIPL_DIR}/source/aipl_white_balance.c
     ${AIPL_DIR}/source/default/aipl_white_balance_default.c
-    ${AIPL_DIR}/source/helium/aipl_white_balance_helium.c
     ${AIPL_DIR}/source/aipl_lut_transform.c
     ${AIPL_DIR}/source/default/aipl_lut_transform_default.c
-    ${AIPL_DIR}/source/helium/aipl_lut_transform_helium.c
   )
+
+  if(CONFIG_AIPL_HELIUM_ACCELERATION)
+    zephyr_library_sources_ifdef(
+    CONFIG_AIPL_COLOR_CORRECTION
+      ${AIPL_DIR}/source/helium/aipl_color_correction_helium.c
+      ${AIPL_DIR}/source/helium/aipl_white_balance_helium.c
+      ${AIPL_DIR}/source/helium/aipl_lut_transform_helium.c
+    )
+  endif()
 
   zephyr_library_sources_ifdef(
     CONFIG_AIPL_COLOR_CONVERSION
     ${AIPL_DIR}/source/aipl_color_conversion.c
-    ${AIPL_DIR}/source/dave2d/aipl_color_conversion_dave2d.c
-    ${AIPL_DIR}/source/helium/aipl_color_conversion_helium.c
     ${AIPL_DIR}/source/default/aipl_color_conversion_default.c
   )
+
+  if(CONFIG_AIPL_DAVE2D_ACCELERATION)
+    zephyr_library_sources_ifdef(
+      CONFIG_AIPL_COLOR_CONVERSION
+      ${AIPL_DIR}/source/dave2d/aipl_color_conversion_dave2d.c
+    )
+  endif()
+
+  if(CONFIG_AIPL_HELIUM_ACCELERATION)
+    zephyr_library_sources_ifdef(
+      CONFIG_AIPL_COLOR_CONVERSION
+      ${AIPL_DIR}/source/helium/aipl_color_conversion_helium.c
+    )
+  endif()
 
   zephyr_library_sources_ifdef(
     CONFIG_AIPL_DEMOSAICING
     ${AIPL_DIR}/source/aipl_demosaic.c
     ${AIPL_DIR}/source/default/aipl_demosaic_default.c
-    ${AIPL_DIR}/source/helium/aipl_demosaic_helium.c
   )
+
+  if(CONFIG_AIPL_HELIUM_ACCELERATION)
+    zephyr_library_sources_ifdef(
+      CONFIG_AIPL_DEMOSAICING
+      ${AIPL_DIR}/source/helium/aipl_demosaic_helium.c
+    )
+  endif()
 endif()
