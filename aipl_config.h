@@ -82,11 +82,13 @@ extern "C" {
 #define TO_NV21         BIT(15)
 #define TO_YUY2         BIT(16)
 #define TO_UYVY         BIT(17)
+#define TO_RGB888P      BIT(18)
 #define TO_ALL          (TO_ALPHA8_I400 | TO_ARGB8888 | TO_ARGB4444\
                          | TO_ARGB1555 | TO_RGBA8888 | TO_RGBA4444\
                          | TO_RGBA5551 | TO_BGR888 | TO_RGB888 | TO_RGB565\
                          | TO_YV12 | TO_I420 | TO_I422 | TO_I444\
-                         | TO_NV12 | TO_NV21 | TO_YUY2 | TO_UYVY)
+                         | TO_NV12 | TO_NV21 | TO_YUY2 | TO_UYVY\
+                         | TO_RGB888P)
 
 /**
  * Enable Helium acceleration
@@ -128,6 +130,7 @@ extern "C" {
 #define AIPL_CONVERT_NV21           TO_ARGB8888
 #define AIPL_CONVERT_YUY2           TO_ARGB8888
 #define AIPL_CONVERT_UYVY           TO_ARGB8888
+#define AIPL_CONVERT_RGB888P        (TO_RGB888 | TO_RGB565)
 
 #ifdef __cplusplus
 } /*extern "C"*/

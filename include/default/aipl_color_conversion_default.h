@@ -6897,6 +6897,66 @@ aipl_error_t aipl_color_convert_i400_to_uyvy_default(const void* input,
 #endif
 #endif
 
+#if AIPL_CONVERT_RGB888P
+/**
+ * Convert RGB888P (planar) image to specified format
+ * using default implementation with compiler imposed optimization
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @param format        desired color format
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgb888p_default(const void* input,
+                                                void* output,
+                                                uint32_t pitch,
+                                                uint32_t width,
+                                                uint32_t height,
+                                                aipl_color_format_t format);
+
+#if (AIPL_CONVERT_RGB888P & TO_RGB888)\
+     && (!defined(AIPL_HELIUM_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
+/**
+ * Convert RGB888P (planar) image to RGB888
+ * using default implementation with compiler imposed optimization
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgb888p_to_rgb888_default(const void* input,
+                                                          void* output,
+                                                          uint32_t pitch,
+                                                          uint32_t width,
+                                                          uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGB888P & TO_RGB565)\
+     && (!defined(AIPL_HELIUM_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
+/**
+ * Convert RGB888P (planar) image to RGB565
+ * using default implementation with compiler imposed optimization
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgb888p_to_rgb565_default(const void* input,
+                                                          void* output,
+                                                          uint32_t pitch,
+                                                          uint32_t width,
+                                                          uint32_t height);
+#endif
+#endif
+
 /**********************
  *      MACROS
  **********************/

@@ -975,6 +975,11 @@ aipl_error_t aipl_color_convert_default(const void* input, void* output,
             return aipl_color_convert_rgb888_default(input, output, pitch,
                                                      width, height, output_format);
 #endif
+#if AIPL_CONVERT_RGB888P
+        case AIPL_COLOR_RGB888P:
+            return aipl_color_convert_rgb888p_default(input, output, pitch,
+                                                      width, height, output_format);
+#endif
 
         /* YUV color formats */
 #if AIPL_CONVERT_YV12
@@ -15445,3 +15450,112 @@ static aipl_error_t aipl_color_convert_alpha8_to_yuv_packed_default(const uint8_
     return AIPL_ERR_OK;
 }
 #endif
+
+#if AIPL_CONVERT_RGB888P
+aipl_error_t aipl_color_convert_rgb888p_default(const void* input,
+                                                void* output,
+                                                uint32_t pitch,
+                                                uint32_t width,
+                                                uint32_t height,
+                                                aipl_color_format_t format)
+{
+    switch (format)
+    {
+#if (AIPL_CONVERT_RGB888P & TO_RGB888)\
+     && (!defined(AIPL_HELIUM_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
+        case AIPL_COLOR_RGB888:
+            return aipl_color_convert_rgb888p_to_rgb888_default(input, output,
+                                                                pitch,
+                                                                width, height);
+#endif
+#if (AIPL_CONVERT_RGB888P & TO_RGB565)\
+     && (!defined(AIPL_HELIUM_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
+        case AIPL_COLOR_RGB565:
+            return aipl_color_convert_rgb888p_to_rgb565_default(input, output,
+                                                                pitch,
+                                                                width, height);
+#endif
+        case AIPL_COLOR_RGB888P:
+            return AIPL_ERR_FORMAT_MISMATCH;
+
+        default:
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
+    }
+}
+
+#if (AIPL_CONVERT_RGB888P & TO_RGB888)\
+     && (!defined(AIPL_HELIUM_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
+aipl_error_t aipl_color_convert_rgb888p_to_rgb888_default(const void* input,
+                                                          void* output,
+                                                          uint32_t pitch,
+                                                          uint32_t width,
+                                                          uint32_t height)
+{
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
+    uint32_t plane_size = pitch * height;
+    const uint8_t* r_ptr = input;
+    const uint8_t* g_ptr = r_ptr + plane_size;
+    const uint8_t* b_ptr = g_ptr + plane_size;
+
+    uint8_t* dst_ptr = output;
+
+    for (uint32_t i = 0; i < height; ++i)
+    {
+        const uint8_t* r_src = r_ptr + i * pitch;
+        const uint8_t* g_src = g_ptr + i * pitch;
+        const uint8_t* b_src = b_ptr + i * pitch;
+        uint8_t* dst = dst_ptr + i * width * 3;
+
+        for (uint32_t j = 0; j < width; ++j)
+        {
+            dst[0] = r_src[j];
+            dst[1] = g_src[j];
+            dst[2] = b_src[j];
+            dst += 3;
+        }
+    }
+
+    return AIPL_ERR_OK;
+}
+#endif
+
+#if (AIPL_CONVERT_RGB888P & TO_RGB565)\
+     && (!defined(AIPL_HELIUM_ACCELERATION) || defined(AIPL_INCLUDE_ALL_DEFAULT))
+aipl_error_t aipl_color_convert_rgb888p_to_rgb565_default(const void* input,
+                                                          void* output,
+                                                          uint32_t pitch,
+                                                          uint32_t width,
+                                                          uint32_t height)
+{
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
+    uint32_t plane_size = pitch * height;
+    const uint8_t* r_ptr = input;
+    const uint8_t* g_ptr = r_ptr + plane_size;
+    const uint8_t* b_ptr = g_ptr + plane_size;
+
+    aipl_rgb565_px_t* dst_ptr = output;
+
+    for (uint32_t i = 0; i < height; ++i)
+    {
+        const uint8_t* r_src = r_ptr + i * pitch;
+        const uint8_t* g_src = g_ptr + i * pitch;
+        const uint8_t* b_src = b_ptr + i * pitch;
+        aipl_rgb565_px_t* dst = dst_ptr + i * width;
+
+        for (uint32_t j = 0; j < width; ++j)
+        {
+            dst->t = (r_src[j] & 0xf8) | (g_src[j] >> 5);
+            dst->b = ((g_src[j] << 3) & 0xe0) | (b_src[j] >> 3);
+            ++dst;
+        }
+    }
+
+    return AIPL_ERR_OK;
+}
+#endif
+#endif
+

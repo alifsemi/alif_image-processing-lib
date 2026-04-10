@@ -99,6 +99,7 @@ typedef enum {
     AIPL_COLOR_RGBA5551,
     AIPL_COLOR_BGR888,
     AIPL_COLOR_RGB888,
+    AIPL_COLOR_RGB888P,
     AIPL_COLOR_RGB565,
 
     /* YUV color formats */

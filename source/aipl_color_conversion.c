@@ -130,6 +130,11 @@ aipl_error_t aipl_color_convert(const void* input, void* output,
             return aipl_color_convert_rgb888(input, output, pitch,
                                              width, height, output_format);
 #endif
+#if AIPL_CONVERT_RGB888P
+        case AIPL_COLOR_RGB888P:
+            return aipl_color_convert_rgb888p(input, output, pitch,
+                                              width, height, output_format);
+#endif
 
         /* YUV color formats */
 #if AIPL_CONVERT_YV12
@@ -9059,6 +9064,74 @@ aipl_error_t aipl_color_convert_i400_to_uyvy(const void* input,
     return aipl_color_convert_i400_to_uyvy_default(input, output,
                                                    pitch,
                                                    width, height);
+#endif
+}
+#endif
+
+#endif
+
+#if AIPL_CONVERT_RGB888P
+aipl_error_t aipl_color_convert_rgb888p(const void* input, void* output,
+                                        uint32_t pitch,
+                                        uint32_t width, uint32_t height,
+                                        aipl_color_format_t format)
+{
+    switch (format)
+    {
+#if (AIPL_CONVERT_RGB888P & TO_RGB888)
+        case AIPL_COLOR_RGB888:
+            return aipl_color_convert_rgb888p_to_rgb888(input, output,
+                                                        pitch,
+                                                        width, height);
+#endif
+#if (AIPL_CONVERT_RGB888P & TO_RGB565)
+        case AIPL_COLOR_RGB565:
+            return aipl_color_convert_rgb888p_to_rgb565(input, output,
+                                                        pitch,
+                                                        width, height);
+#endif
+        case AIPL_COLOR_RGB888P:
+            return AIPL_ERR_FORMAT_MISMATCH;
+
+        default:
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
+    }
+}
+
+#if (AIPL_CONVERT_RGB888P & TO_RGB888)
+aipl_error_t aipl_color_convert_rgb888p_to_rgb888(const void* input,
+                                                  void* output,
+                                                  uint32_t pitch,
+                                                  uint32_t width,
+                                                  uint32_t height)
+{
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_rgb888p_to_rgb888_helium(input, output,
+                                                       pitch,
+                                                       width, height);
+#else
+    return aipl_color_convert_rgb888p_to_rgb888_default(input, output,
+                                                        pitch,
+                                                        width, height);
+#endif
+}
+#endif
+
+#if (AIPL_CONVERT_RGB888P & TO_RGB565)
+aipl_error_t aipl_color_convert_rgb888p_to_rgb565(const void* input,
+                                                  void* output,
+                                                  uint32_t pitch,
+                                                  uint32_t width,
+                                                  uint32_t height)
+{
+#ifdef AIPL_HELIUM_ACCELERATION
+    return aipl_color_convert_rgb888p_to_rgb565_helium(input, output,
+                                                       pitch,
+                                                       width, height);
+#else
+    return aipl_color_convert_rgb888p_to_rgb565_default(input, output,
+                                                        pitch,
+                                                        width, height);
 #endif
 }
 #endif
