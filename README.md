@@ -13,6 +13,7 @@ Formats:
 * RGBA4444
 * RGBA5551
 * BGR888
+* RGB888P (planar)
 * RGB565
 * YV12
 * I420
