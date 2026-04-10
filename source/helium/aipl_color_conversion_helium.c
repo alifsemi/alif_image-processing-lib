@@ -861,6 +861,11 @@ aipl_error_t aipl_color_convert_helium(const void* input, void* output,
             return aipl_color_convert_rgb888_helium(input, output, pitch,
                                                     width, height, output_format);
 #endif
+#if AIPL_CONVERT_RGB888P
+        case AIPL_COLOR_RGB888P:
+            return aipl_color_convert_rgb888p_helium(input, output, pitch,
+                                                     width, height, output_format);
+#endif
 
         /* YUV color formats */
 #if AIPL_CONVERT_YV12
@@ -14951,6 +14956,149 @@ static aipl_error_t aipl_color_convert_alpha8_to_yuv_packed_helium(const uint8_t
 
     return AIPL_ERR_OK;
 }
+#endif
+
+#if AIPL_CONVERT_RGB888P
+aipl_error_t aipl_color_convert_rgb888p_helium(const void* input,
+                                               void* output,
+                                               uint32_t pitch,
+                                               uint32_t width,
+                                               uint32_t height,
+                                               aipl_color_format_t format)
+{
+    switch (format)
+    {
+#if (AIPL_CONVERT_RGB888P & TO_RGB888)
+        case AIPL_COLOR_RGB888:
+            return aipl_color_convert_rgb888p_to_rgb888_helium(input, output,
+                                                               pitch,
+                                                               width, height);
+#endif
+#if (AIPL_CONVERT_RGB888P & TO_RGB565)
+        case AIPL_COLOR_RGB565:
+            return aipl_color_convert_rgb888p_to_rgb565_helium(input, output,
+                                                               pitch,
+                                                               width, height);
+#endif
+        case AIPL_COLOR_RGB888P:
+            return AIPL_ERR_FORMAT_MISMATCH;
+
+        default:
+            return AIPL_ERR_UNSUPPORTED_FORMAT;
+    }
+}
+
+#if (AIPL_CONVERT_RGB888P & TO_RGB888)
+aipl_error_t aipl_color_convert_rgb888p_to_rgb888_helium(const void* input,
+                                                         void* output,
+                                                         uint32_t pitch,
+                                                         uint32_t width,
+                                                         uint32_t height)
+{
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
+    uint32_t plane_size = pitch * height;
+    const uint8_t* r_ptr = input;
+    const uint8_t* g_ptr = r_ptr + plane_size;
+    const uint8_t* b_ptr = g_ptr + plane_size;
+
+    uint8_t* dst_ptr = output;
+
+    for (uint32_t i = 0; i < height; ++i)
+    {
+        const uint8_t* r_src = r_ptr + i * pitch;
+        const uint8_t* g_src = g_ptr + i * pitch;
+        const uint8_t* b_src = b_ptr + i * pitch;
+        uint8_t* dst = dst_ptr + i * width * 3;
+
+        int32_t cnt = width;
+        while (cnt > 0)
+        {
+            mve_pred16_t tail_p = vctp8q(cnt);
+
+            aipl_mve_rgb_x16_t pix;
+            pix.r = vldrbq_z_u8(r_src, tail_p);
+            pix.g = vldrbq_z_u8(g_src, tail_p);
+            pix.b = vldrbq_z_u8(b_src, tail_p);
+
+            aipl_mve_str_16px_rgb(dst, pix, tail_p, 0, 1, 2);
+
+            r_src += 16;
+            g_src += 16;
+            b_src += 16;
+            dst += 48;
+            cnt -= 16;
+        }
+    }
+
+    return AIPL_ERR_OK;
+}
+#endif
+
+#if (AIPL_CONVERT_RGB888P & TO_RGB565)
+aipl_error_t aipl_color_convert_rgb888p_to_rgb565_helium(const void* input,
+                                                         void* output,
+                                                         uint32_t pitch,
+                                                         uint32_t width,
+                                                         uint32_t height)
+{
+    if (input == NULL || output == NULL)
+        return AIPL_ERR_NULL_POINTER;
+
+    uint32_t plane_size = pitch * height;
+    const uint8_t* r_ptr = input;
+    const uint8_t* g_ptr = r_ptr + plane_size;
+    const uint8_t* b_ptr = g_ptr + plane_size;
+
+    uint16_t* dst_ptr = output;
+
+    for (uint32_t i = 0; i < height; ++i)
+    {
+        const uint8_t* r_src = r_ptr + i * pitch;
+        const uint8_t* g_src = g_ptr + i * pitch;
+        const uint8_t* b_src = b_ptr + i * pitch;
+        uint16_t* dst = dst_ptr + i * width;
+
+        int32_t cnt = width;
+        // process full 16-pixel chunks
+        while (cnt >= 16)
+        {
+            aipl_mve_rgb_x16_t pix;
+            pix.r = vldrbq_u8(r_src);
+            pix.g = vldrbq_u8(g_src);
+            pix.b = vldrbq_u8(b_src);
+
+            r_src += 16;
+            g_src += 16;
+            b_src += 16;
+
+            __builtin_prefetch(r_src + 64);
+            __builtin_prefetch(g_src + 64);
+            __builtin_prefetch(b_src + 64);
+
+            aipl_mve_str_16px_rgb565_uncut(dst, pix);
+
+            dst += 16;
+            cnt -= 16;
+        }
+        // tail with predicated store
+        if (cnt > 0)
+        {
+            mve_pred16_t tail_p = vctp8q(cnt);
+
+            aipl_mve_rgb_x16_t pix;
+            pix.r = vldrbq_z_u8(r_src, tail_p);
+            pix.g = vldrbq_z_u8(g_src, tail_p);
+            pix.b = vldrbq_z_u8(b_src, tail_p);
+
+            aipl_mve_str_16px_rgb565(dst, pix, tail_p);
+        }
+    }
+
+    return AIPL_ERR_OK;
+}
+#endif
 #endif
 
 #endif /* AIPL_HELIUM_ACCELERATION */

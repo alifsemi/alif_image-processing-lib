@@ -6246,6 +6246,59 @@ aipl_error_t aipl_color_convert_i400_to_uyvy(const void* input,
 #endif
 #endif
 
+#if AIPL_CONVERT_RGB888P
+/**
+ * Convert RGB888P (planar) image to specified format
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @param format        desired color format
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgb888p(const void* input, void* output,
+                                        uint32_t pitch,
+                                        uint32_t width, uint32_t height,
+                                        aipl_color_format_t format);
+
+#if (AIPL_CONVERT_RGB888P & TO_RGB888)
+/**
+ * Convert RGB888P (planar) image to RGB888
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgb888p_to_rgb888(const void* input,
+                                                  void* output,
+                                                  uint32_t pitch,
+                                                  uint32_t width,
+                                                  uint32_t height);
+#endif
+#if (AIPL_CONVERT_RGB888P & TO_RGB565)
+/**
+ * Convert RGB888P (planar) image to RGB565
+ *
+ * @param input         input image pointer
+ * @param output        output image pointer
+ * @param pitch         input image pitch
+ * @param width         image width
+ * @param height        image height
+ * @return error code
+ */
+aipl_error_t aipl_color_convert_rgb888p_to_rgb565(const void* input,
+                                                  void* output,
+                                                  uint32_t pitch,
+                                                  uint32_t width,
+                                                  uint32_t height);
+#endif
+#endif
+
 /**********************
  *      MACROS
  **********************/
