@@ -2727,11 +2727,11 @@ INLINE void aipl_mve_pre_cnvt_8px_y(int32x4_t* c0_dst,
                                     int32x4_t* c1_dst,
                                     uint16x8_t y)
 {
-    uint16x8_t c = y;
-    c = vsubq_n_u16(c, 16);
+    int16x8_t c = vreinterpretq_s16(y);
+    c = vsubq_n_s16(c, 16);
 
-    *c0_dst = vreinterpretq_s32(vmovlbq(c));
-    *c1_dst = vreinterpretq_s32(vmovltq(c));
+    *c0_dst = vmovlbq(c);
+    *c1_dst = vmovltq(c);
 
     *c0_dst = vmulq_n_s32(*c0_dst, AIPL_YUV_C_MULTIPLIER);
     *c1_dst = vmulq_n_s32(*c1_dst, AIPL_YUV_C_MULTIPLIER);
