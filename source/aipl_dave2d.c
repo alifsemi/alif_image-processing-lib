@@ -96,6 +96,10 @@ bool aipl_dave2d_mode_has_alpha(d2_u32 mode)
 
     switch (mode)
     {
+        case d2_mode_alpha8:
+        case d2_mode_alpha4:
+        case d2_mode_alpha2:
+        case d2_mode_alpha1:
         case d2_mode_argb8888:
         case d2_mode_argb4444:
         case d2_mode_argb1555:
@@ -105,10 +109,6 @@ bool aipl_dave2d_mode_has_alpha(d2_u32 mode)
         case d2_mode_ai44:
             return true;
 
-        case d2_mode_alpha8:
-        case d2_mode_alpha4:
-        case d2_mode_alpha2:
-        case d2_mode_alpha1:
         case d2_mode_i8:
         case d2_mode_i4:
         case d2_mode_i2:
