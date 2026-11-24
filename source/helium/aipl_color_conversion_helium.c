@@ -14308,7 +14308,8 @@ static aipl_error_t aipl_color_convert_yuv_packed_to_rgba5551_helium(const uint8
 }
 #endif
 
-#if (AIPL_CONVERT_YV12 & TO_BGR888 | AIPL_CONVERT_I420 & TO_BGR888)
+#if (AIPL_CONVERT_YV12 & TO_BGR888 | AIPL_CONVERT_I420 & TO_BGR888\
+     | AIPL_CONVERT_YV12 & TO_RGB888 | AIPL_CONVERT_I420 & TO_RGB888)
 static aipl_error_t aipl_color_convert_yuv_planar_to_24bit_helium(const uint8_t* y_ptr,
                                                            const uint8_t* u_ptr,
                                                            const uint8_t* v_ptr,
@@ -14378,7 +14379,8 @@ static aipl_error_t aipl_color_convert_yuv_planar_to_24bit_helium(const uint8_t*
 }
 #endif
 
-#if (AIPL_CONVERT_NV12 & TO_BGR888 | AIPL_CONVERT_NV21 & TO_BGR888)
+#if (AIPL_CONVERT_NV12 & TO_BGR888 | AIPL_CONVERT_NV21 & TO_BGR888\
+     | AIPL_CONVERT_NV12 & TO_RGB888 | AIPL_CONVERT_NV21 & TO_RGB888)
 static aipl_error_t aipl_color_convert_yuv_semi_planar_to_24bit_helium(const uint8_t* y_ptr,
                                                                 const uint8_t* u_ptr,
                                                                 const uint8_t* v_ptr,
@@ -14448,7 +14450,8 @@ static aipl_error_t aipl_color_convert_yuv_semi_planar_to_24bit_helium(const uin
 }
 #endif
 
-#if (AIPL_CONVERT_YUY2 & TO_BGR888 | AIPL_CONVERT_UYVY & TO_BGR888)
+#if (AIPL_CONVERT_YUY2 & TO_BGR888 | AIPL_CONVERT_UYVY & TO_BGR888\
+     | AIPL_CONVERT_YUY2 & TO_RGB888 | AIPL_CONVERT_UYVY & TO_RGB888)
 static aipl_error_t aipl_color_convert_yuv_packed_to_24bit_helium(const uint8_t* y_ptr,
                                                            const uint8_t* u_ptr,
                                                            const uint8_t* v_ptr,
